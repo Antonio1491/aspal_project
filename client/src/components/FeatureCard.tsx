@@ -19,8 +19,8 @@ export default function FeatureCard({ icon: Icon, title, description, index = 0 
       data-testid={`card-feature-${index}`}
     >
       <CardContent className="p-6 space-y-4">
-        <div className="w-12 h-12 rounded-lg bg-secondary/20 flex items-center justify-center group-hover:bg-secondary/30 transition-colors">
-          <Icon className="w-6 h-6 text-secondary-foreground" />
+        <div className="w-12 h-12 rounded-lg bg-secondary flex items-center justify-center group-hover:bg-secondary/90 transition-colors">
+          <Icon className="w-6 h-6 text-primary" />
         </div>
         
         <h3 className="text-xl font-semibold" data-testid={`text-feature-title-${index}`}>
