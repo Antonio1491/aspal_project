@@ -1,4 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { PodcastCard } from "@/components/PodcastCard";
 import type { Podcast } from "@shared/schema";
 import { Headphones } from "lucide-react";
@@ -8,18 +10,9 @@ export default function PodcastPage() {
     queryKey: ["/api/podcasts"],
   });
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 md:px-8 py-16">
-          <div className="text-center">Cargando...</div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-background">
+      <Header />
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary via-primary/95 to-primary/90 text-primary-foreground py-20">
         <div className="container mx-auto px-4 md:px-8">
@@ -71,13 +64,33 @@ export default function PodcastPage() {
           <h2 className="text-3xl font-bold mb-8" data-testid="text-episodes-title">
             Todos los Episodios
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {podcasts?.map((podcast) => (
-              <PodcastCard key={podcast.id} podcast={podcast} />
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div
+                  key={i}
+                  className="h-96 bg-muted animate-pulse rounded-2xl"
+                  data-testid={`skeleton-podcast-${i}`}
+                ></div>
+              ))}
+            </div>
+          ) : podcasts && podcasts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {podcasts.map((podcast) => (
+                <PodcastCard key={podcast.id} podcast={podcast} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground text-lg" data-testid="text-no-podcasts">
+                No hay episodios disponibles en este momento.
+              </p>
+            </div>
+          )}
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }
