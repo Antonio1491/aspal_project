@@ -35,3 +35,21 @@ export const insertPostSchema = createInsertSchema(posts).omit({
 
 export type InsertPost = z.infer<typeof insertPostSchema>;
 export type Post = typeof posts.$inferSelect;
+
+export const podcasts = pgTable("podcasts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  artwork: text("artwork").notNull(),
+  episodeNumber: text("episode_number").notNull(),
+  duration: text("duration").notNull(),
+  publishedAt: timestamp("published_at").notNull(),
+  externalUrl: text("external_url").notNull(),
+});
+
+export const insertPodcastSchema = createInsertSchema(podcasts).omit({
+  id: true,
+});
+
+export type InsertPodcast = z.infer<typeof insertPodcastSchema>;
+export type Podcast = typeof podcasts.$inferSelect;

@@ -1,4 +1,4 @@
-import { type User, type InsertUser, type Post, type InsertPost } from "@shared/schema";
+import { type User, type InsertUser, type Post, type InsertPost, type Podcast, type InsertPodcast } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 // modify the interface with any CRUD methods
@@ -12,16 +12,21 @@ export interface IStorage {
   getPosts(): Promise<Post[]>;
   getPostBySlug(slug: string): Promise<Post | undefined>;
   createPost(post: InsertPost): Promise<Post>;
+  
+  getPodcasts(): Promise<Podcast[]>;
 }
 
 export class MemStorage implements IStorage {
   private users: Map<string, User>;
   private posts: Map<string, Post>;
+  private podcasts: Map<string, Podcast>;
 
   constructor() {
     this.users = new Map();
     this.posts = new Map();
+    this.podcasts = new Map();
     this.initializeMockPosts();
+    this.initializeMockPodcasts();
   }
 
   async getUser(id: string): Promise<User | undefined> {
@@ -58,6 +63,12 @@ export class MemStorage implements IStorage {
     const post: Post = { ...insertPost, id };
     this.posts.set(id, post);
     return post;
+  }
+
+  async getPodcasts(): Promise<Podcast[]> {
+    return Array.from(this.podcasts.values()).sort(
+      (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+    );
   }
 
   private initializeMockPosts() {
@@ -138,6 +149,89 @@ export class MemStorage implements IStorage {
       const id = randomUUID();
       const post: Post = { ...insertPost, id };
       this.posts.set(id, post);
+    });
+  }
+
+  private initializeMockPodcasts() {
+    const mockPodcasts: InsertPodcast[] = [
+      {
+        title: "Desde la OFVC de Guadalajara - ¿Qué son las Oficina de Convenciones y Visitantes?",
+        description: "Hoy hablaremos de las oficinas de convenciones y visitantes. Tenemos una gran invitada, Ligia González, subdirectora de Industria de Reuniones de la OFVC de Guadalajara, quien compartirá qué es, para qué sirve y cómo te puede ayudar una oficina de convenciones y visitantes al momento de organizar el evento de tu asociación.",
+        artwork: "https://asociacionesprofesionales.org/wp-content/uploads/2024/07/desde-la-ofvc-de-guadalajara.png",
+        episodeNumber: "8",
+        duration: "38:00",
+        publishedAt: new Date("2024-07-31"),
+        externalUrl: "https://asociacionesprofesionales.org/desde-la-ofvc-de-guadalajara/",
+      },
+      {
+        title: "Potencia tu Asociación",
+        description: "Entrevista con nuestro invitado Juan Carlos García, donde hablamos sobre la Planeación Estratégica de las Organizaciones y cómo potenciar el impacto de tu asociación profesional.",
+        artwork: "https://asociacionesprofesionales.org/wp-content/uploads/2024/07/potencia-tu-aso_64604928-1.png",
+        episodeNumber: "7",
+        duration: "42:15",
+        publishedAt: new Date("2024-07-17"),
+        externalUrl: "https://asociacionesprofesionales.org/potencia-tu-asociacion/",
+      },
+      {
+        title: "Organizaciones con Fines de Flujo - Parte 2",
+        description: "Continuación de nuestra conversación sobre cómo transformar nuestras organizaciones de sin fines de lucro a con fines de flujo, explorando estrategias innovadoras para crear valor sostenible.",
+        artwork: "https://asociacionesprofesionales.org/wp-content/uploads/2024/07/organizaciones_con_fines_de_flujo_parte2_aspal.png",
+        episodeNumber: "6",
+        duration: "45:30",
+        publishedAt: new Date("2024-07-03"),
+        externalUrl: "https://asociacionesprofesionales.org/organizaciones-organizaciones-con-fines-de-flujo-continuacion/",
+      },
+      {
+        title: "Organizaciones con Fines de Flujo - Parte 1",
+        description: "Primera parte donde exploramos el concepto revolucionario de organizaciones con fines de flujo y cómo este enfoque puede transformar la manera en que operan las asociaciones profesionales.",
+        artwork: "https://artwork.captivate.fm/17205524-2959-4eef-b987-80145a164ec6/m4PuKR4KDhqNYuPXl3WDsW9k.jpg",
+        episodeNumber: "5",
+        duration: "40:22",
+        publishedAt: new Date("2024-06-19"),
+        externalUrl: "https://asociacionesprofesionales.org/podcast/",
+      },
+      {
+        title: "El Poder de las Comunidades Profesionales",
+        description: "Descubre cómo las comunidades profesionales pueden impulsar el crecimiento y desarrollo de tus miembros, creando redes de valor que trascienden los límites geográficos.",
+        artwork: "https://artwork.captivate.fm/17205524-2959-4eef-b987-80145a164ec6/m4PuKR4KDhqNYuPXl3WDsW9k.jpg",
+        episodeNumber: "4",
+        duration: "35:45",
+        publishedAt: new Date("2024-06-05"),
+        externalUrl: "https://asociacionesprofesionales.org/podcast/",
+      },
+      {
+        title: "Innovación en la Gestión de Eventos",
+        description: "Exploramos las últimas tendencias y mejores prácticas en la organización de eventos para asociaciones profesionales, desde eventos presenciales hasta híbridos y virtuales.",
+        artwork: "https://artwork.captivate.fm/17205524-2959-4eef-b987-80145a164ec6/m4PuKR4KDhqNYuPXl3WDsW9k.jpg",
+        episodeNumber: "3",
+        duration: "38:50",
+        publishedAt: new Date("2024-05-22"),
+        externalUrl: "https://asociacionesprofesionales.org/podcast/",
+      },
+      {
+        title: "Certificaciones Profesionales: Estrategias de Implementación",
+        description: "Conversamos sobre cómo diseñar, implementar y gestionar programas de certificación profesional que agreguen valor real a tus miembros y fortalezcan la reputación de tu asociación.",
+        artwork: "https://artwork.captivate.fm/17205524-2959-4eef-b987-80145a164ec6/m4PuKR4KDhqNYuPXl3WDsW9k.jpg",
+        episodeNumber: "2",
+        duration: "41:10",
+        publishedAt: new Date("2024-05-08"),
+        externalUrl: "https://asociacionesprofesionales.org/podcast/",
+      },
+      {
+        title: "Bienvenidos a Conexión Profesional",
+        description: "En nuestro episodio inaugural, te damos la bienvenida a Conexión Profesional, el podcast que explora y fortalece las redes en asociaciones profesionales. Descubre qué nos motiva y qué puedes esperar en futuros episodios.",
+        artwork: "https://artwork.captivate.fm/17205524-2959-4eef-b987-80145a164ec6/m4PuKR4KDhqNYuPXl3WDsW9k.jpg",
+        episodeNumber: "1",
+        duration: "25:30",
+        publishedAt: new Date("2024-04-24"),
+        externalUrl: "https://asociacionesprofesionales.org/podcast/",
+      },
+    ];
+
+    mockPodcasts.forEach((insertPodcast) => {
+      const id = randomUUID();
+      const podcast: Podcast = { ...insertPodcast, id };
+      this.podcasts.set(id, podcast);
     });
   }
 }
