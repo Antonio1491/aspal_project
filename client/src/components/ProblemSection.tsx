@@ -32,7 +32,7 @@ export default function ProblemSection({
             </h2>
             
             <div className="space-y-4">
-              <h3 className="text-2xl md:text-3xl font-semibold text-primary" data-testid="text-solution">
+              <h3 className="text-2xl md:text-3xl font-semibold text-secondary-foreground" data-testid="text-solution">
                 {solution}
               </h3>
               <p className="text-lg text-muted-foreground" data-testid="text-description">
@@ -43,8 +43,8 @@ export default function ProblemSection({
             <ul className="space-y-3">
               {benefits.map((benefit, index) => (
                 <li key={index} className="flex items-start gap-3" data-testid={`benefit-${index}`}>
-                  <div className="mt-1 rounded-full bg-primary/10 p-1">
-                    <Check className="w-4 h-4 text-primary" />
+                  <div className="mt-1 rounded-full bg-secondary/20 p-1">
+                    <Check className="w-4 h-4 text-secondary-foreground" />
                   </div>
                   <span className="text-foreground">{benefit}</span>
                 </li>

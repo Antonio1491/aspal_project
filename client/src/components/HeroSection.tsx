@@ -14,9 +14,9 @@ export default function HeroSection() {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Left side - Content */}
           <div className="space-y-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
-              <Sparkles className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Plataforma profesional para asociaciones</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 border border-secondary/30">
+              <Sparkles className="w-4 h-4 text-secondary-foreground" />
+              <span className="text-sm font-medium text-secondary-foreground">Plataforma profesional para asociaciones</span>
             </div>
             
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
@@ -32,11 +32,11 @@ export default function HeroSection() {
             </p>
             
             <div className="flex flex-wrap gap-4">
-              <Button size="lg" className="text-base px-8 py-6" data-testid="button-cta-primary">
+              <Button size="lg" className="text-base px-8 py-6 bg-secondary text-secondary-foreground hover:bg-secondary/90" data-testid="button-cta-primary">
                 Comenzar ahora
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
-              <Button size="lg" variant="outline" className="text-base px-8 py-6" data-testid="button-cta-secondary">
+              <Button size="lg" variant="outline" className="text-base px-8 py-6 border-primary text-primary hover:bg-primary hover:text-primary-foreground" data-testid="button-cta-secondary">
                 Ver demo
               </Button>
             </div>

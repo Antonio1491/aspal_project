@@ -33,7 +33,7 @@ export default function FeaturesGrid({
           <h2 className="text-4xl md:text-5xl font-bold" data-testid="text-features-title">
             {title}
           </h2>
-          <p className="text-xl text-primary font-semibold" data-testid="text-features-subtitle">
+          <p className="text-xl text-secondary-foreground font-semibold" data-testid="text-features-subtitle">
             {subtitle}
           </p>
         </div>

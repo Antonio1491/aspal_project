@@ -40,7 +40,7 @@ export default function TestimonialsSection() {
           <h2 className="text-4xl md:text-5xl font-bold" data-testid="text-testimonials-title">
             Casos de Éxito
           </h2>
-          <p className="text-xl text-primary font-semibold">
+          <p className="text-xl text-secondary-foreground font-semibold">
             Testimonios
           </p>
         </div>

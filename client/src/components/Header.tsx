@@ -66,7 +66,7 @@ export default function Header() {
             <Button variant="ghost" data-testid="button-login">
               Iniciar sesión
             </Button>
-            <Button data-testid="button-demo">
+            <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90" data-testid="button-demo">
               Ver demo
             </Button>
           </div>
@@ -119,7 +119,7 @@ export default function Header() {
                 <Button variant="ghost" className="w-full" data-testid="button-mobile-login">
                   Iniciar sesión
                 </Button>
-                <Button className="w-full" data-testid="button-mobile-demo">
+                <Button className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90" data-testid="button-mobile-demo">
                   Ver demo
                 </Button>
               </div>
