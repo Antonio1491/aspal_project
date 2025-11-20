@@ -192,7 +192,9 @@ export default function Header() {
               {/* Se Miembro */}
               <NavigationMenuItem>
                 <a
-                  href="#se-miembro"
+                  href="https://asociacionesprofesionales.org/register/membresia-basica/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={navigationMenuTriggerStyle()}
                   data-testid="link-se-miembro"
                 >
@@ -207,8 +209,10 @@ export default function Header() {
             <Button variant="ghost" data-testid="button-login">
               Iniciar sesión
             </Button>
-            <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90" data-testid="button-demo">
-              Ver demo
+            <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90" asChild data-testid="button-demo">
+              <a href="https://youtu.be/kl4Zd89F8jk" target="_blank" rel="noopener noreferrer">
+                Ver Video
+              </a>
             </Button>
           </div>
 
@@ -296,7 +300,9 @@ export default function Header() {
 
               {/* Se Miembro */}
               <a 
-                href="#se-miembro" 
+                href="https://asociacionesprofesionales.org/register/membresia-basica/" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
                 data-testid="mobile-link-se-miembro"
               >
@@ -307,8 +313,10 @@ export default function Header() {
                 <Button variant="ghost" className="w-full" data-testid="button-mobile-login">
                   Iniciar sesión
                 </Button>
-                <Button className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90" data-testid="button-mobile-demo">
-                  Ver demo
+                <Button className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90" asChild data-testid="button-mobile-demo">
+                  <a href="https://youtu.be/kl4Zd89F8jk" target="_blank" rel="noopener noreferrer">
+                    Ver Video
+                  </a>
                 </Button>
               </div>
             </nav>

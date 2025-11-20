@@ -320,8 +320,8 @@ export default function Home() {
       {/* Logo carousel */}
       <LogoCarousel />
       
-      {/* Testimonials */}
-      <TestimonialsSection />
+      {/* Testimonials - Hidden */}
+      {/* <TestimonialsSection /> */}
       
       {/* CTA */}
       <CTASection />

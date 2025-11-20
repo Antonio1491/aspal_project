@@ -37,17 +37,25 @@ export default function Footer() {
               Transformando organizaciones sin fines de lucro en comunidades digitales prósperas.
             </p>
             <div className="flex gap-3">
-              <Button size="icon" variant="ghost" className="hover-elevate" data-testid="button-social-facebook">
-                <Facebook className="w-5 h-5" />
+              <Button size="icon" variant="ghost" className="hover-elevate" asChild data-testid="button-social-facebook">
+                <a href="https://www.facebook.com/asociacionesprofesionales" target="_blank" rel="noopener noreferrer">
+                  <Facebook className="w-5 h-5" />
+                </a>
               </Button>
-              <Button size="icon" variant="ghost" className="hover-elevate" data-testid="button-social-twitter">
-                <Twitter className="w-5 h-5" />
+              <Button size="icon" variant="ghost" className="hover-elevate" asChild data-testid="button-social-twitter">
+                <a href="https://x.com/ASPALATAM" target="_blank" rel="noopener noreferrer">
+                  <Twitter className="w-5 h-5" />
+                </a>
               </Button>
-              <Button size="icon" variant="ghost" className="hover-elevate" data-testid="button-social-linkedin">
-                <Linkedin className="w-5 h-5" />
+              <Button size="icon" variant="ghost" className="hover-elevate" asChild data-testid="button-social-linkedin">
+                <a href="https://www.linkedin.com/company/asociaciones-profesionales-aspal/?viewAsMember=true" target="_blank" rel="noopener noreferrer">
+                  <Linkedin className="w-5 h-5" />
+                </a>
               </Button>
-              <Button size="icon" variant="ghost" className="hover-elevate" data-testid="button-social-instagram">
-                <Instagram className="w-5 h-5" />
+              <Button size="icon" variant="ghost" className="hover-elevate" asChild data-testid="button-social-instagram">
+                <a href="https://www.instagram.com/aspalatam/" target="_blank" rel="noopener noreferrer">
+                  <Instagram className="w-5 h-5" />
+                </a>
               </Button>
             </div>
           </div>
@@ -86,15 +94,15 @@ export default function Footer() {
             <ul className="space-y-2">
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Mail className="w-4 h-4" />
-                <span data-testid="text-contact-email">info@asociacionesprofesionales.org</span>
+                <span data-testid="text-contact-email">vinculacion@asociacionesprofesionales.org</span>
               </li>
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Phone className="w-4 h-4" />
-                <span data-testid="text-contact-phone">+52 55 1234 5678</span>
+                <span data-testid="text-contact-phone">+52 9991634080</span>
               </li>
               <li className="flex items-start gap-2 text-sm text-muted-foreground">
                 <MapPin className="w-4 h-4 mt-0.5" />
-                <span data-testid="text-contact-address">Ciudad de México, México</span>
+                <span data-testid="text-contact-address">Mérida, Yucatán</span>
               </li>
             </ul>
             
@@ -121,7 +129,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground" data-testid="text-copyright">
-            © 2025 Asociaciones Profesionales. Todos los derechos reservados.
+            © 2025 Asociaciones y Sociedades Profesionales de América Latina. Todos los derechos reservados.
           </p>
           <div className="flex gap-6">
             <a href="#privacidad" className="text-sm text-muted-foreground hover:text-primary transition-colors" data-testid="link-privacy">

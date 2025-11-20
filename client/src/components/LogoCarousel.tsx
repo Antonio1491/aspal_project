@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import logo1 from "@assets/Recurso 50comunidad ASPAL_1763678044080.png";
+import logo2 from "@assets/Recurso 52comunidad ASPAL_1763678051896.png";
+import logo3 from "@assets/Recurso 53comunidad ASPAL_1763678055285.png";
 
 const LOGOS = [
-  "Recurso-50comunidad-ASPAL-min.png",
-  "Recurso-51comunidad-ASPAL-min.png",
-  "Recurso-52comunidad-ASPAL-min.png",
-  "Recurso-53comunidad-ASPAL-min.png",
-  "Recurso-54comunidad-ASPAL-min.png",
+  { src: logo1, alt: "ANPR México" },
+  { src: logo2, alt: "Expo Mascotas" },
+  { src: logo3, alt: "World Urban Parks" },
 ];
 
 export default function LogoCarousel() {
@@ -30,31 +31,35 @@ export default function LogoCarousel() {
       
       <div className="relative">
         {/* First row - scrolling right */}
-        <div className="flex gap-8 mb-8 animate-scroll-right" data-testid="carousel-row-1">
+        <div className="flex gap-12 mb-8 animate-scroll-right" data-testid="carousel-row-1">
           {duplicatedLogos.map((logo, index) => (
             <div
               key={`row1-${index}`}
-              className="flex-shrink-0 w-40 h-24 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
+              className="flex-shrink-0 w-48 h-28 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 opacity-70 hover:opacity-100"
               data-testid={`logo-${index}`}
             >
-              <div className="w-32 h-16 bg-muted rounded-lg flex items-center justify-center">
-                <span className="text-xs text-muted-foreground font-medium">Logo {(index % LOGOS.length) + 1}</span>
-              </div>
+              <img 
+                src={logo.src} 
+                alt={logo.alt} 
+                className="max-w-full max-h-full object-contain filter brightness-0 dark:brightness-100"
+              />
             </div>
           ))}
         </div>
         
         {/* Second row - scrolling left */}
-        <div className="flex gap-8 animate-scroll-left" data-testid="carousel-row-2">
+        <div className="flex gap-12 animate-scroll-left" data-testid="carousel-row-2">
           {duplicatedLogos.map((logo, index) => (
             <div
               key={`row2-${index}`}
-              className="flex-shrink-0 w-40 h-24 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
+              className="flex-shrink-0 w-48 h-28 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 opacity-70 hover:opacity-100"
               data-testid={`logo-alt-${index}`}
             >
-              <div className="w-32 h-16 bg-muted rounded-lg flex items-center justify-center">
-                <span className="text-xs text-muted-foreground font-medium">Logo {(index % LOGOS.length) + 1}</span>
-              </div>
+              <img 
+                src={logo.src} 
+                alt={logo.alt} 
+                className="max-w-full max-h-full object-contain filter brightness-0 dark:brightness-100"
+              />
             </div>
           ))}
         </div>
