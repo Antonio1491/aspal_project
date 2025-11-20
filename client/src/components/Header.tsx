@@ -65,13 +65,13 @@ export default function Header() {
                       </Link>
                     </li>
                     <li>
-                      <a
-                        href="#podcast"
+                      <Link
+                        href="/podcast"
                         className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         data-testid="link-podcast"
                       >
                         <div className="text-sm font-medium leading-none">Podcast</div>
-                      </a>
+                      </Link>
                     </li>
                     <li>
                       <a
@@ -242,9 +242,9 @@ export default function Header() {
                   <Link href="/blog" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-blog">
                     Blog
                   </Link>
-                  <a href="#podcast" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-podcast">
+                  <Link href="/podcast" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-podcast">
                     Podcast
-                  </a>
+                  </Link>
                   <a href="#biblioteca" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-biblioteca">
                     Biblioteca Digital
                   </a>

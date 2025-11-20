@@ -31,6 +31,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Podcast routes
+  app.get("/api/podcasts", async (req, res) => {
+    try {
+      const podcasts = await storage.getPodcasts();
+      res.json(podcasts);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch podcasts" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;
