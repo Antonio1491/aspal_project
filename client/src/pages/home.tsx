@@ -6,8 +6,12 @@ import LogoCarousel from "@/components/LogoCarousel";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
-import communityIllustration from "@assets/generated_images/community_networking_illustration.png";
-import membershipIllustration from "@assets/generated_images/membership_automation_illustration.png";
+import membershipImage from "@assets/recurso-13-membresias.png";
+import communityImage from "@assets/recurso-8-comunidad.png";
+import blogImage from "@assets/recurso-3-blog.png";
+import certificationsImage from "@assets/recurso-40-certificaciones.png";
+import marketingImage from "@assets/recurso-27-marketing.png";
+import jobBoardImage from "@assets/recurso-26-bolsa-trabajo.png";
 import ProblemSection from "@/components/ProblemSection";
 import { 
   Users, MessageCircle, Shield, Calendar, TrendingUp, Lock,
@@ -76,7 +80,7 @@ export default function Home() {
           "Eventos, gamificación y etiquetas",
           "Privacidad y seguridad garantizada"
         ]}
-        image={communityIllustration}
+        image={communityImage}
         imageAlt="Comunidad en línea"
         reverse={true}
       />
@@ -130,7 +134,7 @@ export default function Home() {
           "Revista digital con identidad propia",
           "Biblioteca digital organizada"
         ]}
-        image={membershipIllustration}
+        image={blogImage}
         imageAlt="Contenido y recursos"
       />
       
@@ -173,7 +177,7 @@ export default function Home() {
           "Control de acceso por nivel o rol",
           "Experiencia personalizada para cada usuario"
         ]}
-        image={communityIllustration}
+        image={certificationsImage}
         imageAlt="Certificaciones y cursos"
         reverse={true}
       />
@@ -222,7 +226,7 @@ export default function Home() {
           "Campañas por Email, WhatsApp y SMS",
           "Formularios y landing pages personalizadas"
         ]}
-        image={membershipIllustration}
+        image={marketingImage}
         imageAlt="Marketing y comunicación"
       />
       
@@ -275,7 +279,7 @@ export default function Home() {
           "Filtros avanzados de búsqueda",
           "Opción de monetización para tu organización"
         ]}
-        image={communityIllustration}
+        image={jobBoardImage}
         imageAlt="Bolsa de trabajo"
         reverse={true}
       />

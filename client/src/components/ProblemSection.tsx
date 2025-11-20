@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Check } from "lucide-react";
-import membershipIllustration from "@assets/generated_images/membership_automation_illustration.png";
+import membershipIllustration from "@assets/recurso-13-membresias.png";
 
 interface ProblemSectionProps {
   question: string;
