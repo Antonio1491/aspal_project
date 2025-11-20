@@ -2,6 +2,8 @@ import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone, MapPin } from "luc
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import logoLight from "@assets/ASPAL-para fondo claro_1763675327795.png";
+import logoDark from "@assets/ASPAL-para fondo oscuro_1763675345456.png";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
@@ -19,9 +21,18 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Company info */}
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-primary" data-testid="text-footer-brand">
-              Asociaciones Profesionales
-            </h3>
+            <img 
+              src={logoLight} 
+              alt="Aspal" 
+              className="h-8 w-auto mb-4 dark:hidden"
+              data-testid="img-footer-logo-light"
+            />
+            <img 
+              src={logoDark} 
+              alt="Aspal" 
+              className="h-8 w-auto mb-4 hidden dark:block"
+              data-testid="img-footer-logo-dark"
+            />
             <p className="text-sm text-muted-foreground">
               Transformando organizaciones sin fines de lucro en comunidades digitales prósperas.
             </p>
