@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
-import heroDashboard from "@assets/generated_images/hero_dashboard_mockup_illustration.png";
+import heroDashboard from "@assets/generated_images/hero_dashboard_with_yellow_background.png";
 
 export default function HeroSection() {
   return (
