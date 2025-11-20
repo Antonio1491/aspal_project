@@ -18,6 +18,7 @@ Preferred communication style: Simple, everyday language.
 - `/` - Homepage/landing page
 - `/blog` - Blog list page showing all articles
 - `/blog/:slug` - Individual blog post page
+- `/podcast` - Podcast page showing all episodes
 - `*` - 404 not found page
 
 **State Management**: 
@@ -34,11 +35,14 @@ Preferred communication style: Simple, everyday language.
 
 **Component Architecture**:
 - Atomic design pattern with reusable UI components in `/components/ui/`
-- Feature-specific components (HeroSection, FeatureCard, TestimonialCard, BlogCard, etc.)
+- Feature-specific components (HeroSection, FeatureCard, TestimonialCard, BlogCard, PodcastCard, etc.)
 - Blog components:
   - `BlogCard`: Displays blog post preview with image, title, excerpt, category, date, and CTA
   - Blog page (`/pages/blog.tsx`): Hero section + responsive grid (1/2/3 columns) of blog posts
   - BlogPost page (`/pages/blog-post.tsx`): Individual article view with full content
+- Podcast components:
+  - `PodcastCard`: Displays podcast episode with artwork, title, description, episode number, duration, date, and external link
+  - Podcast page (`/pages/podcast.tsx`): Hero section with branding + responsive grid (1/2/3 columns) of episodes
 - Example components for demonstration purposes in `/components/examples/`
 - All components use TypeScript for type safety
 - data-testid attributes on all interactive and meaningful elements for testing
@@ -67,6 +71,7 @@ Preferred communication style: Simple, everyday language.
 **Database Schema**:
 - Users table with UUID primary keys, username, and password fields
 - Posts table with fields: id, title, slug (unique), excerpt, content, featuredImage, category, publishedAt (timestamp), author
+- Podcasts table with fields: id, title, description, artwork, episodeNumber, duration, publishedAt (timestamp), externalUrl
 - Schema validation using Zod for type-safe inserts
 - PostgreSQL dialect with Neon serverless driver support
 
@@ -77,7 +82,10 @@ Preferred communication style: Simple, everyday language.
 - CRUD operations:
   - Users: getUser, getUserByUsername, createUser
   - Posts: getPosts (sorted by publishedAt desc), getPostBySlug
-- Mock data: 7 blog posts initialized with real ASPAL content covering podcasting, events, marketing, community, certifications, career development, and innovation
+  - Podcasts: getPodcasts (sorted by publishedAt desc)
+- Mock data: 
+  - 7 blog posts initialized with real ASPAL content covering podcasting, events, marketing, community, certifications, career development, and innovation
+  - 8 podcast episodes from "Conexión Profesional" with real episode information, artwork, and external links
 
 **Migration Strategy**: Drizzle Kit for schema management with migrations stored in `/migrations/`
 
