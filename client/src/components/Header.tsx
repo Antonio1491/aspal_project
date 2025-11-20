@@ -1,11 +1,27 @@
 import logoLight from "@assets/ASPAL-para fondo claro_1763675327795.png";
 import logoDark from "@assets/ASPAL-para fondo oscuro_1763675345456.png";
 import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
+import { Menu, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [aprendeOpen, setAprendeOpen] = useState(false);
+  const [participaOpen, setParticipaOpen] = useState(false);
+  const [bolsaOpen, setBolsaOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -30,36 +46,161 @@ export default function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8">
-            <a 
-              href="#servicios" 
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              data-testid="link-nav-services"
-            >
-              Servicios
-            </a>
-            <a 
-              href="#casos" 
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              data-testid="link-nav-cases"
-            >
-              Casos de éxito
-            </a>
-            <a 
-              href="#testimonios" 
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              data-testid="link-nav-testimonials"
-            >
-              Testimonios
-            </a>
-            <a 
-              href="#contacto" 
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              data-testid="link-nav-contact"
-            >
-              Contacto
-            </a>
-          </nav>
+          <NavigationMenu className="hidden md:flex">
+            <NavigationMenuList>
+              {/* Aprende Menu */}
+              <NavigationMenuItem>
+                <NavigationMenuTrigger data-testid="menu-aprende">
+                  Aprende
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[200px] gap-3 p-4">
+                    <li>
+                      <a
+                        href="#blog"
+                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        data-testid="link-blog"
+                      >
+                        <div className="text-sm font-medium leading-none">Blog</div>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#podcast"
+                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        data-testid="link-podcast"
+                      >
+                        <div className="text-sm font-medium leading-none">Podcast</div>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#biblioteca"
+                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        data-testid="link-biblioteca"
+                      >
+                        <div className="text-sm font-medium leading-none">Biblioteca Digital</div>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#cursos"
+                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        data-testid="link-cursos"
+                      >
+                        <div className="text-sm font-medium leading-none">Cursos en Línea</div>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#documentos"
+                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        data-testid="link-documentos"
+                      >
+                        <div className="text-sm font-medium leading-none">Documentos</div>
+                      </a>
+                    </li>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              {/* Participa Menu */}
+              <NavigationMenuItem>
+                <NavigationMenuTrigger data-testid="menu-participa">
+                  Participa
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[240px] gap-3 p-4">
+                    <li>
+                      <a
+                        href="#comunidad"
+                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        data-testid="link-comunidad"
+                      >
+                        <div className="text-sm font-medium leading-none">Comunidad</div>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#directorio-miembros"
+                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        data-testid="link-directorio-miembros"
+                      >
+                        <div className="text-sm font-medium leading-none">Directorio de Miembros</div>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#directorio-industria"
+                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        data-testid="link-directorio-industria"
+                      >
+                        <div className="text-sm font-medium leading-none">Directorio de la Industria</div>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#eventos"
+                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        data-testid="link-eventos"
+                      >
+                        <div className="text-sm font-medium leading-none">Eventos y Grupos</div>
+                      </a>
+                    </li>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              {/* Bolsa de Trabajo Menu */}
+              <NavigationMenuItem>
+                <NavigationMenuTrigger data-testid="menu-bolsa">
+                  Bolsa de Trabajo
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[180px] gap-3 p-4">
+                    <li>
+                      <a
+                        href="#bolsa-home"
+                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        data-testid="link-bolsa-home"
+                      >
+                        <div className="text-sm font-medium leading-none">Home</div>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#candidatos"
+                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        data-testid="link-candidatos"
+                      >
+                        <div className="text-sm font-medium leading-none">Candidatos</div>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#reclutadores"
+                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        data-testid="link-reclutadores"
+                      >
+                        <div className="text-sm font-medium leading-none">Reclutadores</div>
+                      </a>
+                    </li>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              {/* Se Miembro */}
+              <NavigationMenuItem>
+                <a
+                  href="#se-miembro"
+                  className={navigationMenuTriggerStyle()}
+                  data-testid="link-se-miembro"
+                >
+                  Se Miembro
+                </a>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-4">
@@ -86,35 +227,82 @@ export default function Header() {
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-border" data-testid="mobile-menu">
-            <nav className="flex flex-col gap-4">
+            <nav className="flex flex-col gap-2">
+              {/* Aprende Collapsible */}
+              <Collapsible open={aprendeOpen} onOpenChange={setAprendeOpen}>
+                <CollapsibleTrigger className="flex items-center justify-between w-full text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2" data-testid="mobile-menu-aprende">
+                  Aprende
+                  <ChevronDown className={`h-4 w-4 transition-transform ${aprendeOpen ? 'rotate-180' : ''}`} />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="pl-4 space-y-2 pt-2">
+                  <a href="#blog" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-blog">
+                    Blog
+                  </a>
+                  <a href="#podcast" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-podcast">
+                    Podcast
+                  </a>
+                  <a href="#biblioteca" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-biblioteca">
+                    Biblioteca Digital
+                  </a>
+                  <a href="#cursos" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-cursos">
+                    Cursos en Línea
+                  </a>
+                  <a href="#documentos" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-documentos">
+                    Documentos
+                  </a>
+                </CollapsibleContent>
+              </Collapsible>
+
+              {/* Participa Collapsible */}
+              <Collapsible open={participaOpen} onOpenChange={setParticipaOpen}>
+                <CollapsibleTrigger className="flex items-center justify-between w-full text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2" data-testid="mobile-menu-participa">
+                  Participa
+                  <ChevronDown className={`h-4 w-4 transition-transform ${participaOpen ? 'rotate-180' : ''}`} />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="pl-4 space-y-2 pt-2">
+                  <a href="#comunidad" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-comunidad">
+                    Comunidad
+                  </a>
+                  <a href="#directorio-miembros" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-directorio-miembros">
+                    Directorio de Miembros
+                  </a>
+                  <a href="#directorio-industria" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-directorio-industria">
+                    Directorio de la Industria
+                  </a>
+                  <a href="#eventos" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-eventos">
+                    Eventos y Grupos
+                  </a>
+                </CollapsibleContent>
+              </Collapsible>
+
+              {/* Bolsa de Trabajo Collapsible */}
+              <Collapsible open={bolsaOpen} onOpenChange={setBolsaOpen}>
+                <CollapsibleTrigger className="flex items-center justify-between w-full text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2" data-testid="mobile-menu-bolsa">
+                  Bolsa de Trabajo
+                  <ChevronDown className={`h-4 w-4 transition-transform ${bolsaOpen ? 'rotate-180' : ''}`} />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="pl-4 space-y-2 pt-2">
+                  <a href="#bolsa-home" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-bolsa-home">
+                    Home
+                  </a>
+                  <a href="#candidatos" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-candidatos">
+                    Candidatos
+                  </a>
+                  <a href="#reclutadores" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-reclutadores">
+                    Reclutadores
+                  </a>
+                </CollapsibleContent>
+              </Collapsible>
+
+              {/* Se Miembro */}
               <a 
-                href="#servicios" 
+                href="#se-miembro" 
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
-                data-testid="link-mobile-services"
+                data-testid="mobile-link-se-miembro"
               >
-                Servicios
+                Se Miembro
               </a>
-              <a 
-                href="#casos" 
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
-                data-testid="link-mobile-cases"
-              >
-                Casos de éxito
-              </a>
-              <a 
-                href="#testimonios" 
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
-                data-testid="link-mobile-testimonials"
-              >
-                Testimonios
-              </a>
-              <a 
-                href="#contacto" 
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
-                data-testid="link-mobile-contact"
-              >
-                Contacto
-              </a>
+
               <div className="flex flex-col gap-2 pt-2">
                 <Button variant="ghost" className="w-full" data-testid="button-mobile-login">
                   Iniciar sesión
