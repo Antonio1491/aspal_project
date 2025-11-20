@@ -43,8 +43,8 @@ export default function ProblemSection({
             <ul className="space-y-3">
               {benefits.map((benefit, index) => (
                 <li key={index} className="flex items-start gap-3" data-testid={`benefit-${index}`}>
-                  <div className="mt-1 rounded-full bg-secondary/20 p-1">
-                    <Check className="w-4 h-4 text-secondary-foreground" />
+                  <div className="mt-1 rounded-full bg-secondary p-1">
+                    <Check className="w-4 h-4 text-primary" />
                   </div>
                   <span className="text-foreground">{benefit}</span>
                 </li>
