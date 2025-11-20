@@ -3,6 +3,7 @@ import logoDark from "@assets/ASPAL-para fondo oscuro_1763675345456.png";
 import { Button } from "@/components/ui/button";
 import { Menu, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { Link } from "wouter";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -56,13 +57,12 @@ export default function Header() {
                 <NavigationMenuContent>
                   <ul className="grid w-[200px] gap-3 p-4">
                     <li>
-                      <a
-                        href="#blog"
+                      <Link
+                        href="/blog"
                         className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        data-testid="link-blog"
                       >
-                        <div className="text-sm font-medium leading-none">Blog</div>
-                      </a>
+                        <div className="text-sm font-medium leading-none" data-testid="link-blog">Blog</div>
+                      </Link>
                     </li>
                     <li>
                       <a
@@ -239,9 +239,9 @@ export default function Header() {
                   <ChevronDown className={`h-4 w-4 transition-transform ${aprendeOpen ? 'rotate-180' : ''}`} />
                 </CollapsibleTrigger>
                 <CollapsibleContent className="pl-4 space-y-2 pt-2">
-                  <a href="#blog" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-blog">
+                  <Link href="/blog" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-blog">
                     Blog
-                  </a>
+                  </Link>
                   <a href="#podcast" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-podcast">
                     Podcast
                   </a>
