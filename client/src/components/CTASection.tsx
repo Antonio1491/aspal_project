@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, Sparkles } from "lucide-react";
@@ -9,7 +10,6 @@ export default function CTASection() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("CTA form submitted with email:", email);
-    // TODO: Remove mock functionality - handle actual form submission
   };
 
   return (
@@ -20,20 +20,47 @@ export default function CTASection() {
       
       <div className="container mx-auto px-4 md:px-8 relative z-10">
         <div className="max-w-4xl mx-auto text-center space-y-8">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 backdrop-blur-sm border border-primary/30">
+          <motion.div 
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 backdrop-blur-sm border border-primary/30"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, ease: [0.25, 0.4, 0.25, 1] }}
+          >
             <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium text-primary">Comienza hoy mismo</span>
-          </div>
+          </motion.div>
           
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary leading-tight" data-testid="text-cta-title">
+          <motion.h2 
+            className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary leading-tight" 
+            data-testid="text-cta-title"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.25, 0.4, 0.25, 1] }}
+          >
             ¿Listo para transformar tu asociación?
-          </h2>
+          </motion.h2>
           
-          <p className="text-xl text-primary/80 max-w-2xl mx-auto" data-testid="text-cta-description">
+          <motion.p 
+            className="text-xl text-primary/80 max-w-2xl mx-auto" 
+            data-testid="text-cta-description"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
+          >
             Únete a cientos de asociaciones que ya están creciendo con nuestra plataforma. Sin riesgos, sin compromisos.
-          </p>
+          </motion.p>
           
-          <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+          <motion.form 
+            onSubmit={handleSubmit} 
+            className="max-w-md mx-auto"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
+          >
             <div className="flex flex-col sm:flex-row gap-3">
               <Input
                 type="email"
@@ -44,27 +71,61 @@ export default function CTASection() {
                 required
                 data-testid="input-cta-email"
               />
-              <Button 
-                type="submit"
-                size="lg" 
-                className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold h-12 px-8"
-                data-testid="button-cta-submit"
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                Comenzar
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
+                <Button 
+                  type="submit"
+                  size="lg" 
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold h-12 px-8 w-full sm:w-auto"
+                  data-testid="button-cta-submit"
+                >
+                  Comenzar
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </motion.div>
             </div>
-          </form>
+          </motion.form>
           
-          <p className="text-sm text-primary/60">
+          <motion.p 
+            className="text-sm text-primary/60"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+          >
             Prueba gratuita por 14 días • No requiere tarjeta de crédito
-          </p>
+          </motion.p>
         </div>
       </div>
       
-      {/* Decorative blobs */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+      {/* Decorative blobs with subtle animation */}
+      <motion.div 
+        className="absolute top-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
+        animate={{ 
+          scale: [1, 1.1, 1],
+          opacity: [0.3, 0.5, 0.3]
+        }}
+        transition={{ 
+          duration: 6,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+      <motion.div 
+        className="absolute bottom-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
+        animate={{ 
+          scale: [1, 1.2, 1],
+          opacity: [0.3, 0.4, 0.3]
+        }}
+        transition={{ 
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 2
+        }}
+      />
     </section>
   );
 }

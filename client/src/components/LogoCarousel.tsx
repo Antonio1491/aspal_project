@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import logo1 from "@assets/Recurso 50comunidad ASPAL_1763678044080.png";
 import logo2 from "@assets/Recurso 52comunidad ASPAL_1763678051896.png";
 import logo3 from "@assets/Recurso 53comunidad ASPAL_1763678055285.png";
@@ -18,18 +19,30 @@ export default function LogoCarousel() {
 
   if (!mounted) return null;
 
-  // Duplicate logos for infinite scroll effect
   const duplicatedLogos = [...LOGOS, ...LOGOS, ...LOGOS];
 
   return (
     <section className="py-16 bg-gradient-to-b from-background to-muted/20 overflow-hidden" data-testid="section-logo-carousel">
       <div className="container mx-auto px-4 md:px-8 mb-12">
-        <h2 className="text-3xl md:text-4xl font-bold text-center" data-testid="text-clients-title">
+        <motion.h2 
+          className="text-3xl md:text-4xl font-bold text-center" 
+          data-testid="text-clients-title"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+        >
           Casos de éxito o clientes
-        </h2>
+        </motion.h2>
       </div>
       
-      <div className="relative">
+      <motion.div 
+        className="relative"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+      >
         {/* First row - scrolling right */}
         <div className="flex gap-12 mb-8 animate-scroll-right" data-testid="carousel-row-1">
           {duplicatedLogos.map((logo, index) => (
@@ -67,7 +80,7 @@ export default function LogoCarousel() {
         {/* Gradient overlays */}
         <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-background to-transparent pointer-events-none"></div>
         <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-background to-transparent pointer-events-none"></div>
-      </div>
+      </motion.div>
       
       <style>{`
         @keyframes scroll-right {

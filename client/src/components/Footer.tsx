@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -5,22 +6,49 @@ import { useState } from "react";
 import logoLight from "@assets/ASPAL-para fondo claro_1763675327795.png";
 import logoDark from "@assets/ASPAL-para fondo oscuro_1763675345456.png";
 
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.25, 0.4, 0.25, 1],
+    },
+  },
+};
+
 export default function Footer() {
   const [email, setEmail] = useState("");
 
   const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Newsletter subscription:", email);
-    // TODO: Remove mock functionality - handle actual newsletter subscription
     setEmail("");
   };
 
   return (
     <footer className="bg-muted/30 border-t border-border" data-testid="footer">
       <div className="container mx-auto px-4 md:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+        >
           {/* Company info */}
-          <div className="space-y-4">
+          <motion.div className="space-y-4" variants={itemVariants}>
             <img 
               src={logoLight} 
               alt="Aspal" 
@@ -58,10 +86,10 @@ export default function Footer() {
                 </a>
               </Button>
             </div>
-          </div>
+          </motion.div>
           
           {/* Quick links */}
-          <div className="space-y-4">
+          <motion.div className="space-y-4" variants={itemVariants}>
             <h4 className="font-semibold text-foreground" data-testid="text-footer-nav-title">
               Navegación
             </h4>
@@ -71,10 +99,10 @@ export default function Footer() {
               <li><a href="#casos" className="text-sm text-muted-foreground hover:text-primary transition-colors" data-testid="link-nav-cases">Casos de éxito</a></li>
               <li><a href="#testimonios" className="text-sm text-muted-foreground hover:text-primary transition-colors" data-testid="link-nav-testimonials">Testimonios</a></li>
             </ul>
-          </div>
+          </motion.div>
           
           {/* Services */}
-          <div className="space-y-4">
+          <motion.div className="space-y-4" variants={itemVariants}>
             <h4 className="font-semibold text-foreground" data-testid="text-footer-services-title">
               Servicios
             </h4>
@@ -84,10 +112,10 @@ export default function Footer() {
               <li><a href="#cursos" className="text-sm text-muted-foreground hover:text-primary transition-colors" data-testid="link-service-courses">Certificaciones</a></li>
               <li><a href="#marketing" className="text-sm text-muted-foreground hover:text-primary transition-colors" data-testid="link-service-marketing">Marketing Digital</a></li>
             </ul>
-          </div>
+          </motion.div>
           
           {/* Contact & Newsletter */}
-          <div className="space-y-4">
+          <motion.div className="space-y-4" variants={itemVariants}>
             <h4 className="font-semibold text-foreground" data-testid="text-footer-contact-title">
               Contacto
             </h4>
@@ -123,11 +151,17 @@ export default function Footer() {
                 </Button>
               </div>
             </form>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
         
         {/* Bottom bar */}
-        <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
+        <motion.div 
+          className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
           <p className="text-sm text-muted-foreground" data-testid="text-copyright">
             © 2025 Asociaciones y Sociedades Profesionales de América Latina. Todos los derechos reservados.
           </p>
@@ -142,7 +176,7 @@ export default function Footer() {
               Cookies
             </a>
           </div>
-        </div>
+        </motion.div>
       </div>
     </footer>
   );

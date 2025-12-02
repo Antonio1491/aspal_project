@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import membershipIllustration from "@assets/recurso-13-membresias.png";
@@ -11,6 +12,18 @@ interface ProblemSectionProps {
   imageAlt: string;
   reverse?: boolean;
 }
+
+const benefitVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.4,
+      ease: [0.25, 0.4, 0.25, 1],
+    },
+  },
+};
 
 export default function ProblemSection({ 
   question, 
@@ -27,54 +40,100 @@ export default function ProblemSection({
         <div className={`grid md:grid-cols-2 gap-12 items-center ${reverse ? 'md:flex-row-reverse' : ''}`}>
           {/* Content side */}
           <div className={`space-y-6 ${reverse ? 'md:order-2' : ''}`}>
-            <h2 className="text-4xl md:text-5xl font-bold leading-tight" data-testid="text-question">
+            <motion.h2 
+              className="text-4xl md:text-5xl font-bold leading-tight" 
+              data-testid="text-question"
+              initial={{ opacity: 0, x: reverse ? 40 : -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
+            >
               {question}
-            </h2>
+            </motion.h2>
             
-            <div className="space-y-4">
+            <motion.div 
+              className="space-y-4"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
+            >
               <h3 className="text-2xl md:text-3xl font-semibold text-secondary-foreground" data-testid="text-solution">
                 {solution}
               </h3>
               <p className="text-lg text-muted-foreground" data-testid="text-description">
                 {description}
               </p>
-            </div>
+            </motion.div>
             
-            <ul className="space-y-3">
+            <motion.ul 
+              className="space-y-3"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ staggerChildren: 0.1, delayChildren: 0.4 }}
+            >
               {benefits.map((benefit, index) => (
-                <li key={index} className="flex items-start gap-3" data-testid={`benefit-${index}`}>
-                  <div className="mt-1 rounded-full bg-secondary p-1">
+                <motion.li 
+                  key={index} 
+                  className="flex items-start gap-3" 
+                  data-testid={`benefit-${index}`}
+                  variants={benefitVariants}
+                >
+                  <motion.div 
+                    className="mt-1 rounded-full bg-secondary p-1"
+                    initial={{ scale: 0 }}
+                    whileInView={{ scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.5 + index * 0.1, type: "spring", stiffness: 400 }}
+                  >
                     <Check className="w-4 h-4 text-primary" />
-                  </div>
+                  </motion.div>
                   <span className="text-foreground">{benefit}</span>
-                </li>
+                </motion.li>
               ))}
-            </ul>
+            </motion.ul>
           </div>
           
           {/* Image side */}
-          <div className={reverse ? 'md:order-1' : ''}>
+          <motion.div 
+            className={reverse ? 'md:order-1' : ''}
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, delay: 0.1, ease: [0.25, 0.4, 0.25, 1] }}
+          >
             <div className="relative">
-              <Card className="p-8 backdrop-blur-sm bg-card/80 border-card-border">
-                <img 
-                  src={image} 
-                  alt={imageAlt} 
-                  className="w-full h-auto rounded-xl"
-                  data-testid="img-problem-illustration"
-                />
-              </Card>
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Card className="p-8 backdrop-blur-sm bg-card/80 border-card-border">
+                  <img 
+                    src={image} 
+                    alt={imageAlt} 
+                    className="w-full h-auto rounded-xl"
+                    data-testid="img-problem-illustration"
+                  />
+                </Card>
+              </motion.div>
               
               {/* Decorative elements */}
-              <div className="absolute -z-10 -top-6 -right-6 w-full h-full bg-gradient-to-br from-primary/10 to-transparent rounded-2xl"></div>
+              <motion.div 
+                className="absolute -z-10 -top-6 -right-6 w-full h-full bg-gradient-to-br from-primary/10 to-transparent rounded-2xl"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+              />
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
   );
 }
 
-// Export a default variant for easy use
 export function MembershipProblemSection() {
   return (
     <ProblemSection
