@@ -98,17 +98,18 @@ export default function Blog() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.7, delay: 0.1, ease: [0.25, 0.4, 0.25, 1] }}
               >
-                {/* Featured image as background */}
-                <div className="absolute inset-0">
+                {/* Featured image - prominent display */}
+                <div className="relative h-48 md:h-56 overflow-hidden">
                   <img
                     src={featuredPost.featuredImage}
-                    alt=""
-                    className="w-full h-full object-cover opacity-20"
+                    alt={featuredPost.title}
+                    className="w-full h-full object-cover"
+                    data-testid="img-featured-article"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/95 to-card/80" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
                 </div>
 
-                <div className="relative z-10 p-8 md:p-10 flex flex-col h-full justify-end">
+                <div className="relative z-10 p-6 md:p-8 flex flex-col flex-1">
                   <Badge
                     className="self-start mb-4 bg-secondary text-secondary-foreground font-semibold px-3 py-1"
                     data-testid="badge-featured"
@@ -118,7 +119,7 @@ export default function Blog() {
 
                   <Link href={`/blog/${featuredPost.slug}`}>
                     <h2
-                      className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground hover:text-primary transition-colors cursor-pointer leading-tight"
+                      className="text-xl md:text-2xl lg:text-3xl font-bold text-foreground hover:text-primary transition-colors cursor-pointer leading-tight"
                       data-testid="text-featured-title"
                     >
                       {featuredPost.title}
@@ -126,14 +127,14 @@ export default function Blog() {
                   </Link>
 
                   <p
-                    className="mt-4 text-muted-foreground line-clamp-3 text-base md:text-lg"
+                    className="mt-3 text-muted-foreground line-clamp-3 text-sm md:text-base flex-1"
                     data-testid="text-featured-excerpt"
                   >
                     {featuredPost.excerpt}
                   </p>
 
-                  <div className="mt-6 flex items-center gap-6 text-sm text-muted-foreground">
-                    <span className="uppercase tracking-wide font-medium text-foreground">
+                  <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+                    <span className="uppercase tracking-wide font-semibold text-foreground">
                       {featuredPost.category}
                     </span>
                     <span className="flex items-center gap-1">
@@ -144,7 +145,7 @@ export default function Blog() {
 
                   <Link href={`/blog/${featuredPost.slug}`}>
                     <motion.span
-                      className="inline-flex items-center gap-2 mt-6 text-primary font-semibold cursor-pointer"
+                      className="inline-flex items-center gap-2 mt-4 text-primary font-semibold cursor-pointer"
                       whileHover={{ x: 5 }}
                       data-testid="link-read-featured"
                     >
