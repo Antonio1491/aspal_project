@@ -54,11 +54,11 @@ export default function BlogCard({ post }: BlogCardProps) {
           data-testid={`card-post-${post.id}`}
         >
           {/* Image container */}
-          <div className="relative h-52 overflow-hidden">
+          <div className="relative h-52 overflow-hidden bg-muted/30">
             <motion.img
               src={post.featuredImage}
               alt={post.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.4 }}
               data-testid={`img-post-featured-${post.id}`}

@@ -27,11 +27,11 @@ export function PodcastCard({ podcast, episodeNumber }: PodcastCardProps) {
     <a href={podcast.link} target="_blank" rel="noopener noreferrer" className="block h-full">
       <Card className="flex flex-col h-full hover-elevate cursor-pointer" data-testid={`card-podcast-${podcast.id}`}>
         <CardHeader className="p-0">
-          <div className="aspect-square w-full overflow-hidden rounded-t-md">
+          <div className="aspect-video w-full overflow-hidden rounded-t-md bg-muted/30">
             <img
               src={podcast.featuredImage || '/placeholder-podcast.jpg'}
               alt={podcast.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
               data-testid={`img-podcast-artwork-${podcast.id}`}
             />
           </div>
