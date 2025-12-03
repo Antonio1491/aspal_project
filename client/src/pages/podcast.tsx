@@ -2,12 +2,29 @@ import { useQuery } from "@tanstack/react-query";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { PodcastCard } from "@/components/PodcastCard";
-import type { Podcast } from "@shared/schema";
 import { Headphones } from "lucide-react";
 
+interface WPPodcast {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  featuredImage: string;
+  category: string;
+  publishedAt: string;
+  author: string;
+  link: string;
+}
+
 export default function PodcastPage() {
-  const { data: podcasts, isLoading } = useQuery<Podcast[]>({
-    queryKey: ["/api/podcasts"],
+  const { data: podcasts, isLoading } = useQuery<WPPodcast[]>({
+    queryKey: ["/api/podcasts", { per_page: 6 }],
+    queryFn: async () => {
+      const response = await fetch("/api/podcasts?per_page=6");
+      if (!response.ok) throw new Error("Failed to fetch podcasts");
+      return response.json();
+    },
   });
 
   return (
@@ -76,8 +93,12 @@ export default function PodcastPage() {
             </div>
           ) : podcasts && podcasts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {podcasts.map((podcast) => (
-                <PodcastCard key={podcast.id} podcast={podcast} />
+              {podcasts.map((podcast, index) => (
+                <PodcastCard 
+                  key={podcast.id} 
+                  podcast={podcast} 
+                  episodeNumber={podcasts.length - index}
+                />
               ))}
             </div>
           ) : (
