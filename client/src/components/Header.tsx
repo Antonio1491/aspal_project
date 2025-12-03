@@ -1,9 +1,10 @@
 import logoLight from "@assets/ASPAL-para fondo claro_1763675327795.png";
 import logoDark from "@assets/ASPAL-para fondo oscuro_1763675345456.png";
 import { Button } from "@/components/ui/button";
-import { Menu, ChevronDown } from "lucide-react";
+import { Menu, ChevronDown, X, Play } from "lucide-react";
 import { useState } from "react";
 import { Link } from "wouter";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -18,11 +19,71 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
+function VideoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          {/* Backdrop with 50% opacity */}
+          <motion.div
+            className="absolute inset-0 bg-black/50"
+            onClick={onClose}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            data-testid="header-modal-backdrop"
+          />
+          
+          {/* Modal content */}
+          <motion.div
+            className="relative z-10 w-full max-w-4xl bg-card rounded-2xl overflow-hidden shadow-2xl"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
+          >
+            {/* Close button */}
+            <Button
+              size="icon"
+              variant="ghost"
+              className="absolute top-4 right-4 z-20 bg-black/50 hover:bg-black/70 text-white rounded-full"
+              onClick={onClose}
+              data-testid="header-button-close-modal"
+            >
+              <X className="w-5 h-5" />
+            </Button>
+            
+            {/* Video container with 16:9 aspect ratio */}
+            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src="https://www.youtube.com/embed/kl4Zd89F8jk?autoplay=1&rel=0"
+                title="Video de presentación"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                data-testid="header-iframe-video"
+              />
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [aprendeOpen, setAprendeOpen] = useState(false);
   const [participaOpen, setParticipaOpen] = useState(false);
   const [bolsaOpen, setBolsaOpen] = useState(false);
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -209,10 +270,13 @@ export default function Header() {
             <Button variant="ghost" data-testid="button-login">
               Iniciar sesión
             </Button>
-            <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90" asChild data-testid="button-demo">
-              <a href="https://youtu.be/kl4Zd89F8jk" target="_blank" rel="noopener noreferrer">
-                Ver Video
-              </a>
+            <Button 
+              className="bg-secondary text-secondary-foreground hover:bg-secondary/90" 
+              onClick={() => setIsVideoOpen(true)}
+              data-testid="button-demo"
+            >
+              <Play className="mr-2 w-4 h-4" />
+              Ver Video
             </Button>
           </div>
 
@@ -313,16 +377,25 @@ export default function Header() {
                 <Button variant="ghost" className="w-full" data-testid="button-mobile-login">
                   Iniciar sesión
                 </Button>
-                <Button className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90" asChild data-testid="button-mobile-demo">
-                  <a href="https://youtu.be/kl4Zd89F8jk" target="_blank" rel="noopener noreferrer">
-                    Ver Video
-                  </a>
+                <Button 
+                  className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90" 
+                  onClick={() => {
+                    setIsVideoOpen(true);
+                    setMobileMenuOpen(false);
+                  }}
+                  data-testid="button-mobile-demo"
+                >
+                  <Play className="mr-2 w-4 h-4" />
+                  Ver Video
                 </Button>
               </div>
             </nav>
           </div>
         )}
       </div>
+
+      {/* Video Modal */}
+      <VideoModal isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)} />
     </header>
   );
 }

@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { ArrowRight, X, Play } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAnimatedCounter } from "@/hooks/use-animated-counter";
 import heroDashboard from "@assets/generated_images/hero_dashboard_with_yellow_background.png";
 
@@ -17,7 +18,68 @@ function AnimatedCounter({ end, suffix = "", label }: { end: number; suffix?: st
   );
 }
 
+function VideoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          {/* Backdrop with 50% opacity */}
+          <motion.div
+            className="absolute inset-0 bg-black/50"
+            onClick={onClose}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            data-testid="modal-backdrop"
+          />
+          
+          {/* Modal content */}
+          <motion.div
+            className="relative z-10 w-full max-w-4xl bg-card rounded-2xl overflow-hidden shadow-2xl"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
+          >
+            {/* Close button */}
+            <Button
+              size="icon"
+              variant="ghost"
+              className="absolute top-4 right-4 z-20 bg-black/50 hover:bg-black/70 text-white rounded-full"
+              onClick={onClose}
+              data-testid="button-close-modal"
+            >
+              <X className="w-5 h-5" />
+            </Button>
+            
+            {/* Video container with 16:9 aspect ratio */}
+            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src="https://www.youtube.com/embed/kl4Zd89F8jk?autoplay=1&rel=0"
+                title="Video de presentación"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                data-testid="iframe-video"
+              />
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 export default function HeroSection() {
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
+
   return (
     <section className="relative min-h-[80vh] flex items-center overflow-hidden bg-gradient-to-br from-primary/5 via-background to-primary/10">
       {/* Animated mesh gradient background */}
@@ -67,10 +129,15 @@ export default function HeroSection() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: 0.65 }}
               >
-                <Button size="lg" variant="outline" className="text-base px-8 py-6 border-primary text-primary hover:bg-primary hover:text-primary-foreground" asChild data-testid="button-cta-secondary">
-                  <a href="https://youtu.be/kl4Zd89F8jk" target="_blank" rel="noopener noreferrer">
-                    Ver Video
-                  </a>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="text-base px-8 py-6 border-primary text-primary hover:bg-primary hover:text-primary-foreground" 
+                  onClick={() => setIsVideoOpen(true)}
+                  data-testid="button-cta-secondary"
+                >
+                  <Play className="mr-2 w-5 h-5" />
+                  Ver Video
                 </Button>
               </motion.div>
             </motion.div>
@@ -137,6 +204,9 @@ export default function HeroSection() {
           </motion.div>
         </div>
       </div>
+
+      {/* Video Modal */}
+      <VideoModal isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)} />
     </section>
   );
 }
