@@ -9,23 +9,34 @@ import { Calendar, Clock, ArrowRight } from "lucide-react";
 import { Link } from "wouter";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import type { Post } from "@shared/schema";
+
+interface WPPost {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  featuredImage: string;
+  category: string;
+  publishedAt: string;
+  author: string;
+  link: string;
+}
 
 const CATEGORIES = [
   { name: "Todos", color: "bg-secondary" },
-  { name: "Podcasting", color: "bg-blue-500" },
-  { name: "Eventos", color: "bg-green-500" },
-  { name: "Marketing", color: "bg-purple-500" },
-  { name: "Comunidad", color: "bg-orange-500" },
-  { name: "Certificaciones", color: "bg-pink-500" },
-  { name: "Carrera", color: "bg-cyan-500" },
-  { name: "Innovación", color: "bg-rose-500" },
+  { name: "Arquitectura", color: "bg-blue-500" },
+  { name: "Comunidad", color: "bg-green-500" },
+  { name: "Innovación", color: "bg-purple-500" },
+  { name: "Tecnología", color: "bg-orange-500" },
+  { name: "Diseño", color: "bg-pink-500" },
+  { name: "General", color: "bg-cyan-500" },
 ];
 
 export default function Blog() {
   const [activeCategory, setActiveCategory] = useState("Todos");
 
-  const { data: posts, isLoading } = useQuery<Post[]>({
+  const { data: posts, isLoading } = useQuery<WPPost[]>({
     queryKey: ["/api/posts"],
   });
 

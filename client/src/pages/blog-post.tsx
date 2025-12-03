@@ -7,13 +7,25 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Calendar, User } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import type { Post } from "@shared/schema";
+
+interface WPPost {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  featuredImage: string;
+  category: string;
+  publishedAt: string;
+  author: string;
+  link: string;
+}
 
 export default function BlogPost() {
   const params = useParams();
   const slug = params.slug as string;
 
-  const { data: post, isLoading, error } = useQuery<Post>({
+  const { data: post, isLoading, error } = useQuery<WPPost>({
     queryKey: ["/api/posts", slug],
     queryFn: async () => {
       const response = await fetch(`/api/posts/${slug}`);
@@ -123,12 +135,12 @@ export default function BlogPost() {
               />
             </div>
 
-            {/* Post content */}
-            <div className="prose prose-lg max-w-none" data-testid="content-body">
-              <div className="text-foreground leading-relaxed whitespace-pre-line">
-                {post.content}
-              </div>
-            </div>
+            {/* Post content - render WordPress HTML */}
+            <div 
+              className="prose prose-lg max-w-none dark:prose-invert prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-a:text-primary hover:prose-a:text-primary/80"
+              data-testid="content-body"
+              dangerouslySetInnerHTML={{ __html: post.content }}
+            />
 
             {/* Call to action */}
             <div className="mt-16 pt-12 border-t border-border">

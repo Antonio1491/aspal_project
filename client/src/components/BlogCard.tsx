@@ -5,10 +5,22 @@ import { Clock, ArrowUpRight } from "lucide-react";
 import { Link } from "wouter";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import type { Post } from "@shared/schema";
+
+interface WPPost {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  featuredImage: string;
+  category: string;
+  publishedAt: string;
+  author: string;
+  link: string;
+}
 
 interface BlogCardProps {
-  post: Post;
+  post: WPPost;
 }
 
 const getCategoryColor = (category: string) => {
