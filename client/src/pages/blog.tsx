@@ -37,7 +37,12 @@ export default function Blog() {
   const [activeCategory, setActiveCategory] = useState("Todos");
 
   const { data: posts, isLoading } = useQuery<WPPost[]>({
-    queryKey: ["/api/posts"],
+    queryKey: ["/api/posts", { per_page: 7 }],
+    queryFn: async () => {
+      const response = await fetch("/api/posts?per_page=7");
+      if (!response.ok) throw new Error("Failed to fetch posts");
+      return response.json();
+    },
   });
 
   const featuredPost = useMemo(() => {

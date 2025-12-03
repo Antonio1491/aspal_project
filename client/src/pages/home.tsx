@@ -1,5 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
-import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import { MembershipProblemSection } from "@/components/ProblemSection";
@@ -8,7 +6,6 @@ import LogoCarousel from "@/components/LogoCarousel";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
-import BlogCard from "@/components/BlogCard";
 import membershipImage from "@assets/recurso-13-membresias.png";
 import communityImage from "@assets/recurso-8-comunidad.png";
 import blogImage from "@assets/recurso-3-blog.png";
@@ -16,19 +13,6 @@ import certificationsImage from "@assets/recurso-40-certificaciones.png";
 import marketingImage from "@assets/recurso-27-marketing.png";
 import jobBoardImage from "@assets/recurso-26-bolsa-trabajo.png";
 import ProblemSection from "@/components/ProblemSection";
-
-interface WPPost {
-  id: number;
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  featuredImage: string;
-  category: string;
-  publishedAt: string;
-  author: string;
-  link: string;
-}
 import { 
   NetworkNodes, 
   FloatingDots, 
@@ -47,10 +31,6 @@ import {
 } from "lucide-react";
 
 export default function Home() {
-  const { data: posts, isLoading: postsLoading } = useQuery<WPPost[]>({
-    queryKey: ["/api/posts"],
-  });
-
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Decorative background elements */}
@@ -228,63 +208,6 @@ export default function Home() {
         ]}
         columns={4}
       />
-      
-      {/* Blog Posts Section */}
-      <section className="py-16 md:py-24 bg-muted/30" data-testid="section-blog-home">
-        <div className="container mx-auto px-4 md:px-8">
-          <motion.div
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Últimos <span className="text-secondary">Artículos</span>
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Recursos, guías y mejores prácticas para asociaciones profesionales
-            </p>
-          </motion.div>
-
-          {postsLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div
-                  key={i}
-                  className="h-96 bg-muted animate-pulse rounded-2xl"
-                  data-testid={`skeleton-post-home-${i}`}
-                />
-              ))}
-            </div>
-          ) : posts && posts.length > 0 ? (
-            <motion.div
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={{
-                hidden: {},
-                visible: {
-                  transition: { staggerChildren: 0.1 },
-                },
-              }}
-            >
-              {posts.slice(0, 6).map((post) => (
-                <motion.div
-                  key={post.id}
-                  variants={{
-                    hidden: { opacity: 0, y: 30 },
-                    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-                  }}
-                >
-                  <BlogCard post={post} />
-                </motion.div>
-              ))}
-            </motion.div>
-          ) : null}
-        </div>
-      </section>
       
       {/* Certifications Section with decorative graphic */}
       <div className="relative">
