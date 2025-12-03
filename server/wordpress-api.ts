@@ -1,4 +1,4 @@
-const WP_API_BASE = 'https://comunidadmuestra.asociacionesprofesionales.org/wp-json/wp/v2';
+const WP_API_BASE = 'https://comunidad.asociacionesprofesionales.org/wp-json/wp/v2';
 
 export interface WPPost {
   id: number;
@@ -119,14 +119,14 @@ export async function fetchPostBySlug(slug: string): Promise<TransformedPost | n
   }
 }
 
-export async function fetchPodcasts(perPage: number = 8): Promise<TransformedPost[]> {
+export async function fetchPodcasts(perPage: number = 6): Promise<TransformedPost[]> {
   try {
     const response = await fetch(
-      `${WP_API_BASE}/posts?_embed&per_page=${perPage}&categories=podcast`
+      `${WP_API_BASE}/posts?_embed&per_page=${perPage}`
     );
     
     if (!response.ok) {
-      return [];
+      throw new Error(`WordPress API error: ${response.status}`);
     }
     
     const posts: WPPost[] = await response.json();

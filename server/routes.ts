@@ -32,7 +32,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Podcast routes - fetch from WordPress API
   app.get("/api/podcasts", async (req, res) => {
     try {
-      const perPage = parseInt(req.query.per_page as string) || 8;
+      const perPage = parseInt(req.query.per_page as string) || 6;
       const podcasts = await fetchPodcasts(perPage);
       res.json(podcasts);
     } catch (error) {
