@@ -23,7 +23,7 @@ function VideoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -39,27 +39,29 @@ function VideoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
             data-testid="modal-backdrop"
           />
           
-          {/* Modal content */}
+          {/* Modal wrapper with close button above */}
           <motion.div
-            className="relative z-10 w-full max-w-4xl bg-card rounded-2xl overflow-hidden shadow-2xl"
+            className="relative z-10 w-full max-w-4xl"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
             transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
           >
-            {/* Close button */}
-            <Button
-              size="icon"
-              variant="ghost"
-              className="absolute top-4 right-4 z-20 bg-black/50 hover:bg-black/70 text-white rounded-full"
-              onClick={onClose}
-              data-testid="button-close-modal"
-            >
-              <X className="w-5 h-5" />
-            </Button>
+            {/* Close button - positioned above and to the right of video */}
+            <div className="flex justify-end mb-3">
+              <Button
+                size="icon"
+                variant="ghost"
+                className="bg-white/20 hover:bg-white/30 text-white rounded-full backdrop-blur-sm"
+                onClick={onClose}
+                data-testid="button-close-modal"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
             
             {/* Video container with 16:9 aspect ratio */}
-            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+            <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl bg-black" style={{ paddingBottom: '56.25%' }}>
               <iframe
                 className="absolute inset-0 w-full h-full"
                 src="https://www.youtube.com/embed/kl4Zd89F8jk?autoplay=1&rel=0"
