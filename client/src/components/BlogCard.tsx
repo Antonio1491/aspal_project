@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Clock, ArrowUpRight } from "lucide-react";
-import { Link } from "wouter";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
@@ -44,7 +43,7 @@ export default function BlogCard({ post }: BlogCardProps) {
   };
 
   return (
-    <Link href={`/blog/${post.slug}`}>
+    <a href={post.link} target="_blank" rel="noopener noreferrer">
       <motion.div
         className="group h-full cursor-pointer"
         whileHover={{ y: -8 }}
@@ -119,6 +118,6 @@ export default function BlogCard({ post }: BlogCardProps) {
           </div>
         </Card>
       </motion.div>
-    </Link>
+    </a>
   );
 }
