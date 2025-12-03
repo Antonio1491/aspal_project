@@ -121,8 +121,27 @@ export async function fetchPostBySlug(slug: string): Promise<TransformedPost | n
 
 export async function fetchPodcasts(perPage: number = 6): Promise<TransformedPost[]> {
   try {
+    // First, get the category ID for "podcast"
+    const categoryResponse = await fetch(
+      `${WP_API_BASE}/categories?slug=podcast`
+    );
+    
+    if (!categoryResponse.ok) {
+      throw new Error(`WordPress API error: ${categoryResponse.status}`);
+    }
+    
+    const categories = await categoryResponse.json();
+    
+    if (categories.length === 0) {
+      console.log('Category "podcast" not found');
+      return [];
+    }
+    
+    const podcastCategoryId = categories[0].id;
+    
+    // Now fetch posts filtered by the podcast category
     const response = await fetch(
-      `${WP_API_BASE}/posts?_embed&per_page=${perPage}`
+      `${WP_API_BASE}/posts?_embed&per_page=${perPage}&categories=${podcastCategoryId}`
     );
     
     if (!response.ok) {
