@@ -76,6 +76,7 @@ Preferred communication style: Simple, everyday language.
 - Podcasts table with fields: id, title, description, artwork, episodeNumber, duration, publishedAt (timestamp), externalUrl
 - Schema validation using Zod for type-safe inserts
 - PostgreSQL dialect with Neon serverless driver support
+- 
 
 **Storage Pattern**: 
 - Interface-based storage abstraction (`IStorage`) allowing multiple implementations
