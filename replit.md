@@ -4,6 +4,7 @@ This is a professional association/community management platform built as a mark
 
 The application uses a modern React frontend with a component-based architecture, styled with Tailwind CSS and shadcn/ui components. The backend is a minimal Express server with support for PostgreSQL database integration via Drizzle ORM.
 
+
 # User Preferences
 
 Preferred communication style: Simple, everyday language.
