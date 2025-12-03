@@ -110,19 +110,11 @@ export default function BlogCard({ post }: BlogCardProps) {
               {post.excerpt}
             </p>
 
-            {/* Footer with date and author */}
+            {/* Footer with date */}
             <div className="mt-4 pt-4 border-t border-border/50">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground" data-testid={`text-post-date-${post.id}`}>
-                  {format(new Date(post.publishedAt), "d MMM, yyyy", { locale: es })}
-                </span>
-                
-                {post.author && (
-                  <span className="font-medium text-foreground">
-                    {post.author}
-                  </span>
-                )}
-              </div>
+              <span className="text-sm text-muted-foreground" data-testid={`text-post-date-${post.id}`}>
+                {format(new Date(post.publishedAt), "d MMM, yyyy", { locale: es })}
+              </span>
             </div>
           </div>
         </Card>

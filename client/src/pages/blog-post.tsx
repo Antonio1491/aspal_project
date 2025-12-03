@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Calendar, User } from "lucide-react";
+import { ArrowLeft, Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
@@ -109,10 +109,6 @@ export default function BlogPost() {
                   <time dateTime={new Date(post.publishedAt).toISOString()} data-testid="text-date">
                     {format(new Date(post.publishedAt), "d 'de' MMMM, yyyy", { locale: es })}
                   </time>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <User className="w-4 h-4" />
-                  <span data-testid="text-author">{post.author}</span>
                 </div>
               </div>
 
