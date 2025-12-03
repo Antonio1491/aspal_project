@@ -53,107 +53,91 @@ export default function Blog() {
       {/* Hero Section - Split Panel Design */}
       <section className="relative bg-primary overflow-hidden" data-testid="section-blog-hero">
         <div className="container mx-auto px-4 md:px-8 py-12 md:py-20">
-          <div className="grid lg:grid-cols-2 gap-8 items-stretch min-h-[400px]">
-            {/* Left Panel - Title with decorative element */}
-            <motion.div
-              className="relative flex flex-col justify-center p-8 md:p-12 rounded-3xl bg-gradient-to-br from-primary-foreground/5 to-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/10"
-              initial={{ opacity: 0, x: -40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
-            >
-              {/* Decorative circles */}
-              <div className="absolute top-8 right-8 w-3 h-3 rounded-full bg-secondary" />
-              <div className="absolute bottom-12 left-12 w-2 h-2 rounded-full bg-secondary/60" />
-              <div className="absolute top-1/2 right-16 w-2 h-2 rounded-full bg-primary-foreground/40" />
-
-              {/* Abstract globe illustration */}
-              <div className="absolute right-4 bottom-4 opacity-20">
-                <svg width="200" height="200" viewBox="0 0 200 200" fill="none">
-                  <circle cx="100" cy="100" r="80" stroke="currentColor" strokeWidth="1" className="text-secondary" />
-                  <circle cx="100" cy="100" r="60" stroke="currentColor" strokeWidth="1" className="text-primary-foreground/30" />
-                  <ellipse cx="100" cy="100" rx="80" ry="30" stroke="currentColor" strokeWidth="1" className="text-secondary/60" />
-                  <path d="M100 20 Q140 100 100 180" stroke="currentColor" strokeWidth="1" className="text-primary-foreground/40" fill="none" />
-                  <path d="M100 20 Q60 100 100 180" stroke="currentColor" strokeWidth="1" className="text-primary-foreground/40" fill="none" />
-                </svg>
-              </div>
-
-              <h1
-                className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground leading-tight relative z-10"
-                data-testid="text-blog-title"
-              >
-                Artículos de<br />
-                <span className="text-secondary">Conocimiento</span>
-              </h1>
-
-              <p className="mt-4 text-primary-foreground/70 text-lg max-w-md relative z-10">
-                Recursos, guías y mejores prácticas para asociaciones profesionales
-              </p>
-            </motion.div>
-
-            {/* Right Panel - Featured Article */}
+          <div className="grid lg:grid-cols-2 gap-6 items-stretch min-h-[420px]">
+            {/* Left Panel - Featured Article Image */}
             {featuredPost && (
               <motion.div
-                className="relative flex flex-col bg-card rounded-3xl overflow-hidden shadow-xl"
+                className="relative rounded-3xl overflow-hidden shadow-xl"
+                initial={{ opacity: 0, x: -40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
+              >
+                <Link href={`/blog/${featuredPost.slug}`}>
+                  <img
+                    src={featuredPost.featuredImage}
+                    alt={featuredPost.title}
+                    className="w-full h-full object-cover min-h-[300px] lg:min-h-full cursor-pointer hover:scale-105 transition-transform duration-500"
+                    data-testid="img-featured-article"
+                  />
+                </Link>
+                
+                {/* Overlay with title */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
+                <div className="absolute bottom-6 left-6 right-6">
+                  <h1
+                    className="text-3xl md:text-4xl font-bold text-white leading-tight"
+                    data-testid="text-blog-title"
+                  >
+                    Artículos de <span className="text-secondary">Conocimiento</span>
+                  </h1>
+                  <p className="mt-2 text-white/80 text-sm md:text-base">
+                    Recursos, guías y mejores prácticas para asociaciones profesionales
+                  </p>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Right Panel - Featured Article Info */}
+            {featuredPost && (
+              <motion.div
+                className="relative flex flex-col bg-card rounded-3xl overflow-hidden shadow-xl p-6 md:p-8"
                 initial={{ opacity: 0, x: 40 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.7, delay: 0.1, ease: [0.25, 0.4, 0.25, 1] }}
               >
-                {/* Featured image - prominent display */}
-                <div className="relative h-48 md:h-56 overflow-hidden">
-                  <img
-                    src={featuredPost.featuredImage}
-                    alt={featuredPost.title}
-                    className="w-full h-full object-cover"
-                    data-testid="img-featured-article"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
+                <Badge
+                  className="self-start mb-4 bg-secondary text-secondary-foreground font-semibold px-3 py-1"
+                  data-testid="badge-featured"
+                >
+                  Artículo Destacado
+                </Badge>
+
+                <Link href={`/blog/${featuredPost.slug}`}>
+                  <h2
+                    className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground hover:text-primary transition-colors cursor-pointer leading-tight"
+                    data-testid="text-featured-title"
+                  >
+                    {featuredPost.title}
+                  </h2>
+                </Link>
+
+                <p
+                  className="mt-4 text-muted-foreground line-clamp-4 text-base md:text-lg flex-1"
+                  data-testid="text-featured-excerpt"
+                >
+                  {featuredPost.excerpt}
+                </p>
+
+                <div className="mt-6 flex items-center gap-4 text-sm text-muted-foreground">
+                  <span className="uppercase tracking-wide font-semibold text-foreground">
+                    {featuredPost.category}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Clock className="w-4 h-4" />
+                    {estimateReadTime(featuredPost.content)} min lectura
+                  </span>
                 </div>
 
-                <div className="relative z-10 p-6 md:p-8 flex flex-col flex-1">
-                  <Badge
-                    className="self-start mb-4 bg-secondary text-secondary-foreground font-semibold px-3 py-1"
-                    data-testid="badge-featured"
+                <Link href={`/blog/${featuredPost.slug}`}>
+                  <motion.span
+                    className="inline-flex items-center gap-2 mt-6 text-primary font-semibold cursor-pointer text-lg"
+                    whileHover={{ x: 5 }}
+                    data-testid="link-read-featured"
                   >
-                    Artículo Destacado
-                  </Badge>
-
-                  <Link href={`/blog/${featuredPost.slug}`}>
-                    <h2
-                      className="text-xl md:text-2xl lg:text-3xl font-bold text-foreground hover:text-primary transition-colors cursor-pointer leading-tight"
-                      data-testid="text-featured-title"
-                    >
-                      {featuredPost.title}
-                    </h2>
-                  </Link>
-
-                  <p
-                    className="mt-3 text-muted-foreground line-clamp-3 text-sm md:text-base flex-1"
-                    data-testid="text-featured-excerpt"
-                  >
-                    {featuredPost.excerpt}
-                  </p>
-
-                  <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
-                    <span className="uppercase tracking-wide font-semibold text-foreground">
-                      {featuredPost.category}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-4 h-4" />
-                      {estimateReadTime(featuredPost.content)} min lectura
-                    </span>
-                  </div>
-
-                  <Link href={`/blog/${featuredPost.slug}`}>
-                    <motion.span
-                      className="inline-flex items-center gap-2 mt-4 text-primary font-semibold cursor-pointer"
-                      whileHover={{ x: 5 }}
-                      data-testid="link-read-featured"
-                    >
-                      Leer artículo
-                      <ArrowRight className="w-5 h-5" />
-                    </motion.span>
-                  </Link>
-                </div>
+                    Leer artículo
+                    <ArrowRight className="w-5 h-5" />
+                  </motion.span>
+                </Link>
               </motion.div>
             )}
           </div>
