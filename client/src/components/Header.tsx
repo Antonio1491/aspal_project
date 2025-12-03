@@ -265,13 +265,13 @@ export default function Header() {
               {/* Se Miembro */}
               <NavigationMenuItem>
                 <a
-                  href="https://asociacionesprofesionales.org/register/membresia-basica/"
+                  href="https://comunidad.asociacionesprofesionales.org/register/membresia-basica/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={navigationMenuTriggerStyle()}
                   data-testid="link-se-miembro"
                 >
-                  Se Miembro
+                  Sé Miembro
                 </a>
               </NavigationMenuItem>
             </NavigationMenuList>
@@ -376,13 +376,13 @@ export default function Header() {
 
               {/* Se Miembro */}
               <a 
-                href="https://asociacionesprofesionales.org/register/membresia-basica/" 
+                href="https://comunidad.asociacionesprofesionales.org/register/membresia-basica/" 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
                 data-testid="mobile-link-se-miembro"
               >
-                Se Miembro
+                Sé Miembro
               </a>
 
               <div className="flex flex-col gap-2 pt-2">
