@@ -14,6 +14,15 @@ import marketingImage from "@assets/recurso-27-marketing.png";
 import jobBoardImage from "@assets/recurso-26-bolsa-trabajo.png";
 import ProblemSection from "@/components/ProblemSection";
 import { 
+  NetworkNodes, 
+  FloatingDots, 
+  HexagonNetwork, 
+  PeopleCircle, 
+  GrowthChart,
+  DecorativeBlob,
+  ConnectionLines
+} from "@/components/CommunityGraphics";
+import { 
   Users, MessageCircle, Shield, Calendar, TrendingUp, Lock,
   BookOpen, Podcast, Video, FileText,
   GraduationCap, Award, UserCheck, DollarSign, Settings,
@@ -23,7 +32,35 @@ import {
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        {/* Top right network */}
+        <div className="absolute -top-20 -right-20 w-80 h-80 opacity-30">
+          <NetworkNodes />
+        </div>
+        
+        {/* Left side floating dots */}
+        <div className="absolute top-[30%] -left-10 w-48 h-48 opacity-40">
+          <FloatingDots />
+        </div>
+        
+        {/* Right side hexagon */}
+        <div className="absolute top-[50%] -right-16 w-64 h-64 opacity-20">
+          <HexagonNetwork />
+        </div>
+        
+        {/* Bottom left blob */}
+        <div className="absolute bottom-[20%] -left-20 w-96 h-96">
+          <DecorativeBlob variant="secondary" />
+        </div>
+        
+        {/* Bottom right people circle */}
+        <div className="absolute bottom-[40%] -right-24 w-72 h-72 opacity-25">
+          <PeopleCircle />
+        </div>
+      </div>
+      
       <Header />
       <HeroSection />
       
@@ -68,22 +105,28 @@ export default function Home() {
         columns={3}
       />
       
-      {/* Community Section */}
-      <ProblemSection
-        question="¿Tu asociación tiene miembros... pero no comunidad?"
-        solution="Comunidad en Línea:"
-        description="Diseñamos y construimos tu espacio digital para que tus miembros conecten, colaboren y crezcan juntos."
-        benefits={[
-          "Perfiles profesionales personalizados",
-          "Muro de actividad y grupos temáticos",
-          "Mensajes privados y foros de discusión",
-          "Eventos, gamificación y etiquetas",
-          "Privacidad y seguridad garantizada"
-        ]}
-        image={communityImage}
-        imageAlt="Comunidad en línea"
-        reverse={true}
-      />
+      {/* Community Section with decorative graphic */}
+      <div className="relative">
+        {/* Inline decorative element */}
+        <div className="absolute left-1/2 -translate-x-1/2 -top-16 w-32 h-32 opacity-20 hidden md:block">
+          <PeopleCircle />
+        </div>
+        <ProblemSection
+          question="¿Tu asociación tiene miembros... pero no comunidad?"
+          solution="Comunidad en Línea:"
+          description="Diseñamos y construimos tu espacio digital para que tus miembros conecten, colaboren y crezcan juntos."
+          benefits={[
+            "Perfiles profesionales personalizados",
+            "Muro de actividad y grupos temáticos",
+            "Mensajes privados y foros de discusión",
+            "Eventos, gamificación y etiquetas",
+            "Privacidad y seguridad garantizada"
+          ]}
+          image={communityImage}
+          imageAlt="Comunidad en línea"
+          reverse={true}
+        />
+      </div>
       
       <FeaturesGrid
         title="Características de Comunidad"
@@ -166,21 +209,27 @@ export default function Home() {
         columns={4}
       />
       
-      {/* Certifications Section */}
-      <ProblemSection
-        question="¿Qué tan fácil es para tus miembros aprender y certificarse contigo hoy?"
-        solution="Certificaciones y Cursos en Línea:"
-        description="Impulsa el desarrollo profesional de tu comunidad con una plataforma moderna de aprendizaje digital."
-        benefits={[
-          "Gestión integral de cursos",
-          "Certificaciones digitales automáticas",
-          "Control de acceso por nivel o rol",
-          "Experiencia personalizada para cada usuario"
-        ]}
-        image={certificationsImage}
-        imageAlt="Certificaciones y cursos"
-        reverse={true}
-      />
+      {/* Certifications Section with decorative graphic */}
+      <div className="relative">
+        {/* Growth chart decoration */}
+        <div className="absolute right-8 top-8 w-40 h-32 opacity-15 hidden lg:block">
+          <GrowthChart />
+        </div>
+        <ProblemSection
+          question="¿Qué tan fácil es para tus miembros aprender y certificarse contigo hoy?"
+          solution="Certificaciones y Cursos en Línea:"
+          description="Impulsa el desarrollo profesional de tu comunidad con una plataforma moderna de aprendizaje digital."
+          benefits={[
+            "Gestión integral de cursos",
+            "Certificaciones digitales automáticas",
+            "Control de acceso por nivel o rol",
+            "Experiencia personalizada para cada usuario"
+          ]}
+          image={certificationsImage}
+          imageAlt="Certificaciones y cursos"
+          reverse={true}
+        />
+      </div>
       
       <FeaturesGrid
         title="Aprendizaje Digital"
@@ -215,20 +264,26 @@ export default function Home() {
         columns={3}
       />
       
-      {/* Marketing Section */}
-      <ProblemSection
-        question="¿Ya tienes una estrategia digital para atraer y retener a tus miembros?"
-        solution="Marketing y Comunicación:"
-        description="Optimiza la conexión con tus miembros y amplía tu alcance con estrategias digitales pensadas para asociaciones."
-        benefits={[
-          "Automatización de marketing multicanal",
-          "Segmentación inteligente de audiencias",
-          "Campañas por Email, WhatsApp y SMS",
-          "Formularios y landing pages personalizadas"
-        ]}
-        image={marketingImage}
-        imageAlt="Marketing y comunicación"
-      />
+      {/* Marketing Section with connection lines */}
+      <div className="relative">
+        {/* Connection lines decoration */}
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-64 h-48 opacity-10 hidden lg:block">
+          <ConnectionLines />
+        </div>
+        <ProblemSection
+          question="¿Ya tienes una estrategia digital para atraer y retener a tus miembros?"
+          solution="Marketing y Comunicación:"
+          description="Optimiza la conexión con tus miembros y amplía tu alcance con estrategias digitales pensadas para asociaciones."
+          benefits={[
+            "Automatización de marketing multicanal",
+            "Segmentación inteligente de audiencias",
+            "Campañas por Email, WhatsApp y SMS",
+            "Formularios y landing pages personalizadas"
+          ]}
+          image={marketingImage}
+          imageAlt="Marketing y comunicación"
+        />
+      </div>
       
       <FeaturesGrid
         title="Marketing Digital"
@@ -268,21 +323,27 @@ export default function Home() {
         columns={3}
       />
       
-      {/* Job Board Section */}
-      <ProblemSection
-        question="¿Tu asociación ya conecta a sus miembros con ofertas laborales?"
-        solution="Bolsa de Trabajo en Línea:"
-        description="Conecta a tus miembros con empleadores y oportunidades reales a través de una bolsa de trabajo hecha a la medida."
-        benefits={[
-          "Publicación de vacantes simplificada",
-          "Perfiles y currículums de candidatos",
-          "Filtros avanzados de búsqueda",
-          "Opción de monetización para tu organización"
-        ]}
-        image={jobBoardImage}
-        imageAlt="Bolsa de trabajo"
-        reverse={true}
-      />
+      {/* Job Board Section with network graphic */}
+      <div className="relative">
+        {/* Network nodes decoration */}
+        <div className="absolute right-4 bottom-8 w-48 h-48 opacity-15 hidden lg:block">
+          <NetworkNodes />
+        </div>
+        <ProblemSection
+          question="¿Tu asociación ya conecta a sus miembros con ofertas laborales?"
+          solution="Bolsa de Trabajo en Línea:"
+          description="Conecta a tus miembros con empleadores y oportunidades reales a través de una bolsa de trabajo hecha a la medida."
+          benefits={[
+            "Publicación de vacantes simplificada",
+            "Perfiles y currículums de candidatos",
+            "Filtros avanzados de búsqueda",
+            "Opción de monetización para tu organización"
+          ]}
+          image={jobBoardImage}
+          imageAlt="Bolsa de trabajo"
+          reverse={true}
+        />
+      </div>
       
       <FeaturesGrid
         title="Bolsa de Trabajo"
