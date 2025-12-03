@@ -26,6 +26,7 @@ Preferred communication style: Simple, everyday language.
 - TanStack Query (React Query) for server state management and data fetching
 - React hooks for local component state
 - Custom hooks for responsive behavior (`use-mobile`) and toast notifications
+- 
 
 **Styling System**:
 - Tailwind CSS as the core utility-first CSS framework
