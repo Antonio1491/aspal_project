@@ -74,7 +74,8 @@ app.use((req, res, next) => {
   server.listen({
     port,
     host: "0.0.0.0",
-    reusePort: true,
+    // SO_REUSEPORT is not supported on Windows and makes listen() throw ENOTSUP
+    reusePort: process.platform !== "win32",
   }, () => {
     log(`serving on port ${port}`);
   });
