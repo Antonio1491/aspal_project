@@ -1,6 +1,5 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
 import { fetchPosts, fetchPostBySlug, fetchPodcasts } from "./wordpress-api";
 
 export async function registerRoutes(app: Express): Promise<Server> {

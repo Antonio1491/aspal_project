@@ -2,7 +2,7 @@
 
 This is a professional association/community management platform built as a marketing landing page. The application showcases features for managing memberships, building online communities, content creation (blogs), certifications, marketing tools, and job boards. It's designed for non-profit organizations and professional associations looking to create and manage their digital presence.
 
-The application uses a modern React frontend with a component-based architecture, styled with Tailwind CSS and shadcn/ui components. The backend is a minimal Express server with support for PostgreSQL database integration via Drizzle ORM.
+The application uses a modern React frontend with a component-based architecture, styled with Tailwind CSS and shadcn/ui components. The backend is a minimal Express server that proxies blog and podcast content from an external WordPress REST API. There is no database.
 
 
 # User Preferences
@@ -55,10 +55,12 @@ Preferred communication style: Simple, everyday language.
 
 **Architecture Pattern**: Simple REST API structure with:
 - Centralized route registration in `server/routes.ts`
-- Storage abstraction layer via interface pattern
+- WordPress fetching and response transformation in `server/wordpress-api.ts`
 - Development/production mode support with environment-based configuration
 
-**Session Management**: Built-in support for `connect-pg-simple` for PostgreSQL-backed session storage (not yet fully implemented)
+**Session Management**: None. The site is fully public and stateless.
+
+**Vercel Deployment**: `api/index.ts` is a standalone serverless function that duplicates the WordPress proxy logic from `server/`. Changes to the API must be applied in both places.
 
 **Development Tools**:
 - Vite middleware integration for HMR (Hot Module Replacement)
@@ -68,29 +70,19 @@ Preferred communication style: Simple, everyday language.
 
 ## Data Storage
 
-**ORM**: Drizzle ORM for type-safe database operations
+**There is no database.** All blog and podcast content is fetched at request time from the WordPress REST API at `https://comunidad.asociacionesprofesionales.org/wp-json/wp/v2`.
 
-**Database Schema**:
-- Users table with UUID primary keys, username, and password fields
-- Posts table with fields: id, title, slug (unique), excerpt, content, featuredImage, category, publishedAt (timestamp), author
-- Podcasts table with fields: id, title, description, artwork, episodeNumber, duration, publishedAt (timestamp), externalUrl
-- Schema validation using Zod for type-safe inserts
-- PostgreSQL dialect with Neon serverless driver support
-- 
+**Content Source**:
+- Blog posts: `/posts?_embed` — HTML is stripped for excerpts, featured image falls back to the first `<img>` in the content
+- Podcasts: the same `/posts` endpoint, filtered by the `podcast` category (resolved by slug at request time)
+- Both are normalized into a `TransformedPost` shape before reaching the client
 
-**Storage Pattern**: 
-- Interface-based storage abstraction (`IStorage`) allowing multiple implementations
-- Current implementation: In-memory storage (`MemStorage`) for development
-- Ready for PostgreSQL implementation via Drizzle ORM
-- CRUD operations:
-  - Users: getUser, getUserByUsername, createUser
-  - Posts: getPosts (sorted by publishedAt desc), getPostBySlug
-  - Podcasts: getPodcasts (sorted by publishedAt desc)
-- Mock data: 
-  - 7 blog posts initialized with real ASPAL content covering podcasting, events, marketing, community, certifications, career development, and innovation
-  - 8 podcast episodes from "Conexión Profesional" with real episode information, artwork, and external links
+**Endpoints**:
+- `GET /api/posts?per_page=N`
+- `GET /api/posts/:slug`
+- `GET /api/podcasts?per_page=N`
 
-**Migration Strategy**: Drizzle Kit for schema management with migrations stored in `/migrations/`
+No environment variables or credentials are required — the WordPress API is public and read-only.
 
 ## External Dependencies
 
@@ -104,12 +96,10 @@ Preferred communication style: Simple, everyday language.
 **Form Handling**:
 - React Hook Form with Hookform resolvers for validation
 - Zod for schema validation
-- Integration with Drizzle schemas via `drizzle-zod`
 
-**Database & Backend**:
-- @neondatabase/serverless for PostgreSQL connection
-- Drizzle ORM and Drizzle Kit for database operations and migrations
-- connect-pg-simple for session storage
+**Backend**:
+- Express for the API server and static file serving
+- Native `fetch` against the WordPress REST API
 
 **Utilities**:
 - date-fns for date formatting and manipulation with Spanish locale for blog dates
