@@ -1,9 +1,9 @@
 import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import BlogCard from "@/components/BlogCard";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import BlogCard from "@/components/content/BlogCard";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
 import { Link } from "wouter";

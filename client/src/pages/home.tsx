@@ -1,18 +1,18 @@
-import Header from "@/components/Header";
-import HeroSection from "@/components/HeroSection";
-import { MembershipProblemSection } from "@/components/ProblemSection";
-import FeaturesGrid from "@/components/FeaturesGrid";
-import LogoCarousel from "@/components/LogoCarousel";
-import TestimonialsSection from "@/components/TestimonialsSection";
-import CTASection from "@/components/CTASection";
-import Footer from "@/components/Footer";
+import Header from "@/components/layout/Header";
+import HeroSection from "@/components/sections/HeroSection";
+import { MembershipProblemSection } from "@/components/sections/ProblemSection";
+import FeaturesGrid from "@/components/sections/FeaturesGrid";
+import LogoCarousel from "@/components/sections/LogoCarousel";
+import TestimonialsSection from "@/components/sections/TestimonialsSection";
+import CTASection from "@/components/sections/CTASection";
+import Footer from "@/components/layout/Footer";
 import membershipImage from "@assets/recurso-13-membresias.png";
 import communityImage from "@assets/recurso-8-comunidad.png";
 import blogImage from "@assets/recurso-3-blog.png";
 import certificationsImage from "@assets/recurso-40-certificaciones.png";
 import marketingImage from "@assets/recurso-27-marketing.png";
 import jobBoardImage from "@assets/recurso-26-bolsa-trabajo.png";
-import ProblemSection from "@/components/ProblemSection";
+import ProblemSection from "@/components/sections/ProblemSection";
 import { 
   NetworkNodes, 
   FloatingDots, 
@@ -21,7 +21,7 @@ import {
   GrowthChart,
   DecorativeBlob,
   ConnectionLines
-} from "@/components/CommunityGraphics";
+} from "@/components/sections/CommunityGraphics";
 import { 
   Users, MessageCircle, Shield, Calendar, TrendingUp, Lock,
   BookOpen, Podcast, Video, FileText,
