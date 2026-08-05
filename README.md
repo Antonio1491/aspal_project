@@ -22,15 +22,15 @@ sitio es público, de solo lectura y sin estado.
 
 ## Stack
 
-| Capa | Tecnología |
-|---|---|
-| UI | React 18 · TypeScript · Vite |
-| Estilos | Tailwind CSS · shadcn/ui (New York) · Montserrat |
-| Rutas | wouter |
-| Datos | TanStack Query |
-| Animación | framer-motion |
-| Backend | Express (dev y self-hosted) · función serverless en Vercel |
-| Contenido | WordPress REST API (headless) |
+| Capa      | Tecnología                                                 |
+| --------- | ---------------------------------------------------------- |
+| UI        | React 18 · TypeScript · Vite                               |
+| Estilos   | Tailwind CSS · shadcn/ui (New York) · Montserrat           |
+| Rutas     | wouter                                                     |
+| Datos     | TanStack Query                                             |
+| Animación | framer-motion                                              |
+| Backend   | Express (dev y self-hosted) · función serverless en Vercel |
+| Contenido | WordPress REST API (headless)                              |
 
 ## Arranque rápido
 
@@ -51,11 +51,11 @@ Abre <http://localhost:5000>.
 
 ## Scripts
 
-| Comando | Qué hace |
-|---|---|
-| `npm run dev` | Express + Vite con HMR |
-| `npm run build` | Cliente a `dist/public/`, servidor a `dist/` |
-| `npm run start` | Sirve el build de producción |
+| Comando         | Qué hace                                              |
+| --------------- | ----------------------------------------------------- |
+| `npm run dev`   | Express + Vite con HMR                                |
+| `npm run build` | Cliente a `dist/public/`, servidor a `dist/`          |
+| `npm run start` | Sirve el build de producción                          |
 | `npm run check` | Typecheck de `client/`, `server/`, `shared/` y `api/` |
 
 ## Estructura
@@ -83,12 +83,12 @@ hacían y acabaron divergiendo.
 
 Todos los endpoints son públicos, de solo lectura y sin parámetros de auth.
 
-| Endpoint | Descripción |
-|---|---|
-| `GET /api/posts?per_page=N` | Últimos posts (por defecto 6) |
-| `GET /api/posts/:slug` | Post individual · `404` si no existe |
-| `GET /api/podcasts?per_page=N` | Episodios de la categoría `podcast` |
-| `GET /api/health` | Sonda de estado |
+| Endpoint                       | Descripción                          |
+| ------------------------------ | ------------------------------------ |
+| `GET /api/posts?per_page=N`    | Últimos posts (por defecto 6)        |
+| `GET /api/posts/:slug`         | Post individual · `404` si no existe |
+| `GET /api/podcasts?per_page=N` | Episodios de la categoría `podcast`  |
+| `GET /api/health`              | Sonda de estado                      |
 
 Los posts se devuelven ya normalizados (`TransformedPost`): el HTML se limpia
 para el extracto y la imagen destacada cae al primer `<img>` del contenido
@@ -101,11 +101,11 @@ error: la landing debe renderizar aunque el blog esté caído.
 
 Ninguna es obligatoria — la API de WordPress es pública.
 
-| Variable | Default | Para qué |
-|---|---|---|
-| `PORT` | `5000` | Puerto del servidor Express |
-| `WP_API_BASE` | `https://comunidad.asociacionesprofesionales.org/wp-json/wp/v2` | Origen del contenido |
-| `NODE_ENV` | — | `development` activa Vite/HMR; si no, sirve `dist/` |
+| Variable      | Default                                                         | Para qué                                            |
+| ------------- | --------------------------------------------------------------- | --------------------------------------------------- |
+| `PORT`        | `5000`                                                          | Puerto del servidor Express                         |
+| `WP_API_BASE` | `https://comunidad.asociacionesprofesionales.org/wp-json/wp/v2` | Origen del contenido                                |
+| `NODE_ENV`    | —                                                               | `development` activa Vite/HMR; si no, sirve `dist/` |
 
 ## Despliegue
 

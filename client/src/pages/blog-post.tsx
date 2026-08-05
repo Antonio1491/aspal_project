@@ -13,7 +13,11 @@ export default function BlogPost() {
   const params = useParams();
   const slug = params.slug as string;
 
-  const { data: post, isLoading, error } = useQuery<TransformedPost>({
+  const {
+    data: post,
+    isLoading,
+    error,
+  } = useQuery<TransformedPost>({
     queryKey: ["/api/posts", slug],
     queryFn: async () => {
       const response = await fetch(`/api/posts/${slug}`);
@@ -52,7 +56,10 @@ export default function BlogPost() {
         <Header />
         <div className="container mx-auto px-4 md:px-8 py-16">
           <div className="max-w-4xl mx-auto text-center space-y-6">
-            <h1 className="text-4xl font-bold text-foreground" data-testid="text-error-title">
+            <h1
+              className="text-4xl font-bold text-foreground"
+              data-testid="text-error-title"
+            >
               Artículo no encontrado
             </h1>
             <p className="text-muted-foreground" data-testid="text-error-message">
@@ -74,7 +81,7 @@ export default function BlogPost() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <article className="py-16 md:py-24" data-testid="article-post">
         <div className="container mx-auto px-4 md:px-8">
           <div className="max-w-4xl mx-auto">
@@ -89,18 +96,29 @@ export default function BlogPost() {
             {/* Post header */}
             <header className="space-y-6 mb-12">
               <div className="flex flex-wrap items-center gap-4">
-                <Badge className="bg-secondary text-secondary-foreground" data-testid="badge-category">
+                <Badge
+                  className="bg-secondary text-secondary-foreground"
+                  data-testid="badge-category"
+                >
                   {post.category}
                 </Badge>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Calendar className="w-4 h-4" />
-                  <time dateTime={new Date(post.publishedAt).toISOString()} data-testid="text-date">
-                    {format(new Date(post.publishedAt), "d 'de' MMMM, yyyy", { locale: es })}
+                  <time
+                    dateTime={new Date(post.publishedAt).toISOString()}
+                    data-testid="text-date"
+                  >
+                    {format(new Date(post.publishedAt), "d 'de' MMMM, yyyy", {
+                      locale: es,
+                    })}
                   </time>
                 </div>
               </div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight" data-testid="text-title">
+              <h1
+                className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
+                data-testid="text-title"
+              >
                 {post.title}
               </h1>
 
@@ -120,7 +138,7 @@ export default function BlogPost() {
             </div>
 
             {/* Post content - render WordPress HTML */}
-            <div 
+            <div
               className="prose prose-lg max-w-none dark:prose-invert prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-a:text-primary hover:prose-a:text-primary/80"
               data-testid="content-body"
               dangerouslySetInnerHTML={{ __html: post.content }}
@@ -129,16 +147,26 @@ export default function BlogPost() {
             {/* Call to action */}
             <div className="mt-16 pt-12 border-t border-border">
               <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-8 md:p-12 text-center">
-                <h2 className="text-2xl md:text-3xl font-bold mb-4" data-testid="text-cta-title">
+                <h2
+                  className="text-2xl md:text-3xl font-bold mb-4"
+                  data-testid="text-cta-title"
+                >
                   ¿Te gustó este artículo?
                 </h2>
-                <p className="text-muted-foreground mb-6" data-testid="text-cta-description">
-                  Explora más recursos y mantente actualizado con las últimas tendencias para asociaciones profesionales.
+                <p
+                  className="text-muted-foreground mb-6"
+                  data-testid="text-cta-description"
+                >
+                  Explora más recursos y mantente actualizado con las últimas tendencias
+                  para asociaciones profesionales.
                 </p>
-                <Button size="lg" className="bg-secondary text-secondary-foreground hover:bg-secondary/90" asChild data-testid="button-cta">
-                  <Link href="/blog">
-                    Ver más artículos
-                  </Link>
+                <Button
+                  size="lg"
+                  className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
+                  asChild
+                  data-testid="button-cta"
+                >
+                  <Link href="/blog">Ver más artículos</Link>
                 </Button>
               </div>
             </div>

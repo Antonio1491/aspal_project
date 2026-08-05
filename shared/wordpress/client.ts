@@ -13,13 +13,11 @@ import type { TransformedPost, WPPost } from "./types";
 
 const WP_API_BASE =
   process.env.WP_API_BASE ??
-  'https://comunidad.asociacionesprofesionales.org/wp-json/wp/v2';
+  "https://comunidad.asociacionesprofesionales.org/wp-json/wp/v2";
 
 export async function fetchPosts(perPage: number = 6): Promise<TransformedPost[]> {
   try {
-    const response = await fetch(
-      `${WP_API_BASE}/posts?_embed&per_page=${perPage}`
-    );
+    const response = await fetch(`${WP_API_BASE}/posts?_embed&per_page=${perPage}`);
 
     if (!response.ok) {
       throw new Error(`WordPress API error: ${response.status}`);
@@ -28,7 +26,7 @@ export async function fetchPosts(perPage: number = 6): Promise<TransformedPost[]
     const posts: WPPost[] = await response.json();
     return posts.map(transformPost);
   } catch (error) {
-    console.error('Error fetching posts from WordPress:', error);
+    console.error("Error fetching posts from WordPress:", error);
     return [];
   }
 }
@@ -36,7 +34,7 @@ export async function fetchPosts(perPage: number = 6): Promise<TransformedPost[]
 export async function fetchPostBySlug(slug: string): Promise<TransformedPost | null> {
   try {
     const response = await fetch(
-      `${WP_API_BASE}/posts?_embed&slug=${encodeURIComponent(slug)}`
+      `${WP_API_BASE}/posts?_embed&slug=${encodeURIComponent(slug)}`,
     );
 
     if (!response.ok) {
@@ -50,7 +48,7 @@ export async function fetchPostBySlug(slug: string): Promise<TransformedPost | n
 
     return transformPost(posts[0]);
   } catch (error) {
-    console.error('Error fetching post by slug:', error);
+    console.error("Error fetching post by slug:", error);
     return null;
   }
 }
@@ -59,9 +57,7 @@ export async function fetchPodcasts(perPage: number = 6): Promise<TransformedPos
   try {
     // Los podcasts son posts de la categoría "podcast": hay que resolver su id
     // por slug antes de poder filtrar.
-    const categoryResponse = await fetch(
-      `${WP_API_BASE}/categories?slug=podcast`
-    );
+    const categoryResponse = await fetch(`${WP_API_BASE}/categories?slug=podcast`);
 
     if (!categoryResponse.ok) {
       throw new Error(`WordPress API error: ${categoryResponse.status}`);
@@ -77,7 +73,7 @@ export async function fetchPodcasts(perPage: number = 6): Promise<TransformedPos
     const podcastCategoryId = categories[0].id;
 
     const response = await fetch(
-      `${WP_API_BASE}/posts?_embed&per_page=${perPage}&categories=${podcastCategoryId}`
+      `${WP_API_BASE}/posts?_embed&per_page=${perPage}&categories=${podcastCategoryId}`,
     );
 
     if (!response.ok) {
@@ -87,7 +83,7 @@ export async function fetchPodcasts(perPage: number = 6): Promise<TransformedPos
     const posts: WPPost[] = await response.json();
     return posts.map(transformPost);
   } catch (error) {
-    console.error('Error fetching podcasts:', error);
+    console.error("Error fetching podcasts:", error);
     return [];
   }
 }

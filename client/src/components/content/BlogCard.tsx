@@ -14,13 +14,17 @@ const getCategoryColor = (category: string) => {
   const colors: Record<string, string> = {
     Podcasting: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
     Eventos: "bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20",
-    Marketing: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
-    Comunidad: "bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20",
+    Marketing:
+      "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
+    Comunidad:
+      "bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20",
     Certificaciones: "bg-pink-500/10 text-pink-600 dark:text-pink-400 border-pink-500/20",
     Carrera: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/20",
     Innovación: "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20",
   };
-  return colors[category] || "bg-secondary/10 text-secondary-foreground border-secondary/20";
+  return (
+    colors[category] || "bg-secondary/10 text-secondary-foreground border-secondary/20"
+  );
 };
 
 export default function BlogCard({ post }: BlogCardProps) {
@@ -51,10 +55,10 @@ export default function BlogCard({ post }: BlogCardProps) {
               transition={{ duration: 0.4 }}
               data-testid={`img-post-featured-${post.id}`}
             />
-            
+
             {/* Gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            
+
             {/* Arrow icon on hover */}
             <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
               <div className="p-2 rounded-full bg-white/90 dark:bg-black/80 backdrop-blur-sm">
@@ -74,7 +78,7 @@ export default function BlogCard({ post }: BlogCardProps) {
               >
                 {post.category}
               </Badge>
-              
+
               <span className="flex items-center gap-1 text-xs text-muted-foreground">
                 <Clock className="w-3.5 h-3.5" />
                 {estimateReadTime(post.content)} min
@@ -99,7 +103,10 @@ export default function BlogCard({ post }: BlogCardProps) {
 
             {/* Footer with date */}
             <div className="mt-4 pt-4 border-t border-border/50">
-              <span className="text-sm text-muted-foreground" data-testid={`text-post-date-${post.id}`}>
+              <span
+                className="text-sm text-muted-foreground"
+                data-testid={`text-post-date-${post.id}`}
+              >
                 {format(new Date(post.publishedAt), "d MMM, yyyy", { locale: es })}
               </span>
             </div>

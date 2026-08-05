@@ -22,10 +22,13 @@ export default function LogoCarousel() {
   const duplicatedLogos = [...LOGOS, ...LOGOS, ...LOGOS];
 
   return (
-    <section className="py-16 bg-gradient-to-b from-background to-muted/20 overflow-hidden" data-testid="section-logo-carousel">
+    <section
+      className="py-16 bg-gradient-to-b from-background to-muted/20 overflow-hidden"
+      data-testid="section-logo-carousel"
+    >
       <div className="container mx-auto px-4 md:px-8 mb-12">
-        <motion.h2 
-          className="text-3xl md:text-4xl font-bold text-center" 
+        <motion.h2
+          className="text-3xl md:text-4xl font-bold text-center"
           data-testid="text-clients-title"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -35,8 +38,8 @@ export default function LogoCarousel() {
           Casos de éxito o clientes
         </motion.h2>
       </div>
-      
-      <motion.div 
+
+      <motion.div
         className="relative"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -44,22 +47,25 @@ export default function LogoCarousel() {
         transition={{ duration: 0.8, delay: 0.2 }}
       >
         {/* First row - scrolling right */}
-        <div className="flex gap-12 mb-8 animate-scroll-right" data-testid="carousel-row-1">
+        <div
+          className="flex gap-12 mb-8 animate-scroll-right"
+          data-testid="carousel-row-1"
+        >
           {duplicatedLogos.map((logo, index) => (
             <div
               key={`row1-${index}`}
               className="flex-shrink-0 w-48 h-28 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 opacity-70 hover:opacity-100"
               data-testid={`logo-${index}`}
             >
-              <img 
-                src={logo.src} 
-                alt={logo.alt} 
+              <img
+                src={logo.src}
+                alt={logo.alt}
                 className="max-w-full max-h-full object-contain filter brightness-0 dark:brightness-100"
               />
             </div>
           ))}
         </div>
-        
+
         {/* Second row - scrolling left */}
         <div className="flex gap-12 animate-scroll-left" data-testid="carousel-row-2">
           {duplicatedLogos.map((logo, index) => (
@@ -68,20 +74,20 @@ export default function LogoCarousel() {
               className="flex-shrink-0 w-48 h-28 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 opacity-70 hover:opacity-100"
               data-testid={`logo-alt-${index}`}
             >
-              <img 
-                src={logo.src} 
-                alt={logo.alt} 
+              <img
+                src={logo.src}
+                alt={logo.alt}
                 className="max-w-full max-h-full object-contain filter brightness-0 dark:brightness-100"
               />
             </div>
           ))}
         </div>
-        
+
         {/* Gradient overlays */}
         <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-background to-transparent pointer-events-none"></div>
         <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-background to-transparent pointer-events-none"></div>
       </motion.div>
-      
+
       <style>{`
         @keyframes scroll-right {
           0% {

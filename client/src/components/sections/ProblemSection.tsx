@@ -25,23 +25,25 @@ const benefitVariants = {
   },
 };
 
-export default function ProblemSection({ 
-  question, 
-  solution, 
-  description, 
-  benefits, 
-  image, 
+export default function ProblemSection({
+  question,
+  solution,
+  description,
+  benefits,
+  image,
   imageAlt,
-  reverse = false 
+  reverse = false,
 }: ProblemSectionProps) {
   return (
     <section className="py-20 md:py-32" data-testid="section-problem">
       <div className="container mx-auto px-4 md:px-8">
-        <div className={`grid md:grid-cols-2 gap-12 items-center ${reverse ? 'md:flex-row-reverse' : ''}`}>
+        <div
+          className={`grid md:grid-cols-2 gap-12 items-center ${reverse ? "md:flex-row-reverse" : ""}`}
+        >
           {/* Content side */}
-          <div className={`space-y-6 ${reverse ? 'md:order-2' : ''}`}>
-            <motion.h2 
-              className="text-4xl md:text-5xl font-bold leading-tight" 
+          <div className={`space-y-6 ${reverse ? "md:order-2" : ""}`}>
+            <motion.h2
+              className="text-4xl md:text-5xl font-bold leading-tight"
               data-testid="text-question"
               initial={{ opacity: 0, x: reverse ? 40 : -40 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -50,23 +52,26 @@ export default function ProblemSection({
             >
               {question}
             </motion.h2>
-            
-            <motion.div 
+
+            <motion.div
               className="space-y-4"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
             >
-              <h3 className="text-2xl md:text-3xl font-semibold text-secondary-foreground" data-testid="text-solution">
+              <h3
+                className="text-2xl md:text-3xl font-semibold text-secondary-foreground"
+                data-testid="text-solution"
+              >
                 {solution}
               </h3>
               <p className="text-lg text-muted-foreground" data-testid="text-description">
                 {description}
               </p>
             </motion.div>
-            
-            <motion.ul 
+
+            <motion.ul
               className="space-y-3"
               initial="hidden"
               whileInView="visible"
@@ -74,18 +79,22 @@ export default function ProblemSection({
               transition={{ staggerChildren: 0.1, delayChildren: 0.4 }}
             >
               {benefits.map((benefit, index) => (
-                <motion.li 
-                  key={index} 
-                  className="flex items-start gap-3" 
+                <motion.li
+                  key={index}
+                  className="flex items-start gap-3"
                   data-testid={`benefit-${index}`}
                   variants={benefitVariants}
                 >
-                  <motion.div 
+                  <motion.div
                     className="mt-1 rounded-full bg-secondary p-1"
                     initial={{ scale: 0 }}
                     whileInView={{ scale: 1 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.5 + index * 0.1, type: "spring", stiffness: 400 }}
+                    transition={{
+                      delay: 0.5 + index * 0.1,
+                      type: "spring",
+                      stiffness: 400,
+                    }}
                   >
                     <Check className="w-4 h-4 text-primary" />
                   </motion.div>
@@ -94,32 +103,29 @@ export default function ProblemSection({
               ))}
             </motion.ul>
           </div>
-          
+
           {/* Image side */}
-          <motion.div 
-            className={reverse ? 'md:order-1' : ''}
+          <motion.div
+            className={reverse ? "md:order-1" : ""}
             initial={{ opacity: 0, y: 60 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.25, 0.4, 0.25, 1] }}
           >
             <div className="relative">
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
-              >
+              <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }}>
                 <Card className="p-8 backdrop-blur-sm bg-card/80 border-card-border">
-                  <img 
-                    src={image} 
-                    alt={imageAlt} 
+                  <img
+                    src={image}
+                    alt={imageAlt}
                     className="w-full h-auto rounded-xl"
                     data-testid="img-problem-illustration"
                   />
                 </Card>
               </motion.div>
-              
+
               {/* Decorative elements */}
-              <motion.div 
+              <motion.div
                 className="absolute -z-10 -top-6 -right-6 w-full h-full bg-gradient-to-br from-primary/10 to-transparent rounded-2xl"
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -144,7 +150,7 @@ export function MembershipProblemSection() {
         "Renueva y gestiona membresías sin esfuerzo",
         "Control de acceso personalizado por tipo de membresía",
         "Pagos integrados y automatizados",
-        "Beneficios exclusivos para cada nivel"
+        "Beneficios exclusivos para cada nivel",
       ]}
       image={membershipIllustration}
       imageAlt="Automatización de membresías"

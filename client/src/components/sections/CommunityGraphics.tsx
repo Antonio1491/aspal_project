@@ -2,20 +2,18 @@ import { motion } from "framer-motion";
 
 export function NetworkNodes({ className = "" }: { className?: string }) {
   return (
-    <svg 
-      viewBox="0 0 200 200" 
-      className={`w-full h-full ${className}`}
-      fill="none"
-    >
+    <svg viewBox="0 0 200 200" className={`w-full h-full ${className}`} fill="none">
       {/* Central node */}
       <motion.circle
-        cx="100" cy="100" r="12"
+        cx="100"
+        cy="100"
+        r="12"
         className="fill-primary"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       />
-      
+
       {/* Surrounding nodes */}
       {[0, 60, 120, 180, 240, 300].map((angle, i) => {
         const x = 100 + 50 * Math.cos((angle * Math.PI) / 180);
@@ -23,8 +21,10 @@ export function NetworkNodes({ className = "" }: { className?: string }) {
         return (
           <g key={i}>
             <motion.line
-              x1="100" y1="100"
-              x2={x} y2={y}
+              x1="100"
+              y1="100"
+              x2={x}
+              y2={y}
               className="stroke-primary/30"
               strokeWidth="2"
               initial={{ pathLength: 0 }}
@@ -32,7 +32,9 @@ export function NetworkNodes({ className = "" }: { className?: string }) {
               transition={{ duration: 0.8, delay: 0.3 + i * 0.1 }}
             />
             <motion.circle
-              cx={x} cy={y} r="8"
+              cx={x}
+              cy={y}
+              r="8"
               className="fill-secondary"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -41,7 +43,7 @@ export function NetworkNodes({ className = "" }: { className?: string }) {
           </g>
         );
       })}
-      
+
       {/* Outer ring nodes */}
       {[30, 90, 150, 210, 270, 330].map((angle, i) => {
         const x = 100 + 80 * Math.cos((angle * Math.PI) / 180);
@@ -51,8 +53,10 @@ export function NetworkNodes({ className = "" }: { className?: string }) {
         return (
           <g key={`outer-${i}`}>
             <motion.line
-              x1={innerX} y1={innerY}
-              x2={x} y2={y}
+              x1={innerX}
+              y1={innerY}
+              x2={x}
+              y2={y}
               className="stroke-primary/20"
               strokeWidth="1.5"
               initial={{ pathLength: 0 }}
@@ -60,7 +64,9 @@ export function NetworkNodes({ className = "" }: { className?: string }) {
               transition={{ duration: 0.6, delay: 0.8 + i * 0.1 }}
             />
             <motion.circle
-              cx={x} cy={y} r="5"
+              cx={x}
+              cy={y}
+              r="5"
               className="fill-primary/60"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -93,7 +99,7 @@ export function FloatingDots({ className = "" }: { className?: string }) {
           r={dot.size}
           className="fill-secondary/40"
           initial={{ opacity: 0, scale: 0 }}
-          animate={{ 
+          animate={{
             opacity: [0.4, 0.8, 0.4],
             scale: [0.8, 1.1, 0.8],
           }}
@@ -101,7 +107,7 @@ export function FloatingDots({ className = "" }: { className?: string }) {
             duration: 3,
             delay: dot.delay,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: "easeInOut",
           }}
         />
       ))}
@@ -131,7 +137,7 @@ export function ConnectionLines({ className = "" }: { className?: string }) {
         animate={{ pathLength: 1 }}
         transition={{ duration: 2, delay: 0.3, ease: "easeInOut" }}
       />
-      
+
       {/* Connection points */}
       {[50, 150, 250].map((x, i) => (
         <motion.circle
@@ -170,7 +176,7 @@ export function HexagonNetwork({ className = "" }: { className?: string }) {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.6 }}
       />
-      
+
       {/* Surrounding hexagons */}
       {[0, 60, 120, 180, 240, 300].map((angle, i) => {
         const x = 100 + 55 * Math.cos((angle * Math.PI) / 180);
@@ -187,10 +193,12 @@ export function HexagonNetwork({ className = "" }: { className?: string }) {
           />
         );
       })}
-      
+
       {/* Connection dots */}
       <motion.circle
-        cx="100" cy="100" r="8"
+        cx="100"
+        cy="100"
+        r="8"
         className="fill-primary"
         initial={{ scale: 0 }}
         animate={{ scale: [1, 1.2, 1] }}
@@ -202,56 +210,63 @@ export function HexagonNetwork({ className = "" }: { className?: string }) {
 
 export function PeopleCircle({ className = "" }: { className?: string }) {
   const people = 8;
-  
+
   return (
     <svg viewBox="0 0 200 200" className={`w-full h-full ${className}`} fill="none">
       {/* Center connection hub */}
       <motion.circle
-        cx="100" cy="100" r="25"
+        cx="100"
+        cy="100"
+        r="25"
         className="fill-primary/10 stroke-primary/30"
         strokeWidth="2"
         strokeDasharray="4 4"
         initial={{ scale: 0 }}
         animate={{ scale: 1, rotate: 360 }}
-        transition={{ 
+        transition={{
           scale: { duration: 0.5 },
-          rotate: { duration: 20, repeat: Infinity, ease: "linear" }
+          rotate: { duration: 20, repeat: Infinity, ease: "linear" },
         }}
       />
-      
+
       {/* People icons around the circle */}
       {Array.from({ length: people }).map((_, i) => {
         const angle = (360 / people) * i;
         const x = 100 + 65 * Math.cos((angle * Math.PI) / 180);
         const y = 100 + 65 * Math.sin((angle * Math.PI) / 180);
-        
+
         return (
           <g key={i}>
             {/* Connection line */}
             <motion.line
-              x1="100" y1="100"
-              x2={x} y2={y}
+              x1="100"
+              y1="100"
+              x2={x}
+              y2={y}
               className="stroke-primary/20"
               strokeWidth="1"
               initial={{ pathLength: 0 }}
               animate={{ pathLength: 1 }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
             />
-            
+
             {/* Person head */}
             <motion.circle
-              cx={x} cy={y - 5}
+              cx={x}
+              cy={y - 5}
               r="8"
               className={i % 2 === 0 ? "fill-primary" : "fill-secondary"}
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.3, delay: 0.3 + i * 0.1 }}
             />
-            
+
             {/* Person body */}
             <motion.ellipse
-              cx={x} cy={y + 10}
-              rx="10" ry="6"
+              cx={x}
+              cy={y + 10}
+              rx="10"
+              ry="6"
               className={i % 2 === 0 ? "fill-primary/60" : "fill-secondary/60"}
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -271,8 +286,10 @@ export function GrowthChart({ className = "" }: { className?: string }) {
       {[30, 60, 90, 120].map((y, i) => (
         <motion.line
           key={i}
-          x1="20" y1={y}
-          x2="180" y2={y}
+          x1="20"
+          y1={y}
+          x2="180"
+          y2={y}
           className="stroke-muted-foreground/10"
           strokeWidth="1"
           initial={{ opacity: 0 }}
@@ -280,7 +297,7 @@ export function GrowthChart({ className = "" }: { className?: string }) {
           transition={{ delay: i * 0.1 }}
         />
       ))}
-      
+
       {/* Growth area */}
       <motion.path
         d="M20 120 Q50 100 80 90 T140 50 T180 30 V120 H20 Z"
@@ -289,7 +306,7 @@ export function GrowthChart({ className = "" }: { className?: string }) {
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       />
-      
+
       {/* Growth line */}
       <motion.path
         d="M20 120 Q50 100 80 90 T140 50 T180 30"
@@ -300,14 +317,14 @@ export function GrowthChart({ className = "" }: { className?: string }) {
         animate={{ pathLength: 1 }}
         transition={{ duration: 1.5, ease: "easeOut" }}
       />
-      
+
       {/* Data points */}
       {[
         { x: 20, y: 120 },
         { x: 60, y: 95 },
         { x: 100, y: 70 },
         { x: 140, y: 50 },
-        { x: 180, y: 30 }
+        { x: 180, y: 30 },
       ].map((point, i) => (
         <motion.circle
           key={i}
@@ -325,9 +342,15 @@ export function GrowthChart({ className = "" }: { className?: string }) {
   );
 }
 
-export function DecorativeBlob({ className = "", variant = "primary" }: { className?: string; variant?: "primary" | "secondary" }) {
+export function DecorativeBlob({
+  className = "",
+  variant = "primary",
+}: {
+  className?: string;
+  variant?: "primary" | "secondary";
+}) {
   const colorClass = variant === "primary" ? "fill-primary/5" : "fill-secondary/10";
-  
+
   return (
     <motion.svg
       viewBox="0 0 200 200"
@@ -343,13 +366,13 @@ export function DecorativeBlob({ className = "", variant = "primary" }: { classN
           d: [
             "M100 20 C150 20 180 50 180 100 C180 150 150 180 100 180 C50 180 20 150 20 100 C20 50 50 20 100 20",
             "M100 25 C145 15 185 55 175 105 C165 155 140 185 95 175 C45 165 15 140 25 95 C35 45 55 35 100 25",
-            "M100 20 C150 20 180 50 180 100 C180 150 150 180 100 180 C50 180 20 150 20 100 C20 50 50 20 100 20"
-          ]
+            "M100 20 C150 20 180 50 180 100 C180 150 150 180 100 180 C50 180 20 150 20 100 C20 50 50 20 100 20",
+          ],
         }}
         transition={{
           duration: 8,
           repeat: Infinity,
-          ease: "easeInOut"
+          ease: "easeInOut",
         }}
       />
     </motion.svg>

@@ -11,32 +11,39 @@ interface TestimonialCardProps {
   index?: number;
 }
 
-export default function TestimonialCard({ 
-  quote, 
-  author, 
-  role, 
-  organization, 
+export default function TestimonialCard({
+  quote,
+  author,
+  role,
+  organization,
   avatar,
-  index = 0 
+  index = 0,
 }: TestimonialCardProps) {
-  const initials = author.split(' ').map(n => n[0]).join('').toUpperCase();
-  
+  const initials = author
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+
   return (
-    <Card 
+    <Card
       className="h-full backdrop-blur-sm bg-card/80 border-secondary/20 hover-elevate transition-all duration-300"
-      style={{ 
+      style={{
         animationDelay: `${index * 150}ms`,
-        animationFillMode: 'backwards'
+        animationFillMode: "backwards",
       }}
       data-testid={`card-testimonial-${index}`}
     >
       <CardContent className="p-8 space-y-6">
         <Quote className="w-10 h-10 text-secondary/40" />
-        
-        <p className="text-lg leading-relaxed text-foreground" data-testid={`text-testimonial-quote-${index}`}>
+
+        <p
+          className="text-lg leading-relaxed text-foreground"
+          data-testid={`text-testimonial-quote-${index}`}
+        >
           {quote}
         </p>
-        
+
         <div className="flex items-center gap-4 pt-4 border-t border-border">
           <Avatar className="w-12 h-12" data-testid={`avatar-testimonial-${index}`}>
             <AvatarImage src={avatar} alt={author} />
@@ -44,15 +51,24 @@ export default function TestimonialCard({
               {initials}
             </AvatarFallback>
           </Avatar>
-          
+
           <div>
-            <div className="font-semibold text-foreground" data-testid={`text-testimonial-author-${index}`}>
+            <div
+              className="font-semibold text-foreground"
+              data-testid={`text-testimonial-author-${index}`}
+            >
               {author}
             </div>
-            <div className="text-sm text-muted-foreground" data-testid={`text-testimonial-role-${index}`}>
+            <div
+              className="text-sm text-muted-foreground"
+              data-testid={`text-testimonial-role-${index}`}
+            >
               {role}
             </div>
-            <div className="text-sm font-medium text-secondary-foreground" data-testid={`text-testimonial-org-${index}`}>
+            <div
+              className="text-sm font-medium text-secondary-foreground"
+              data-testid={`text-testimonial-org-${index}`}
+            >
               {organization}
             </div>
           </div>

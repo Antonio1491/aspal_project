@@ -53,7 +53,10 @@ export default function Blog() {
       <Header />
 
       {/* Hero Section - Split Panel Design */}
-      <section className="relative bg-primary overflow-hidden" data-testid="section-blog-hero">
+      <section
+        className="relative bg-primary overflow-hidden"
+        data-testid="section-blog-hero"
+      >
         <div className="container mx-auto px-4 md:px-8 py-12 md:py-20">
           <div className="grid lg:grid-cols-2 gap-6 items-stretch min-h-[420px]">
             {/* Left Panel - Featured Article Image */}
@@ -72,7 +75,7 @@ export default function Blog() {
                     data-testid="img-featured-article"
                   />
                 </Link>
-                
+
                 {/* Overlay with title */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
                 <div className="absolute bottom-6 left-6 right-6">
@@ -165,7 +168,10 @@ export default function Blog() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-2xl md:text-3xl font-bold mb-8" data-testid="text-topics-title">
+            <h2
+              className="text-2xl md:text-3xl font-bold mb-8"
+              data-testid="text-topics-title"
+            >
               Temas de Interés
             </h2>
 
@@ -176,9 +182,10 @@ export default function Blog() {
                   onClick={() => setActiveCategory(category.name)}
                   className={`
                     inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 font-medium transition-all
-                    ${activeCategory === category.name
-                      ? "bg-primary text-primary-foreground border-primary"
-                      : "bg-card text-foreground border-border hover:border-primary/50"
+                    ${
+                      activeCategory === category.name
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-card text-foreground border-border hover:border-primary/50"
                     }
                   `}
                   whileHover={{ scale: 1.02 }}

@@ -17,13 +17,13 @@ de solo lectura y sin estado.
 
 **Rutas** (`wouter`, definidas en `client/src/App.tsx`):
 
-| Ruta | Página |
-|---|---|
-| `/` | Landing |
-| `/blog` | Listado de artículos con filtro por categoría |
-| `/blog/:slug` | Artículo individual |
-| `/podcast` | Listado de episodios |
-| `*` | 404 |
+| Ruta          | Página                                        |
+| ------------- | --------------------------------------------- |
+| `/`           | Landing                                       |
+| `/blog`       | Listado de artículos con filtro por categoría |
+| `/blog/:slug` | Artículo individual                           |
+| `/podcast`    | Listado de episodios                          |
+| `*`           | 404                                           |
 
 **Estado:** TanStack Query para estado de servidor; hooks de React para estado
 local. Hooks propios en `client/src/hooks/` (`use-mobile`, `use-toast`,
@@ -53,10 +53,10 @@ Los elementos interactivos y significativos llevan `data-testid`.
 
 Express con TypeScript. Dos despliegues del mismo código:
 
-| Entorno | Entrada | Rol |
-|---|---|---|
+| Entorno                  | Entrada           | Rol                                |
+| ------------------------ | ----------------- | ---------------------------------- |
 | Desarrollo / self-hosted | `server/index.ts` | Express + middleware de Vite (HMR) |
-| Producción (Vercel) | `api/index.ts` | Función serverless para `/api/*` |
+| Producción (Vercel)      | `api/index.ts`    | Función serverless para `/api/*`   |
 
 **Ambos son solo wiring.** La lógica está en `shared/wordpress/`:
 
@@ -88,12 +88,12 @@ No hay persistencia. Todo el contenido se pide a WordPress en cada request:
 `https://comunidad.asociacionesprofesionales.org/wp-json/wp/v2`
 (configurable con `WP_API_BASE`)
 
-| Endpoint | Origen |
-|---|---|
-| `GET /api/posts?per_page=N` | `/posts?_embed` |
-| `GET /api/posts/:slug` | `/posts?_embed&slug=…` · `404` si no hay resultados |
-| `GET /api/podcasts?per_page=N` | `/posts` filtrado por la categoría `podcast` |
-| `GET /api/health` | — |
+| Endpoint                       | Origen                                              |
+| ------------------------------ | --------------------------------------------------- |
+| `GET /api/posts?per_page=N`    | `/posts?_embed`                                     |
+| `GET /api/posts/:slug`         | `/posts?_embed&slug=…` · `404` si no hay resultados |
+| `GET /api/podcasts?per_page=N` | `/posts` filtrado por la categoría `podcast`        |
+| `GET /api/health`              | —                                                   |
 
 **Normalización** (`transformPost`): se limpia el HTML para título y extracto
 (truncado a 200 caracteres), el contenido se conserva como HTML crudo para

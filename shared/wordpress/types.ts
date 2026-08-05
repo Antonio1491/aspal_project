@@ -14,7 +14,7 @@ export interface WPPost {
   excerpt: { rendered: string };
   link: string;
   _embedded?: {
-    'wp:featuredmedia'?: Array<{
+    "wp:featuredmedia"?: Array<{
       source_url: string;
       alt_text: string;
     }>;
@@ -22,11 +22,13 @@ export interface WPPost {
       name: string;
       avatar_urls?: { [key: string]: string };
     }>;
-    'wp:term'?: Array<Array<{
-      id: number;
-      name: string;
-      slug: string;
-    }>>;
+    "wp:term"?: Array<
+      Array<{
+        id: number;
+        name: string;
+        slug: string;
+      }>
+    >;
   };
 }
 

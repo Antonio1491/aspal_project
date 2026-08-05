@@ -6,10 +6,7 @@ interface UseAnimatedCounterOptions {
   startOnView?: boolean;
 }
 
-export function useAnimatedCounter(
-  end: number,
-  options: UseAnimatedCounterOptions = {}
-) {
+export function useAnimatedCounter(end: number, options: UseAnimatedCounterOptions = {}) {
   const { duration = 2000, delay = 0, startOnView = true } = options;
   const [count, setCount] = useState(0);
   const [hasStarted, setHasStarted] = useState(false);
@@ -27,7 +24,7 @@ export function useAnimatedCounter(
           setHasStarted(true);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     if (ref.current) {
@@ -48,10 +45,10 @@ export function useAnimatedCounter(
         if (!startTime) startTime = currentTime;
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
-        
+
         const easeOutQuart = 1 - Math.pow(1 - progress, 4);
         const currentCount = Math.floor(easeOutQuart * end);
-        
+
         setCount(currentCount);
 
         if (progress < 1) {

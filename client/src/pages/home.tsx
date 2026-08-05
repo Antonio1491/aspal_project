@@ -11,21 +11,41 @@ import certificationsImage from "@assets/recurso-40-certificaciones.png";
 import marketingImage from "@assets/recurso-27-marketing.png";
 import jobBoardImage from "@assets/recurso-26-bolsa-trabajo.png";
 import ProblemSection from "@/components/sections/ProblemSection";
-import { 
-  NetworkNodes, 
-  FloatingDots, 
-  HexagonNetwork, 
-  PeopleCircle, 
+import {
+  NetworkNodes,
+  FloatingDots,
+  HexagonNetwork,
+  PeopleCircle,
   GrowthChart,
   DecorativeBlob,
-  ConnectionLines
+  ConnectionLines,
 } from "@/components/sections/CommunityGraphics";
-import { 
-  Users, MessageCircle, Shield, Calendar, TrendingUp, Lock,
-  BookOpen, Podcast, Video, FileText,
-  GraduationCap, Award, UserCheck, DollarSign, Settings,
-  Mail, Target, Globe, Tag, Heart,
-  Briefcase, FileCheck, Filter, Send, Wallet
+import {
+  Users,
+  MessageCircle,
+  Shield,
+  Calendar,
+  TrendingUp,
+  Lock,
+  BookOpen,
+  Podcast,
+  Video,
+  FileText,
+  GraduationCap,
+  Award,
+  UserCheck,
+  DollarSign,
+  Settings,
+  Mail,
+  Target,
+  Globe,
+  Tag,
+  Heart,
+  Briefcase,
+  FileCheck,
+  Filter,
+  Send,
+  Wallet,
 } from "lucide-react";
 
 export default function Home() {
@@ -37,34 +57,34 @@ export default function Home() {
         <div className="absolute -top-20 -right-20 w-80 h-80 opacity-30">
           <NetworkNodes />
         </div>
-        
+
         {/* Left side floating dots */}
         <div className="absolute top-[30%] -left-10 w-48 h-48 opacity-40">
           <FloatingDots />
         </div>
-        
+
         {/* Right side hexagon */}
         <div className="absolute top-[50%] -right-16 w-64 h-64 opacity-20">
           <HexagonNetwork />
         </div>
-        
+
         {/* Bottom left blob */}
         <div className="absolute bottom-[20%] -left-20 w-96 h-96">
           <DecorativeBlob variant="secondary" />
         </div>
-        
+
         {/* Bottom right people circle */}
         <div className="absolute bottom-[40%] -right-24 w-72 h-72 opacity-25">
           <PeopleCircle />
         </div>
       </div>
-      
+
       <Header />
       <HeroSection />
-      
+
       {/* Memberships Section */}
       <MembershipProblemSection />
-      
+
       <FeaturesGrid
         title="Gestión de Membresías"
         subtitle="Automatiza y simplifica"
@@ -72,37 +92,37 @@ export default function Home() {
           {
             icon: Users,
             title: "Membresías automáticas",
-            description: "Renueva, segmenta y gestiona sin esfuerzo."
+            description: "Renueva, segmenta y gestiona sin esfuerzo.",
           },
           {
             icon: Lock,
             title: "Control de acceso",
-            description: "Define quién ve qué, según su tipo de membresía."
+            description: "Define quién ve qué, según su tipo de membresía.",
           },
           {
             icon: Wallet,
             title: "Pagos integrados",
-            description: "Cobra en automático y olvídate de perseguir a los socios."
+            description: "Cobra en automático y olvídate de perseguir a los socios.",
           },
           {
             icon: Tag,
             title: "Beneficios personalizados",
-            description: "Ofrece valor real con descuentos y recursos exclusivos."
+            description: "Ofrece valor real con descuentos y recursos exclusivos.",
           },
           {
             icon: Target,
             title: "Promoción inteligente",
-            description: "Atrae nuevos miembros con campañas efectivas."
+            description: "Atrae nuevos miembros con campañas efectivas.",
           },
           {
             icon: Settings,
             title: "Configuración flexible",
-            description: "Adapta la plataforma a tus necesidades específicas."
-          }
+            description: "Adapta la plataforma a tus necesidades específicas.",
+          },
         ]}
         columns={3}
       />
-      
+
       {/* Community Section with decorative graphic */}
       <div className="relative">
         {/* Inline decorative element */}
@@ -118,14 +138,14 @@ export default function Home() {
             "Muro de actividad y grupos temáticos",
             "Mensajes privados y foros de discusión",
             "Eventos, gamificación y etiquetas",
-            "Privacidad y seguridad garantizada"
+            "Privacidad y seguridad garantizada",
           ]}
           image={communityImage}
           imageAlt="Comunidad en línea"
           reverse={true}
         />
       </div>
-      
+
       <FeaturesGrid
         title="Características de Comunidad"
         subtitle="Conecta y colabora"
@@ -133,37 +153,37 @@ export default function Home() {
           {
             icon: Users,
             title: "Perfiles profesionales",
-            description: "Cada miembro tiene su espacio personalizado."
+            description: "Cada miembro tiene su espacio personalizado.",
           },
           {
             icon: MessageCircle,
             title: "Muro de actividad",
-            description: "Fomenta la interacción continua."
+            description: "Fomenta la interacción continua.",
           },
           {
             icon: Shield,
             title: "Mensajes privados",
-            description: "Comunicación segura y privada."
+            description: "Comunicación segura y privada.",
           },
           {
             icon: Calendar,
             title: "Eventos y gamificación",
-            description: "Motiva la participación activa."
+            description: "Motiva la participación activa.",
           },
           {
             icon: TrendingUp,
             title: "Monetización",
-            description: "Genera ingresos adicionales."
+            description: "Genera ingresos adicionales.",
           },
           {
             icon: Lock,
             title: "Seguridad garantizada",
-            description: "Protección de datos empresarial."
-          }
+            description: "Protección de datos empresarial.",
+          },
         ]}
         columns={3}
       />
-      
+
       {/* Content Section */}
       <ProblemSection
         question="¿Tus miembros reciben información... o realmente valor?"
@@ -173,12 +193,12 @@ export default function Home() {
           "Podcast para conectar en otro nivel",
           "Webinars en vivo o bajo demanda",
           "Revista digital con identidad propia",
-          "Biblioteca digital organizada"
+          "Biblioteca digital organizada",
         ]}
         image={blogImage}
         imageAlt="Contenido y recursos"
       />
-      
+
       <FeaturesGrid
         title="Contenido de Valor"
         subtitle="Información que transforma"
@@ -186,27 +206,27 @@ export default function Home() {
           {
             icon: Podcast,
             title: "Podcast",
-            description: "Conecta en otro nivel con audio."
+            description: "Conecta en otro nivel con audio.",
           },
           {
             icon: Video,
             title: "Webinars",
-            description: "En vivo o bajo demanda."
+            description: "En vivo o bajo demanda.",
           },
           {
             icon: BookOpen,
             title: "Revista digital",
-            description: "Con identidad propia."
+            description: "Con identidad propia.",
           },
           {
             icon: FileText,
             title: "Biblioteca digital",
-            description: "Organizada y fácil de consultar."
-          }
+            description: "Organizada y fácil de consultar.",
+          },
         ]}
         columns={4}
       />
-      
+
       {/* Certifications Section with decorative graphic */}
       <div className="relative">
         {/* Growth chart decoration */}
@@ -221,14 +241,14 @@ export default function Home() {
             "Gestión integral de cursos",
             "Certificaciones digitales automáticas",
             "Control de acceso por nivel o rol",
-            "Experiencia personalizada para cada usuario"
+            "Experiencia personalizada para cada usuario",
           ]}
           image={certificationsImage}
           imageAlt="Certificaciones y cursos"
           reverse={true}
         />
       </div>
-      
+
       <FeaturesGrid
         title="Aprendizaje Digital"
         subtitle="Certifica y educa"
@@ -236,32 +256,32 @@ export default function Home() {
           {
             icon: GraduationCap,
             title: "Gestión de cursos",
-            description: "Administra todo tu contenido educativo."
+            description: "Administra todo tu contenido educativo.",
           },
           {
             icon: Award,
             title: "Certificaciones automáticas",
-            description: "Emisión digital instantánea."
+            description: "Emisión digital instantánea.",
           },
           {
             icon: UserCheck,
             title: "Control de acceso",
-            description: "Por nivel, rol o membresía."
+            description: "Por nivel, rol o membresía.",
           },
           {
             icon: DollarSign,
             title: "Monetización",
-            description: "Pagos integrados para cursos."
+            description: "Pagos integrados para cursos.",
           },
           {
             icon: Settings,
             title: "Personalización",
-            description: "Experiencia única para cada usuario."
-          }
+            description: "Experiencia única para cada usuario.",
+          },
         ]}
         columns={3}
       />
-      
+
       {/* Marketing Section with connection lines */}
       <div className="relative">
         {/* Connection lines decoration */}
@@ -276,13 +296,13 @@ export default function Home() {
             "Automatización de marketing multicanal",
             "Segmentación inteligente de audiencias",
             "Campañas por Email, WhatsApp y SMS",
-            "Formularios y landing pages personalizadas"
+            "Formularios y landing pages personalizadas",
           ]}
           image={marketingImage}
           imageAlt="Marketing y comunicación"
         />
       </div>
-      
+
       <FeaturesGrid
         title="Marketing Digital"
         subtitle="Crece y comunica"
@@ -290,37 +310,37 @@ export default function Home() {
           {
             icon: Mail,
             title: "Automatización",
-            description: "Marketing automático efectivo."
+            description: "Marketing automático efectivo.",
           },
           {
             icon: Target,
             title: "Segmentación",
-            description: "Audiencias inteligentes."
+            description: "Audiencias inteligentes.",
           },
           {
             icon: Send,
             title: "Multicanal",
-            description: "Email, WhatsApp, SMS."
+            description: "Email, WhatsApp, SMS.",
           },
           {
             icon: Globe,
             title: "Redes sociales",
-            description: "Programación automática."
+            description: "Programación automática.",
           },
           {
             icon: FileCheck,
             title: "Landing pages",
-            description: "Páginas personalizadas."
+            description: "Páginas personalizadas.",
           },
           {
             icon: Heart,
             title: "Fidelización",
-            description: "Campañas que funcionan."
-          }
+            description: "Campañas que funcionan.",
+          },
         ]}
         columns={3}
       />
-      
+
       {/* Job Board Section with network graphic */}
       <div className="relative">
         {/* Network nodes decoration */}
@@ -335,14 +355,14 @@ export default function Home() {
             "Publicación de vacantes simplificada",
             "Perfiles y currículums de candidatos",
             "Filtros avanzados de búsqueda",
-            "Opción de monetización para tu organización"
+            "Opción de monetización para tu organización",
           ]}
           image={jobBoardImage}
           imageAlt="Bolsa de trabajo"
           reverse={true}
         />
       </div>
-      
+
       <FeaturesGrid
         title="Bolsa de Trabajo"
         subtitle="Conecta talento"
@@ -350,41 +370,41 @@ export default function Home() {
           {
             icon: Briefcase,
             title: "Publicación de vacantes",
-            description: "Fácil y rápida para empleadores."
+            description: "Fácil y rápida para empleadores.",
           },
           {
             icon: Users,
             title: "Perfiles de candidatos",
-            description: "Currículums profesionales."
+            description: "Currículums profesionales.",
           },
           {
             icon: Filter,
             title: "Filtros avanzados",
-            description: "Búsqueda precisa y efectiva."
+            description: "Búsqueda precisa y efectiva.",
           },
           {
             icon: Send,
             title: "Postulaciones automáticas",
-            description: "Sistema integrado de aplicaciones."
+            description: "Sistema integrado de aplicaciones.",
           },
           {
             icon: DollarSign,
             title: "Monetización",
-            description: "Genera ingresos adicionales."
-          }
+            description: "Genera ingresos adicionales.",
+          },
         ]}
         columns={3}
       />
-      
+
       {/* Logo carousel */}
       <LogoCarousel />
-      
+
       {/* Testimonials - Hidden */}
       {/* <TestimonialsSection /> */}
-      
+
       {/* CTA */}
       <CTASection />
-      
+
       {/* Footer */}
       <Footer />
     </div>

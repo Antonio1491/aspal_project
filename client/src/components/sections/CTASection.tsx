@@ -13,14 +13,17 @@ export default function CTASection() {
   };
 
   return (
-    <section className="py-20 md:py-32 relative overflow-hidden" data-testid="section-cta">
+    <section
+      className="py-20 md:py-32 relative overflow-hidden"
+      data-testid="section-cta"
+    >
       {/* Gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-secondary via-secondary/95 to-secondary/90"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent"></div>
-      
+
       <div className="container mx-auto px-4 md:px-8 relative z-10">
         <div className="max-w-4xl mx-auto text-center space-y-8">
-          <motion.div 
+          <motion.div
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 backdrop-blur-sm border border-primary/30"
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -30,9 +33,9 @@ export default function CTASection() {
             <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium text-primary">Comienza hoy mismo</span>
           </motion.div>
-          
-          <motion.h2 
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary leading-tight" 
+
+          <motion.h2
+            className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary leading-tight"
             data-testid="text-cta-title"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -41,20 +44,21 @@ export default function CTASection() {
           >
             ¿Listo para transformar tu asociación?
           </motion.h2>
-          
-          <motion.p 
-            className="text-xl text-primary/80 max-w-2xl mx-auto" 
+
+          <motion.p
+            className="text-xl text-primary/80 max-w-2xl mx-auto"
             data-testid="text-cta-description"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
           >
-            Únete a cientos de asociaciones que ya están creciendo con nuestra plataforma. Sin riesgos, sin compromisos.
+            Únete a cientos de asociaciones que ya están creciendo con nuestra plataforma.
+            Sin riesgos, sin compromisos.
           </motion.p>
-          
-          <motion.form 
-            onSubmit={handleSubmit} 
+
+          <motion.form
+            onSubmit={handleSubmit}
             className="max-w-md mx-auto"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -71,13 +75,10 @@ export default function CTASection() {
                 required
                 data-testid="input-cta-email"
               />
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Button 
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                <Button
                   type="submit"
-                  size="lg" 
+                  size="lg"
                   className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold h-12 px-8 w-full sm:w-auto"
                   data-testid="button-cta-submit"
                 >
@@ -87,8 +88,8 @@ export default function CTASection() {
               </motion.div>
             </div>
           </motion.form>
-          
-          <motion.p 
+
+          <motion.p
             className="text-sm text-primary/60"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -99,31 +100,31 @@ export default function CTASection() {
           </motion.p>
         </div>
       </div>
-      
+
       {/* Decorative blobs with subtle animation */}
-      <motion.div 
+      <motion.div
         className="absolute top-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
-        animate={{ 
+        animate={{
           scale: [1, 1.1, 1],
-          opacity: [0.3, 0.5, 0.3]
+          opacity: [0.3, 0.5, 0.3],
         }}
-        transition={{ 
+        transition={{
           duration: 6,
           repeat: Infinity,
-          ease: "easeInOut"
+          ease: "easeInOut",
         }}
       />
-      <motion.div 
+      <motion.div
         className="absolute bottom-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
-        animate={{ 
+        animate={{
           scale: [1, 1.2, 1],
-          opacity: [0.3, 0.4, 0.3]
+          opacity: [0.3, 0.4, 0.3],
         }}
-        transition={{ 
+        transition={{
           duration: 8,
           repeat: Infinity,
           ease: "easeInOut",
-          delay: 2
+          delay: 2,
         }}
       />
     </section>

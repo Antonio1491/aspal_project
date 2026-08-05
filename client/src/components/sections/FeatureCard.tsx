@@ -8,13 +8,18 @@ interface FeatureCardProps {
   index?: number;
 }
 
-export default function FeatureCard({ icon: Icon, title, description, index = 0 }: FeatureCardProps) {
+export default function FeatureCard({
+  icon: Icon,
+  title,
+  description,
+  index = 0,
+}: FeatureCardProps) {
   return (
-    <Card 
+    <Card
       className="group hover-elevate active-elevate-2 transition-all duration-300 border-card-border h-full"
-      style={{ 
+      style={{
         animationDelay: `${index * 100}ms`,
-        animationFillMode: 'backwards'
+        animationFillMode: "backwards",
       }}
       data-testid={`card-feature-${index}`}
     >
@@ -22,12 +27,15 @@ export default function FeatureCard({ icon: Icon, title, description, index = 0 
         <div className="w-12 h-12 rounded-lg bg-secondary flex items-center justify-center group-hover:bg-secondary/90 transition-colors">
           <Icon className="w-6 h-6 text-primary" />
         </div>
-        
+
         <h3 className="text-xl font-semibold" data-testid={`text-feature-title-${index}`}>
           {title}
         </h3>
-        
-        <p className="text-muted-foreground leading-relaxed" data-testid={`text-feature-description-${index}`}>
+
+        <p
+          className="text-muted-foreground leading-relaxed"
+          data-testid={`text-feature-description-${index}`}
+        >
           {description}
         </p>
       </CardContent>

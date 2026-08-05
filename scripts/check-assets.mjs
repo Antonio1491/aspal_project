@@ -46,4 +46,6 @@ if (missing.length > 0) {
   process.exit(1);
 }
 
-console.log(`✓ assets: todas las referencias @assets/ resuelven (${sources.length} archivos revisados)`);
+console.log(
+  `✓ assets: todas las referencias @assets/ resuelven (${sources.length} archivos revisados)`,
+);

@@ -35,10 +35,10 @@ había que sincronizar cada cambio a mano. Divergieron. Por eso existe `shared/`
 
 ### Fronteras de import
 
-| Desde | Puede importar |
-|---|---|
-| `client/src/**` | `@shared/wordpress/types` — **solo tipos** |
-| `server/**`, `api/**` | cualquier cosa de `shared/wordpress/` |
+| Desde                 | Puede importar                             |
+| --------------------- | ------------------------------------------ |
+| `client/src/**`       | `@shared/wordpress/types` — **solo tipos** |
+| `server/**`, `api/**` | cualquier cosa de `shared/wordpress/`      |
 
 `client.ts` lee `process.env` y hace fetch de red: si acaba en el bundle del
 navegador, rompe. El cliente obtiene datos por `/api/*`, nunca importando ese

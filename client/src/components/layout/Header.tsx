@@ -49,7 +49,7 @@ function VideoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
             exit={{ opacity: 0 }}
             data-testid="header-modal-backdrop"
           />
-          
+
           {/* Modal wrapper with close button above */}
           <motion.div
             className="relative z-10 w-full max-w-4xl"
@@ -70,9 +70,12 @@ function VideoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
                 <X className="w-5 h-5" />
               </Button>
             </div>
-            
+
             {/* Video container with 16:9 aspect ratio */}
-            <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl bg-black" style={{ paddingBottom: '56.25%' }}>
+            <div
+              className="relative w-full rounded-2xl overflow-hidden shadow-2xl bg-black"
+              style={{ paddingBottom: "56.25%" }}
+            >
               <iframe
                 className="absolute inset-0 w-full h-full"
                 src="https://www.youtube.com/embed/kl4Zd89F8jk?autoplay=1&rel=0"
@@ -87,7 +90,7 @@ function VideoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
         </motion.div>
       )}
     </AnimatePresence>,
-    document.body
+    document.body,
   );
 }
 
@@ -105,15 +108,15 @@ export default function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <a href="/" className="flex items-center" data-testid="link-logo">
-              <img 
-                src={logoLight} 
-                alt="Aspal" 
+              <img
+                src={logoLight}
+                alt="Aspal"
                 className="h-8 w-auto dark:hidden"
                 data-testid="img-logo-light"
               />
-              <img 
-                src={logoDark} 
-                alt="Aspal" 
+              <img
+                src={logoDark}
+                alt="Aspal"
                 className="h-8 w-auto hidden dark:block"
                 data-testid="img-logo-dark"
               />
@@ -135,7 +138,12 @@ export default function Header() {
                         href="/blog"
                         className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                       >
-                        <div className="text-sm font-medium leading-none" data-testid="link-blog">Blog</div>
+                        <div
+                          className="text-sm font-medium leading-none"
+                          data-testid="link-blog"
+                        >
+                          Blog
+                        </div>
                       </Link>
                     </li>
                     <li>
@@ -153,7 +161,9 @@ export default function Header() {
                         className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         data-testid="link-biblioteca"
                       >
-                        <div className="text-sm font-medium leading-none">Biblioteca Digital</div>
+                        <div className="text-sm font-medium leading-none">
+                          Biblioteca Digital
+                        </div>
                       </a>
                     </li>
                     <li>
@@ -162,7 +172,9 @@ export default function Header() {
                         className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         data-testid="link-cursos"
                       >
-                        <div className="text-sm font-medium leading-none">Cursos en Línea</div>
+                        <div className="text-sm font-medium leading-none">
+                          Cursos en Línea
+                        </div>
                       </a>
                     </li>
                     <li>
@@ -200,7 +212,9 @@ export default function Header() {
                         className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         data-testid="link-directorio-miembros"
                       >
-                        <div className="text-sm font-medium leading-none">Directorio de Miembros</div>
+                        <div className="text-sm font-medium leading-none">
+                          Directorio de Miembros
+                        </div>
                       </a>
                     </li>
                     <li>
@@ -209,7 +223,9 @@ export default function Header() {
                         className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         data-testid="link-directorio-industria"
                       >
-                        <div className="text-sm font-medium leading-none">Directorio de la Industria</div>
+                        <div className="text-sm font-medium leading-none">
+                          Directorio de la Industria
+                        </div>
                       </a>
                     </li>
                     <li>
@@ -218,7 +234,9 @@ export default function Header() {
                         className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         data-testid="link-eventos"
                       >
-                        <div className="text-sm font-medium leading-none">Eventos y Grupos</div>
+                        <div className="text-sm font-medium leading-none">
+                          Eventos y Grupos
+                        </div>
                       </a>
                     </li>
                   </ul>
@@ -256,7 +274,9 @@ export default function Header() {
                         className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         data-testid="link-reclutadores"
                       >
-                        <div className="text-sm font-medium leading-none">Reclutadores</div>
+                        <div className="text-sm font-medium leading-none">
+                          Reclutadores
+                        </div>
                       </a>
                     </li>
                   </ul>
@@ -283,8 +303,8 @@ export default function Header() {
             <Button variant="ghost" data-testid="button-login">
               Iniciar sesión
             </Button>
-            <Button 
-              className="bg-secondary text-secondary-foreground hover:bg-secondary/90" 
+            <Button
+              className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
               onClick={() => setIsVideoOpen(true)}
               data-testid="button-demo"
             >
@@ -294,9 +314,9 @@ export default function Header() {
           </div>
 
           {/* Mobile menu button */}
-          <Button 
-            variant="ghost" 
-            size="icon" 
+          <Button
+            variant="ghost"
+            size="icon"
             className="md:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             data-testid="button-mobile-menu"
@@ -307,28 +327,56 @@ export default function Header() {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-border" data-testid="mobile-menu">
+          <div
+            className="md:hidden py-4 border-t border-border"
+            data-testid="mobile-menu"
+          >
             <nav className="flex flex-col gap-2">
               {/* Aprende Collapsible */}
               <Collapsible open={aprendeOpen} onOpenChange={setAprendeOpen}>
-                <CollapsibleTrigger className="flex items-center justify-between w-full text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2" data-testid="mobile-menu-aprende">
+                <CollapsibleTrigger
+                  className="flex items-center justify-between w-full text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
+                  data-testid="mobile-menu-aprende"
+                >
                   Aprende
-                  <ChevronDown className={`h-4 w-4 transition-transform ${aprendeOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${aprendeOpen ? "rotate-180" : ""}`}
+                  />
                 </CollapsibleTrigger>
                 <CollapsibleContent className="pl-4 space-y-2 pt-2">
-                  <Link href="/blog" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-blog">
+                  <Link
+                    href="/blog"
+                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
+                    data-testid="mobile-link-blog"
+                  >
                     Blog
                   </Link>
-                  <Link href="/podcast" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-podcast">
+                  <Link
+                    href="/podcast"
+                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
+                    data-testid="mobile-link-podcast"
+                  >
                     Podcast
                   </Link>
-                  <a href="#biblioteca" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-biblioteca">
+                  <a
+                    href="#biblioteca"
+                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
+                    data-testid="mobile-link-biblioteca"
+                  >
                     Biblioteca Digital
                   </a>
-                  <a href="#cursos" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-cursos">
+                  <a
+                    href="#cursos"
+                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
+                    data-testid="mobile-link-cursos"
+                  >
                     Cursos en Línea
                   </a>
-                  <a href="#documentos" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-documentos">
+                  <a
+                    href="#documentos"
+                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
+                    data-testid="mobile-link-documentos"
+                  >
                     Documentos
                   </a>
                 </CollapsibleContent>
@@ -336,21 +384,42 @@ export default function Header() {
 
               {/* Participa Collapsible */}
               <Collapsible open={participaOpen} onOpenChange={setParticipaOpen}>
-                <CollapsibleTrigger className="flex items-center justify-between w-full text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2" data-testid="mobile-menu-participa">
+                <CollapsibleTrigger
+                  className="flex items-center justify-between w-full text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
+                  data-testid="mobile-menu-participa"
+                >
                   Participa
-                  <ChevronDown className={`h-4 w-4 transition-transform ${participaOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${participaOpen ? "rotate-180" : ""}`}
+                  />
                 </CollapsibleTrigger>
                 <CollapsibleContent className="pl-4 space-y-2 pt-2">
-                  <a href="#comunidad" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-comunidad">
+                  <a
+                    href="#comunidad"
+                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
+                    data-testid="mobile-link-comunidad"
+                  >
                     Comunidad
                   </a>
-                  <a href="#directorio-miembros" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-directorio-miembros">
+                  <a
+                    href="#directorio-miembros"
+                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
+                    data-testid="mobile-link-directorio-miembros"
+                  >
                     Directorio de Miembros
                   </a>
-                  <a href="#directorio-industria" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-directorio-industria">
+                  <a
+                    href="#directorio-industria"
+                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
+                    data-testid="mobile-link-directorio-industria"
+                  >
                     Directorio de la Industria
                   </a>
-                  <a href="#eventos" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-eventos">
+                  <a
+                    href="#eventos"
+                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
+                    data-testid="mobile-link-eventos"
+                  >
                     Eventos y Grupos
                   </a>
                 </CollapsibleContent>
@@ -358,26 +427,43 @@ export default function Header() {
 
               {/* Bolsa de Trabajo Collapsible */}
               <Collapsible open={bolsaOpen} onOpenChange={setBolsaOpen}>
-                <CollapsibleTrigger className="flex items-center justify-between w-full text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2" data-testid="mobile-menu-bolsa">
+                <CollapsibleTrigger
+                  className="flex items-center justify-between w-full text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
+                  data-testid="mobile-menu-bolsa"
+                >
                   Bolsa de Trabajo
-                  <ChevronDown className={`h-4 w-4 transition-transform ${bolsaOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${bolsaOpen ? "rotate-180" : ""}`}
+                  />
                 </CollapsibleTrigger>
                 <CollapsibleContent className="pl-4 space-y-2 pt-2">
-                  <a href="#bolsa-home" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-bolsa-home">
+                  <a
+                    href="#bolsa-home"
+                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
+                    data-testid="mobile-link-bolsa-home"
+                  >
                     Home
                   </a>
-                  <a href="#candidatos" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-candidatos">
+                  <a
+                    href="#candidatos"
+                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
+                    data-testid="mobile-link-candidatos"
+                  >
                     Candidatos
                   </a>
-                  <a href="#reclutadores" className="block text-sm text-muted-foreground hover:text-foreground py-1" data-testid="mobile-link-reclutadores">
+                  <a
+                    href="#reclutadores"
+                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
+                    data-testid="mobile-link-reclutadores"
+                  >
                     Reclutadores
                   </a>
                 </CollapsibleContent>
               </Collapsible>
 
               {/* Se Miembro */}
-              <a 
-                href="https://comunidad.asociacionesprofesionales.org/register/membresia-basica/" 
+              <a
+                href="https://comunidad.asociacionesprofesionales.org/register/membresia-basica/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
@@ -387,11 +473,15 @@ export default function Header() {
               </a>
 
               <div className="flex flex-col gap-2 pt-2">
-                <Button variant="ghost" className="w-full" data-testid="button-mobile-login">
+                <Button
+                  variant="ghost"
+                  className="w-full"
+                  data-testid="button-mobile-login"
+                >
                   Iniciar sesión
                 </Button>
-                <Button 
-                  className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90" 
+                <Button
+                  className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90"
                   onClick={() => {
                     setIsVideoOpen(true);
                     setMobileMenuOpen(false);
