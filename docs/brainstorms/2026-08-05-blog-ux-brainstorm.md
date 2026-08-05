@@ -54,8 +54,16 @@ Se consideraron tres caminos:
   destacado, rescata `blog-post.tsx` y pone la experiencia de lectura bajo
   control propio, que es donde vive la prioridad de captación. Coste asumido:
   se pierden los comentarios y la actividad de comunidad que viva en WordPress.
-- **Categorías derivadas de los datos**, nunca escritas a mano. La lista de
-  colores de `BlogCard` se alinea con la misma fuente.
+- **El filtro de categorías se retira.** Quitando los podcasts solo queda la
+  categoría `Blog`: siete artículos bajo una etiqueta. Un filtro de un elemento
+  no es un filtro, y dejarlo roto o vacío cuesta más credibilidad que no
+  tenerlo. Vuelve cuando haya volumen y una taxonomía real en WordPress —
+  momento en que las categorías se derivarán de los datos, nunca a mano.
+- **La insignia de categoría desaparece con él.** Si todos los artículos son
+  `Blog`, la insignia es idéntica en todas las tarjetas: ocupa el punto más
+  visible para transmitir cero información. Ese espacio pasa a lo que sí varía
+  (tiempo de lectura y fecha), que es justo lo que usa un lector con poca
+  agenda para decidir si abre algo. `getCategoryColor` se retira con ella.
 - **Los podcasts salen de la rejilla del blog.** Ya tienen `/podcast`.
 - **El CTA de cierre del artículo pasa a captación.** Hoy dice "Ver más
   artículos", que sirve a la prioridad 2 desde el punto de máxima atención.
@@ -65,13 +73,19 @@ Se consideraron tres caminos:
 
 ## Leyes de UX aplicadas, por zona
 
-### Filtro y descubrimiento
+### Descubrimiento
 
-| Ley       | Decisión                                                                                                                               |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| **Hick**  | De 7 opciones a las 2-3 reales: menos carga de decisión, cero callejones sin salida                                                    |
-| **Jakob** | Un filtro debe filtrar; romper la expectativa cuesta credibilidad, y la credibilidad es el producto de una institución que cobra cuota |
-| **Fitts** | Los chips están a ~36 px de alto; el mínimo táctil es 44 px. Hoy se fallan en móvil                                                    |
+Al retirarse el filtro, estas leyes dejan de aplicarse a unos chips y pasan a
+justificar por qué no los hay.
+
+| Ley       | Decisión                                                                                                                                    |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Hick**  | Cero opciones que sopesar. Con siete artículos, la rejilla completa se abarca de un vistazo: filtrar no ahorra trabajo, lo añade            |
+| **Jakob** | Un filtro debe filtrar. Retirarlo cumple la expectativa mejor que mantenerlo vacío, y la credibilidad es el producto de quien cobra cuota   |
+| **Fitts** | Se aplica ahora al objetivo que queda: la tarjeta entera es el área pulsable, y los objetivos táctiles del artículo van a 44 px como mínimo |
+
+Cuando el filtro vuelva, estas tres leyes gobiernan su diseño: opciones
+derivadas de los datos, ninguna que lleve a un resultado vacío y chips de 44 px.
 
 ### Rejilla y escaneo
 
@@ -113,9 +127,10 @@ tiene activado por motivos médicos, no por preferencia.
   para decidir con datos en la próxima iteración.
 - **Comentarios de WordPress.** Al pasar a lectura interna se pierden. Falta
   saber si hoy tienen uso real.
-- **Categorías reales insuficientes.** Solo existe `Blog` como categoría no-
-  podcast, así que el filtro quedará casi vacío de sentido. Puede que el
-  problema real sea de taxonomía en WordPress, no de interfaz.
+- **Cuándo recuperar el filtro.** Queda retirado, no cancelado. Falta acordar el
+  disparador: un número de artículos, o el momento en que se categorice el
+  contenido en WordPress. Sin disparador explícito, "ya lo recuperaremos" se
+  convierte en nunca.
 
 ## Siguiente paso
 
