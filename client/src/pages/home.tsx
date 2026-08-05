@@ -3,10 +3,8 @@ import HeroSection from "@/components/sections/HeroSection";
 import { MembershipProblemSection } from "@/components/sections/ProblemSection";
 import FeaturesGrid from "@/components/sections/FeaturesGrid";
 import LogoCarousel from "@/components/sections/LogoCarousel";
-import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import CTASection from "@/components/sections/CTASection";
 import Footer from "@/components/layout/Footer";
-import membershipImage from "@assets/recurso-13-membresias.png";
 import communityImage from "@assets/recurso-8-comunidad.png";
 import blogImage from "@assets/recurso-3-blog.png";
 import certificationsImage from "@assets/recurso-40-certificaciones.png";
@@ -26,7 +24,7 @@ import {
   Users, MessageCircle, Shield, Calendar, TrendingUp, Lock,
   BookOpen, Podcast, Video, FileText,
   GraduationCap, Award, UserCheck, DollarSign, Settings,
-  Mail, Target, BarChart, Globe, Tag, Heart,
+  Mail, Target, Globe, Tag, Heart,
   Briefcase, FileCheck, Filter, Send, Wallet
 } from "lucide-react";
 

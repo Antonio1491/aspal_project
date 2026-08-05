@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main, staging]
+  pull_request:
+    branches: [main, staging]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      # Cubre client, server, shared y api. api/ es lo que corre en Vercel:
+      # durante un tiempo quedó fuera del typecheck y nadie se enteró.
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      # Un @assets/ inexistente no lo detectan ni tsc ni vite build.
+      - name: Assets
+        run: npm run check:assets
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Formato
+        run: npm run format:check
+
+      - name: Build
+        run: npm run build

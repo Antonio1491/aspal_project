@@ -15,6 +15,8 @@ type ToasterToast = ToastProps & {
   action?: ToastActionElement
 }
 
+// Existe solo para derivar ActionType con `typeof`; nunca se lee como valor.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const actionTypes = {
   ADD_TOAST: "ADD_TOAST",
   UPDATE_TOAST: "UPDATE_TOAST",

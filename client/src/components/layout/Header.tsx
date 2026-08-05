@@ -23,6 +23,7 @@ import {
 function VideoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [mounted, setMounted] = useState(false);
 
+  // Guard de montaje: createPortal necesita document.body.
   useEffect(() => {
     setMounted(true);
   }, []);

@@ -5,10 +5,8 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import BlogCard from "@/components/content/BlogCard";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, ArrowRight } from "lucide-react";
+import { Clock, ArrowRight } from "lucide-react";
 import { Link } from "wouter";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
 import type { TransformedPost } from "@shared/wordpress/types";
 
 const CATEGORIES = [
