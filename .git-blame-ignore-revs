@@ -1,0 +1,6 @@
+# Commits solo de formato: ignóralos al hacer git blame.
+# Configúralo una vez con:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# Aplicar Prettier a todo el código
+1c3d82f703788db822c3c35a5facf35d95684974
