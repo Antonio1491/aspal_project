@@ -7,25 +7,13 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-
-interface WPPost {
-  id: number;
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  featuredImage: string;
-  category: string;
-  publishedAt: string;
-  author: string;
-  link: string;
-}
+import type { TransformedPost } from "@shared/wordpress/types";
 
 export default function BlogPost() {
   const params = useParams();
   const slug = params.slug as string;
 
-  const { data: post, isLoading, error } = useQuery<WPPost>({
+  const { data: post, isLoading, error } = useQuery<TransformedPost>({
     queryKey: ["/api/posts", slug],
     queryFn: async () => {
       const response = await fetch(`/api/posts/${slug}`);

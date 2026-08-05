@@ -1,10 +1,16 @@
-import type { Express } from "express";
-import { createServer, type Server } from "http";
-import { fetchPosts, fetchPostBySlug, fetchPodcasts } from "./wordpress-api";
+/**
+ * Registro único de los endpoints `/api/*`.
+ *
+ * Lo montan tanto el servidor Express de desarrollo/self-hosted
+ * (`server/index.ts`) como la función serverless de Vercel (`api/index.ts`).
+ * Añadir un endpoint aquí lo publica en ambos entornos a la vez — que es
+ * justo lo que antes había que recordar hacer por duplicado.
+ */
+import type { Express, Request, Response } from "express";
+import { fetchPodcasts, fetchPostBySlug, fetchPosts } from "./client";
 
-export async function registerRoutes(app: Express): Promise<Server> {
-  // Blog routes - fetch from WordPress API
-  app.get("/api/posts", async (req, res) => {
+export function registerApiRoutes(app: Express): void {
+  app.get("/api/posts", async (req: Request, res: Response) => {
     try {
       const perPage = parseInt(req.query.per_page as string) || 6;
       const posts = await fetchPosts(perPage);
@@ -15,7 +21,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/posts/:slug", async (req, res) => {
+  app.get("/api/posts/:slug", async (req: Request, res: Response) => {
     try {
       const post = await fetchPostBySlug(req.params.slug);
       if (!post) {
@@ -28,8 +34,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Podcast routes - fetch from WordPress API
-  app.get("/api/podcasts", async (req, res) => {
+  app.get("/api/podcasts", async (req: Request, res: Response) => {
     try {
       const perPage = parseInt(req.query.per_page as string) || 6;
       const podcasts = await fetchPodcasts(perPage);
@@ -40,7 +45,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  const httpServer = createServer(app);
-
-  return httpServer;
+  app.get("/api/health", (_req: Request, res: Response) => {
+    res.json({ status: "ok" });
+  });
 }

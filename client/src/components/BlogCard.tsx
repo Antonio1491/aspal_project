@@ -4,22 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import { Clock, ArrowUpRight } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-
-interface WPPost {
-  id: number;
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  featuredImage: string;
-  category: string;
-  publishedAt: string;
-  author: string;
-  link: string;
-}
+import type { TransformedPost } from "@shared/wordpress/types";
 
 interface BlogCardProps {
-  post: WPPost;
+  post: TransformedPost;
 }
 
 const getCategoryColor = (category: string) => {

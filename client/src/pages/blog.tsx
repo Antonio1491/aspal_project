@@ -9,19 +9,7 @@ import { Calendar, Clock, ArrowRight } from "lucide-react";
 import { Link } from "wouter";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-
-interface WPPost {
-  id: number;
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  featuredImage: string;
-  category: string;
-  publishedAt: string;
-  author: string;
-  link: string;
-}
+import type { TransformedPost } from "@shared/wordpress/types";
 
 const CATEGORIES = [
   { name: "Todos", color: "bg-secondary" },
@@ -36,7 +24,7 @@ const CATEGORIES = [
 export default function Blog() {
   const [activeCategory, setActiveCategory] = useState("Todos");
 
-  const { data: posts, isLoading } = useQuery<WPPost[]>({
+  const { data: posts, isLoading } = useQuery<TransformedPost[]>({
     queryKey: ["/api/posts", { per_page: 7 }],
     queryFn: async () => {
       const response = await fetch("/api/posts?per_page=7");
