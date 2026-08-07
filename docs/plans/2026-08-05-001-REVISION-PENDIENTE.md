@@ -133,18 +133,55 @@ sus metadatos. Aparecerá en el momento en que se active la lectura interna.
 
 ## 🟢 5. Cobertura de tests
 
-Se ha introducido **Vitest** y hay tests de la capa de transformación y del
+Se ha introducido **Vitest** (32 tests) sobre la capa de transformación y el
 cliente de WordPress, que es donde vive la lógica pura y donde el plan había
-detectado los fallos de datos.
+detectado los fallos de datos. El paso de tests está añadido al CI.
 
-Lo que **no** está cubierto por tests automáticos, y sigue siendo verificación
-manual (criterios 11-19 del plan):
+---
 
-- Barra de progreso de lectura → no implementada, ver punto 1.
-- Restauración de scroll con Atrás/Adelante → necesita navegador real.
-- Lector de pantalla y recorrido con teclado.
-- Pinch-zoom al 200 % en móvil.
-- Ausencia de scroll horizontal a 320 px.
+## Estado de los 21 criterios de aceptación
+
+Verificados en Chrome contra el servidor de desarrollo, salvo donde se indica.
+
+| #   | Criterio                               | Estado                                             |
+| --- | -------------------------------------- | -------------------------------------------------- |
+| 1   | El artículo abre en el top             | ✅                                                 |
+| 2   | Atrás restaura la rejilla              | ✅ 600 px → 600 px (y una segunda vuelta también)  |
+| 3   | Atrás → Adelante, artículo en el top   | ✅                                                 |
+| 4   | Enlace directo a `/blog/:slug`         | ✅                                                 |
+| 5   | Desde «sigue leyendo»                  | ⚠️ no aplica: las tarjetas enlazan fuera (punto 1) |
+| 6   | F5 en `/blog/:slug`                    | ⏳ requiere el build desplegado                    |
+| 7   | WordPress caído → error + Reintentar   | ✅ `/api/posts` da 500, no `200 []`                |
+| 8   | Con 0 y 1 artículo la página no miente | ⏳ no reproducible con los datos reales            |
+| 9   | Slug de podcast redirige a `/podcast`  | ✅                                                 |
+| 10  | Slug inexistente → 404 en español      | ✅ y sin botón Reintentar, que sería incoherente   |
+| 11  | Barra de progreso oculta si cabe       | ❌ no implementada (punto 1)                       |
+| 12  | Barra al 100 % al final del cuerpo     | ❌ no implementada (punto 1)                       |
+| 13  | La barra no retrocede en 3G lento      | ❌ no implementada (punto 1)                       |
+| 14  | Recorrido completo con teclado         | ⏳ **manual**                                      |
+| 15  | Lector de pantalla                     | ⏳ **manual**                                      |
+| 16  | Pinch-zoom al 200 %                    | ⏳ **manual** (el `maximum-scale` ya está quitado) |
+| 17  | `prefers-reduced-motion`               | ⏳ **manual**: hay que activarlo en el sistema     |
+| 18  | Objetivos táctiles ≥ 44 px             | ⏳ **manual** en dispositivo real                  |
+| 19  | Sin scroll horizontal a 320 px         | ⏳ **manual**: el resize no cambió el viewport     |
+| 20  | check · lint · format:check · build    | ✅ los cuatro en verde, más 32 tests               |
+| 21  | `CLAUDE.md` con la política de errores | ✅                                                 |
+
+Además, sin errores en la consola del navegador en `/blog`, `/blog/:slug` ni
+en el 404.
+
+### Lo que hay que probar a mano
+
+Son cinco cosas y ninguna se puede automatizar sin más herramientas:
+
+1. **Teclado** (criterio 14): recorrer `/blog` y un artículo solo con Tab.
+2. **Lector de pantalla** (15): NVDA o VoiceOver, comprobar que pronuncia en
+   español y que cada tarjeta se anuncia con su título y no con seis líneas.
+3. **Pinch-zoom** (16) en un móvil real.
+4. **Movimiento reducido** (17): activarlo en el sistema operativo y confirmar
+   que **todo el contenido se ve** y nada queda en opacidad 0.
+5. **320 px** (19): con las herramientas de desarrollo, no redimensionando la
+   ventana.
 
 ---
 
@@ -156,3 +193,8 @@ Ver los mensajes de commit para el detalle. Resumen:
 - **Fase 1** completa salvo el cambio de destino de las tarjetas (punto 1).
 - **Fase 2** solo las partes independientes del contenido bloqueado.
 - **Fase 3** completa.
+
+La restauración de scroll necesitó dos arreglos que solo aparecieron al
+probarla en el navegador: escuchar `popstate` llega tarde respecto a los
+efectos de wouter, y el primer intento de restauración no puede ir en
+`requestAnimationFrame`. Está en el commit correspondiente.
