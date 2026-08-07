@@ -1,5 +1,12 @@
 import type { TransformedPost, WPPost } from "./types";
 
+/** Palabras por minuto para la estimación de lectura. Rango habitual de
+ *  lectura adulta en pantalla. */
+const WORDS_PER_MINUTE = 200;
+
+/** Longitud máxima del extracto de tarjeta. */
+const EXCERPT_LENGTH = 200;
+
 function stripHtml(html: string): string {
   return html
     .replace(/<[^>]*>/g, "")
@@ -15,6 +22,57 @@ function stripHtml(html: string): string {
 function extractFirstImage(content: string): string | null {
   const imgMatch = content.match(/<img[^>]+src="([^">]+)"/);
   return imgMatch ? imgMatch[1] : null;
+}
+
+/**
+ * Minutos de lectura sobre el texto YA limpio.
+ *
+ * Se calcula aquí una sola vez, no en el cliente: estimarlo sobre el HTML
+ * crudo contaba cada `<img src="…" class="…" alt="…">` como ~6 palabras e
+ * inflaba el dato de forma desigual. Al retirarse la insignia de categoría
+ * este pasa a ser el metadato principal de la tarjeta, así que no puede ser
+ * un dato falso.
+ */
+function estimateReadingMinutes(plainText: string): number {
+  if (!plainText) {
+    return 1;
+  }
+
+  const words = plainText.split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(words / WORDS_PER_MINUTE));
+}
+
+/**
+ * Extracto truncado. El sufijo solo se añade si de verdad hubo truncamiento:
+ * antes se concatenaba siempre y un extracto vacío pintaba literalmente "..."
+ * en la tarjeta.
+ */
+function buildExcerpt(rawExcerpt: string): string {
+  const text = stripHtml(rawExcerpt);
+
+  if (text.length <= EXCERPT_LENGTH) {
+    return text;
+  }
+
+  return `${text.substring(0, EXCERPT_LENGTH).trimEnd()}…`;
+}
+
+/**
+ * Fecha de publicación en UTC explícito.
+ *
+ * WordPress devuelve `date_gmt` sin sufijo de zona (`2026-08-05T10:30:00`),
+ * y `new Date()` lo interpretaría como hora local del navegador: la fecha
+ * mostrada podía diferir un día entre husos latinoamericanos. `date` a secas
+ * es hora local del servidor de WordPress, aún peor.
+ */
+function toIsoUtc(post: WPPost): string {
+  const gmt = post.date_gmt;
+
+  if (!gmt) {
+    return post.date;
+  }
+
+  return /(Z|[+-]\d{2}:?\d{2})$/.test(gmt) ? gmt : `${gmt}Z`;
 }
 
 /** Normaliza un post de WordPress: la imagen destacada cae al primer `<img>`
@@ -33,11 +91,13 @@ export function transformPost(post: WPPost): TransformedPost {
     id: post.id,
     title: stripHtml(post.title.rendered),
     slug: post.slug,
-    excerpt: stripHtml(post.excerpt.rendered).substring(0, 200) + "...",
+    excerpt: buildExcerpt(post.excerpt.rendered),
     content: post.content.rendered,
     featuredImage,
     category: categories?.[0]?.name || "General",
-    publishedAt: post.date,
+    categorySlugs: (categories ?? []).map((term) => term.slug),
+    publishedAt: toIsoUtc(post),
+    readingMinutes: estimateReadingMinutes(stripHtml(post.content.rendered)),
     author: author?.name || "ASPAL",
     link: post.link,
   };

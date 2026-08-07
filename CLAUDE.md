@@ -80,9 +80,15 @@ typecheckear.
 - Alias: `@/` → `client/src/`, `@shared/` → `shared/`, `@assets/` →
   `attached_assets/`.
 - `data-testid` en elementos interactivos y significativos. Mantenlo.
-- Los endpoints degradan a vacío/`null` ante fallos de WordPress en vez de
-  lanzar. Es deliberado: la landing tiene que renderizar aunque el blog no
-  responda. No lo conviertas en un throw.
+- **Los fallos de WordPress se propagan y salen como 5xx.** `client.ts` lanza y
+  `routes.ts` traduce. No lo degrades a `[]`: el cliente necesita distinguir
+  "no se pudo cargar" (→ reintentar) de "no hay artículos" (→ estado vacío), y
+  con la política anterior ambos llegaban como el mismo array vacío. El único
+  `null`/404 legítimo es `/api/posts/:slug` cuando el post de verdad no existe.
+
+  Antes se degradaba a vacío "para que la landing renderizara aunque el blog
+  no respondiera". Esa justificación era falsa: `home.tsx` no consume la API.
+  Solo lo hacen `blog.tsx` y `blog-post.tsx`.
 
 ### shadcn/ui
 

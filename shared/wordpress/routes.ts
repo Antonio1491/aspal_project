@@ -5,6 +5,11 @@
  * (`server/index.ts`) como la función serverless de Vercel (`api/index.ts`).
  * Añadir un endpoint aquí lo publica en ambos entornos a la vez — que es
  * justo lo que antes había que recordar hacer por duplicado.
+ *
+ * Política de errores: un fallo de WordPress se traduce a 5xx. NO se degrada
+ * a `[]`, porque el cliente necesita distinguir "no se pudo cargar" de "no
+ * hay artículos" para mostrar un reintento en vez de un estado vacío falso.
+ * Un 404 en `/api/posts/:slug` significa exactamente que el post no existe.
  */
 import type { Express, Request, Response } from "express";
 import { fetchPodcasts, fetchPostBySlug, fetchPosts } from "./client";
