@@ -34,5 +34,10 @@ jobs:
       - name: Formato
         run: npm run format:check
 
+      # Lógica pura de shared/wordpress: transformación y cliente. Lo que
+      # queda fuera es verificación manual — ver la lista de revisión.
+      - name: Tests
+        run: npm test
+
       - name: Build
         run: npm run build
