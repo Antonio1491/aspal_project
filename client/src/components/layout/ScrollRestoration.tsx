@@ -1,30 +1,51 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "wouter";
 
+/** Clave con la que marcamos cada entrada del historial. */
+const INDEX_KEY = "__srIdx";
+
+interface IndexedState {
+  [INDEX_KEY]?: number;
+}
+
 /**
  * Restauración de scroll entre rutas.
  *
  * `ScrollToTop.tsx` es el botón flotante — el nombre estaba ocupado.
  *
- * Tres requisitos, y los tres importan:
+ * ## Por qué se indexa el historial y no se escucha `popstate`
  *
- * 1. **Distinguir navegación nueva de POP.** Un `scrollTo(0,0)` en cada cambio
- *    de ruta rompe el botón Atrás: el usuario vuelve a la rejilla y aparece
- *    arriba del todo, no donde estaba.
- * 2. **`history.scrollRestoration = "manual"`.** En `auto`, el navegador
- *    restaura mientras TanStack Query aún no ha resuelto: mide la altura del
- *    esqueleto y clampa el scroll. Los dos mecanismos pelean.
- * 3. **Restaurar cuando el documento ya tiene altura**, no en el efecto de
- *    ruta. Por eso el reintento por `requestAnimationFrame`.
+ * La versión evidente —marcar un flag en `popstate` y leerlo en el efecto de
+ * ruta— no funciona. Medido en el navegador:
  *
- * Sin esto, tocar la última tarjeta de una rejilla larga deja al usuario a
- * 2.400 px dentro del artículo nuevo, o sea en el pie.
+ * ```
+ * t=72920  scrollTo(0,0)  con location.pathname ya en "/blog"
+ * t=72942  popstate
+ * ```
+ *
+ * Wouter actualiza su localización y React ejecuta los efectos ANTES de que el
+ * evento `popstate` llegue a nuestro listener, así que el flag siempre llegaba
+ * tarde y toda navegación Atrás se trataba como navegación nueva: scroll al
+ * top y botón Atrás roto, justo lo que esto viene a evitar.
+ *
+ * En su lugar se sella un índice incremental en `history.state`. Una entrada
+ * sin sellar es necesariamente nueva; una ya sellada solo puede venir de
+ * Atrás o Adelante. No depende del orden de los eventos.
+ *
+ * ## Los otros dos requisitos
+ *
+ * - **`history.scrollRestoration = "manual"`.** En `auto`, el navegador
+ *   restaura mientras TanStack Query aún no ha resuelto: mide la altura del
+ *   esqueleto y clampa el scroll. Los dos mecanismos pelean.
+ * - **Restaurar cuando el documento ya tiene altura**, no en el efecto de
+ *   ruta. De ahí el reintento por `requestAnimationFrame`.
  */
 export function ScrollRestoration() {
   const [location] = useLocation();
-  const positions = useRef(new Map<string, number>());
-  const isPopNavigation = useRef(false);
-  const previousLocation = useRef(location);
+  /** posición de scroll por índice de entrada del historial */
+  const positions = useRef(new Map<number, number>());
+  const currentIndex = useRef(0);
+  const counter = useRef(0);
 
   useEffect(() => {
     if (!("scrollRestoration" in window.history)) {
@@ -39,18 +60,8 @@ export function ScrollRestoration() {
     };
   }, []);
 
-  // Marca de POP. `popstate` se dispara antes de que wouter propague la nueva
-  // localización, así que el flag ya está puesto cuando corre el efecto de ruta.
-  useEffect(() => {
-    const onPopState = () => {
-      isPopNavigation.current = true;
-    };
-
-    window.addEventListener("popstate", onPopState);
-    return () => window.removeEventListener("popstate", onPopState);
-  }, []);
-
-  // Guarda la posición de la ruta que se abandona.
+  // Guarda la posición de la entrada activa, no de la ruta: dos entradas
+  // distintas pueden compartir ruta y tener posiciones distintas.
   useEffect(() => {
     let frame = 0;
 
@@ -58,7 +69,7 @@ export function ScrollRestoration() {
       if (frame) return;
       frame = window.requestAnimationFrame(() => {
         frame = 0;
-        positions.current.set(location, window.scrollY);
+        positions.current.set(currentIndex.current, window.scrollY);
       });
     };
 
@@ -67,31 +78,45 @@ export function ScrollRestoration() {
       window.removeEventListener("scroll", onScroll);
       if (frame) window.cancelAnimationFrame(frame);
     };
-  }, [location]);
+  }, []);
 
   useEffect(() => {
-    if (previousLocation.current === location) {
-      return;
-    }
-    previousLocation.current = location;
+    const state = (window.history.state ?? {}) as IndexedState;
+    const stamped = state[INDEX_KEY];
 
-    const wasPop = isPopNavigation.current;
-    isPopNavigation.current = false;
+    // Entrada nueva: sellarla e ir al top.
+    if (typeof stamped !== "number") {
+      counter.current += 1;
+      currentIndex.current = counter.current;
 
-    if (!wasPop) {
-      positions.current.delete(location);
+      window.history.replaceState(
+        { ...state, [INDEX_KEY]: currentIndex.current },
+        "",
+        window.location.href,
+      );
+
       window.scrollTo(0, 0);
       return;
     }
 
-    const target = positions.current.get(location);
-    if (target === undefined || target === 0) {
+    // Entrada ya conocida: viene de Atrás o Adelante.
+    currentIndex.current = stamped;
+    counter.current = Math.max(counter.current, stamped);
+
+    const target = positions.current.get(stamped) ?? 0;
+
+    if (target === 0) {
       window.scrollTo(0, 0);
       return;
     }
 
-    // El contenido puede no haber llegado todavía: se reintenta unos cuantos
-    // frames hasta que el documento tenga altura suficiente.
+    // Primer intento SÍNCRONO. Es el caso normal: al volver, TanStack Query ya
+    // tiene los datos en caché y el documento ya tiene altura.
+    //
+    // No delegar este primer intento a `requestAnimationFrame`: si el bucle de
+    // frames está estrangulado —pestaña en segundo plano, ventana oculta— el
+    // callback no se ejecuta y la restauración no ocurre nunca, en silencio.
+    // Medido: 2,2 s sin un solo frame con la pestaña sin foco.
     let attempts = 0;
     let frame = 0;
 
@@ -100,14 +125,24 @@ export function ScrollRestoration() {
 
       if (maxScroll >= target || attempts > 60) {
         window.scrollTo(0, Math.min(target, Math.max(maxScroll, 0)));
-        return;
+        return true;
       }
 
       attempts += 1;
-      frame = window.requestAnimationFrame(restore);
+      return false;
     };
 
-    frame = window.requestAnimationFrame(restore);
+    if (restore()) {
+      return;
+    }
+
+    // Solo si el contenido aún no ha llegado: reintento por frames.
+    const retry = () => {
+      if (restore()) return;
+      frame = window.requestAnimationFrame(retry);
+    };
+
+    frame = window.requestAnimationFrame(retry);
     return () => window.cancelAnimationFrame(frame);
   }, [location]);
 
