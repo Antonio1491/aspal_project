@@ -25,6 +25,22 @@ function extractFirstImage(content: string): string | null {
 }
 
 /**
+ * Detecta que WordPress ha servido el muro de MemberPress en lugar del
+ * artículo.
+ *
+ * A una petición anónima, la REST API no devuelve el cuerpo de ningún post:
+ * devuelve un stub con "You are unauthorized to view this page" y un
+ * formulario de login. Sin esta comprobación ese HTML acabaría renderizado
+ * dentro de `prose` —en inglés y con un login incrustado— y `readingMinutes`
+ * mediría el mensaje de error en vez del artículo.
+ */
+export function isGatedContent(renderedContent: string): boolean {
+  return /mepr-unauthorized-message|unauthorized to view this page/i.test(
+    renderedContent,
+  );
+}
+
+/**
  * Minutos de lectura sobre el texto YA limpio.
  *
  * Se calcula aquí una sola vez, no en el cliente: estimarlo sobre el HTML
@@ -87,6 +103,8 @@ export function transformPost(post: WPPost): TransformedPost {
     featuredImage = extractFirstImage(post.content.rendered) || "";
   }
 
+  const gated = isGatedContent(post.content.rendered);
+
   return {
     id: post.id,
     title: stripHtml(post.title.rendered),
@@ -97,7 +115,11 @@ export function transformPost(post: WPPost): TransformedPost {
     category: categories?.[0]?.name || "General",
     categorySlugs: (categories ?? []).map((term) => term.slug),
     publishedAt: toIsoUtc(post),
-    readingMinutes: estimateReadingMinutes(stripHtml(post.content.rendered)),
+    isGated: gated,
+    // Con el contenido bloqueado el cálculo mediría el mensaje de MemberPress,
+    // no el artículo: 0 es la señal de "no hay dato", y la UI oculta el hueco
+    // en vez de mentir con "1 min".
+    readingMinutes: gated ? 0 : estimateReadingMinutes(stripHtml(post.content.rendered)),
     author: author?.name || "ASPAL",
     link: post.link,
   };

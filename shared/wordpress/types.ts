@@ -49,7 +49,11 @@ export interface TransformedPost {
   categorySlugs: string[];
   /** ISO 8601 con zona explícita. Ver `toIsoUtc` en `transform.ts`. */
   publishedAt: string;
-  /** Minutos de lectura calculados en el servidor sobre el texto limpio. */
+  /** `true` si WordPress sirvió el muro de MemberPress en vez del artículo.
+   *  Ver `isGatedContent` en `transform.ts`. */
+  isGated: boolean;
+  /** Minutos de lectura calculados en el servidor sobre el texto limpio.
+   *  `0` significa "no hay dato fiable" (contenido bloqueado): no lo pintes. */
   readingMinutes: number;
   author: string;
   link: string;
