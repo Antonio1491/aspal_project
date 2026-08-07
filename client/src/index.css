@@ -328,3 +328,39 @@
     inset: -1px;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Movimiento reducido.
+
+   framer-motion se cubre aparte con <MotionConfig reducedMotion="user"> en
+   App.tsx: esta media query NO lo alcanza. Y al revés — MotionConfig no
+   alcanza las utilidades de Tailwind (animate-pulse, transition-*,
+   hover:scale-105), que son lo que se apaga aquí. Hacen falta los dos.
+
+   `forced-color-adjust` aparte: nada puede quedar en opacidad 0 esperando una
+   animación que ya no va a ocurrir. Parte del público activa esta preferencia
+   por motivos médicos; dejarles el contenido invisible sería el peor fallo
+   posible de los dos.
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Blindaje del modo de fallo: si una animación de entrada no llega a
+     ejecutarse, el elemento debe verse igualmente. */
+  [data-framer-appear-id],
+  .motion-safe-hidden {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  html {
+    scroll-behavior: auto !important;
+  }
+}

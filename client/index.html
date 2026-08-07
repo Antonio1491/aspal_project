@@ -1,16 +1,22 @@
 <!doctype html>
-<html lang="en">
+<!-- lang="es": con lang="en" un lector de pantalla lee el español con motor de
+     pronunciación inglesa, o sea ininteligible. WCAG 3.1.1, nivel A. -->
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
+    <!-- Sin maximum-scale: bloqueaba el pinch-zoom, y es el ajuste que más usa
+         el perfil de edad al que se dirige el sitio. WCAG 1.4.4, nivel AA. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ASPAL · Asociación de Profesionales de Asociaciones Latinoamérica</title>
     <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1"
+      name="description"
+      content="Comunidad de profesionales de asociaciones de Latinoamérica: formación, recursos, eventos y podcast."
     />
-    <link
-      rel="icon"
-      type="image/png"
-      href="/attached_assets/Aspal-Icono_1763675356866.png"
-    />
+    <!-- client/public/ se sirve desde la raíz. La ruta anterior
+         (/attached_assets/…) devolvía 200 con Content-Type text/html: era el
+         fallback del SPA sirviendo index.html donde el navegador esperaba PNG. -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
