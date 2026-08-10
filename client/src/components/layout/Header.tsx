@@ -1,11 +1,11 @@
 import logoLight from "@assets/ASPAL-para fondo claro_1763675327795.png";
 import logoDark from "@assets/ASPAL-para fondo oscuro_1763675345456.png";
 import { Button } from "@/components/ui/button";
-import { Menu, ChevronDown, X, Play } from "lucide-react";
-import { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
-import { Link } from "wouter";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -15,78 +15,339 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+  NAVEGACION,
+  URL_LOGIN,
+  URL_REGISTRO,
+  esEntradaActiva,
+  esRutaActiva,
+  type DestinoNav,
+  type EntradaNav,
+} from "@/lib/navegacion";
+import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowUpRight, ChevronDown, Menu, UserPlus, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { Link, useLocation } from "wouter";
 
-function VideoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const [mounted, setMounted] = useState(false);
+/** Marca de sección todavía no construida. Nunca acompaña a un enlace. */
+function Proximamente({ className }: { className?: string }) {
+  return (
+    <span
+      className={cn(
+        "rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground",
+        className,
+      )}
+    >
+      Próximamente
+    </span>
+  );
+}
 
-  // Guard de montaje: createPortal necesita document.body.
+/** Un destino dentro de un desplegable de escritorio. */
+function DestinoEscritorio({ destino, ruta }: { destino: DestinoNav; ruta: string }) {
+  const activo = esRutaActiva(destino.href, ruta);
+
+  const contenido = (
+    <>
+      <div className="flex items-center gap-1.5">
+        <span
+          className={cn(
+            "text-sm leading-none",
+            destino.href ? "font-medium text-foreground" : "font-medium text-muted-foreground",
+          )}
+        >
+          {destino.etiqueta}
+        </span>
+        {destino.externo && (
+          <ArrowUpRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
+        )}
+        {!destino.href && <Proximamente className="ml-auto" />}
+      </div>
+      <p className="mt-1 text-xs leading-snug text-muted-foreground">{destino.descripcion}</p>
+    </>
+  );
+
+  // Sin `href` la sección no existe: se anuncia, pero no se finge navegable.
+  if (!destino.href) {
+    return (
+      <li>
+        <div
+          className="cursor-default rounded-md p-3 opacity-70"
+          aria-disabled="true"
+          data-testid={destino.testid}
+        >
+          {contenido}
+        </div>
+      </li>
+    );
+  }
+
+  const clases = cn(
+    "block rounded-md p-3 no-underline outline-none transition-colors",
+    "hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:ring-1 focus-visible:ring-ring",
+    activo && "bg-accent",
+  );
+
+  return (
+    <li>
+      {destino.externo ? (
+        <a
+          href={destino.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={clases}
+          data-testid={destino.testid}
+        >
+          {contenido}
+        </a>
+      ) : (
+        <Link
+          href={destino.href}
+          className={clases}
+          aria-current={activo ? "page" : undefined}
+          data-testid={destino.testid}
+        >
+          {contenido}
+        </Link>
+      )}
+    </li>
+  );
+}
+
+/** Una entrada de primer nivel del menú de escritorio. */
+function EntradaEscritorio({ entrada, ruta }: { entrada: EntradaNav; ruta: string }) {
+  const activa = esEntradaActiva(entrada, ruta);
+
+  // El subrayado acompaña al cambio de peso tipográfico: el color nunca es el
+  // único canal que indica dónde estás.
+  const subrayado = (
+    <span
+      className={cn(
+        "absolute inset-x-3 -bottom-2 h-0.5 rounded-full bg-secondary transition-opacity",
+        activa ? "opacity-100" : "opacity-0",
+      )}
+      aria-hidden="true"
+    />
+  );
+
+  if (!entrada.destinos) {
+    return (
+      <NavigationMenuItem>
+        <div
+          className={cn(
+            navigationMenuTriggerStyle(),
+            "relative cursor-default gap-2 bg-transparent text-muted-foreground hover:bg-transparent",
+          )}
+          aria-disabled="true"
+          data-testid={entrada.testid}
+        >
+          {entrada.etiqueta}
+          <Proximamente />
+          {subrayado}
+        </div>
+      </NavigationMenuItem>
+    );
+  }
+
+  return (
+    <NavigationMenuItem>
+      <NavigationMenuTrigger
+        className={cn("relative bg-transparent", activa && "font-semibold text-foreground")}
+        data-testid={entrada.testid}
+      >
+        {entrada.etiqueta}
+        {subrayado}
+      </NavigationMenuTrigger>
+      <NavigationMenuContent>
+        <ul className="grid w-[320px] gap-1 p-2">
+          {entrada.destinos.map((destino) => (
+            <DestinoEscritorio key={destino.testid} destino={destino} ruta={ruta} />
+          ))}
+        </ul>
+      </NavigationMenuContent>
+    </NavigationMenuItem>
+  );
+}
+
+/** Un destino dentro del panel móvil. */
+function DestinoMovil({ destino, ruta }: { destino: DestinoNav; ruta: string }) {
+  const activo = esRutaActiva(destino.href, ruta);
+  const clases =
+    "flex min-h-11 items-center gap-2 rounded-md px-3 text-base text-muted-foreground hover:text-foreground";
+
+  if (!destino.href) {
+    return (
+      <div
+        className={cn(clases, "opacity-70")}
+        aria-disabled="true"
+        data-testid={`mobile-${destino.testid}`}
+      >
+        {destino.etiqueta}
+        <Proximamente className="ml-auto" />
+      </div>
+    );
+  }
+
+  if (destino.externo) {
+    return (
+      <a
+        href={destino.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={clases}
+        data-testid={`mobile-${destino.testid}`}
+      >
+        {destino.etiqueta}
+        <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+      </a>
+    );
+  }
+
+  return (
+    <Link
+      href={destino.href}
+      className={cn(clases, activo && "font-semibold text-foreground")}
+      aria-current={activo ? "page" : undefined}
+      data-testid={`mobile-${destino.testid}`}
+    >
+      {destino.etiqueta}
+    </Link>
+  );
+}
+
+/**
+ * Panel móvil a pantalla completa.
+ *
+ * Va en un portal porque el `backdrop-filter` de la cabecera crea un bloque
+ * contenedor: un `fixed` descendiente se posicionaría contra la cabecera, no
+ * contra la ventana.
+ */
+function PanelMovil({
+  abierto,
+  onCerrar,
+  ruta,
+}: {
+  abierto: boolean;
+  onCerrar: () => void;
+  ruta: string;
+}) {
+  const [montado, setMontado] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => setMontado(true), []);
+
+  // Bloquea el scroll del cuerpo mientras el panel cubre la pantalla.
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    if (!abierto) return;
+    const previo = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previo;
+    };
+  }, [abierto]);
 
-  if (!mounted) return null;
+  // Escape cierra, y el foco queda atrapado dentro del panel.
+  useEffect(() => {
+    if (!abierto) return;
+    const enfocadoAntes = document.activeElement as HTMLElement | null;
+
+    const alPulsar = (evento: KeyboardEvent) => {
+      if (evento.key === "Escape") {
+        onCerrar();
+        return;
+      }
+      if (evento.key !== "Tab" || !panelRef.current) return;
+
+      const enfocables = Array.from(
+        panelRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      );
+      if (enfocables.length === 0) return;
+
+      const primero = enfocables[0];
+      const ultimo = enfocables[enfocables.length - 1];
+      if (evento.shiftKey && document.activeElement === primero) {
+        evento.preventDefault();
+        ultimo.focus();
+      } else if (!evento.shiftKey && document.activeElement === ultimo) {
+        evento.preventDefault();
+        primero.focus();
+      }
+    };
+
+    document.addEventListener("keydown", alPulsar);
+    return () => {
+      document.removeEventListener("keydown", alPulsar);
+      enfocadoAntes?.focus();
+    };
+  }, [abierto, onCerrar]);
+
+  if (!montado) return null;
 
   return createPortal(
     <AnimatePresence>
-      {isOpen && (
+      {abierto && (
         <motion.div
-          className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
+          ref={panelRef}
+          id="menu-movil"
+          className="fixed inset-0 z-[100] flex flex-col bg-background md:hidden"
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.2 }}
         >
-          {/* Backdrop with 50% opacity */}
-          <motion.div
-            className="absolute inset-0 bg-black/50"
-            onClick={onClose}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            data-testid="header-modal-backdrop"
-          />
-
-          {/* Modal wrapper with close button above */}
-          <motion.div
-            className="relative z-10 w-full max-w-4xl"
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
-          >
-            {/* Close button - positioned above and to the right of video */}
-            <div className="flex justify-end mb-3">
-              <Button
-                size="icon"
-                variant="ghost"
-                className="bg-white/20 hover:bg-white/30 text-white rounded-full backdrop-blur-sm"
-                onClick={onClose}
-                data-testid="header-button-close-modal"
-              >
-                <X className="w-5 h-5" />
-              </Button>
-            </div>
-
-            {/* Video container with 16:9 aspect ratio */}
-            <div
-              className="relative w-full rounded-2xl overflow-hidden shadow-2xl bg-black"
-              style={{ paddingBottom: "56.25%" }}
+          <div className="flex h-16 shrink-0 items-center justify-between border-b border-border px-4">
+            <span className="text-sm font-semibold text-foreground">Menú</span>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onCerrar}
+              aria-label="Cerrar menú"
+              data-testid="button-mobile-close"
             >
-              <iframe
-                className="absolute inset-0 w-full h-full"
-                src="https://www.youtube.com/embed/kl4Zd89F8jk?autoplay=1&rel=0"
-                title="Video de presentación"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                data-testid="header-iframe-video"
-              />
-            </div>
-          </motion.div>
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
+
+          <nav className="flex-1 overflow-y-auto px-4 py-4" aria-label="Principal">
+            {NAVEGACION.map((entrada) =>
+              entrada.destinos ? (
+                <GrupoMovil key={entrada.testid} entrada={entrada} ruta={ruta} />
+              ) : (
+                <div
+                  key={entrada.testid}
+                  className="flex min-h-11 items-center gap-2 py-2 text-base font-medium text-muted-foreground opacity-70"
+                  aria-disabled="true"
+                  data-testid={`mobile-${entrada.testid}`}
+                >
+                  {entrada.etiqueta}
+                  <Proximamente className="ml-auto" />
+                </div>
+              ),
+            )}
+          </nav>
+
+          {/* Únete queda fijo abajo, al alcance del pulgar. */}
+          <div className="shrink-0 space-y-2 border-t border-border p-4">
+            <Button variant="ghost" className="min-h-11 w-full" asChild>
+              <a href={URL_LOGIN} data-testid="button-mobile-login">
+                Iniciar sesión
+              </a>
+            </Button>
+            <Button
+              variant="secondary"
+              className="min-h-11 w-full"
+              asChild
+              data-testid="button-mobile-registro"
+            >
+              <a href={URL_REGISTRO} target="_blank" rel="noopener noreferrer">
+                <UserPlus className="h-4 w-4" />
+                Únete
+              </a>
+            </Button>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>,
@@ -94,411 +355,132 @@ function VideoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
   );
 }
 
+function GrupoMovil({ entrada, ruta }: { entrada: EntradaNav; ruta: string }) {
+  const [abierto, setAbierto] = useState(() => esEntradaActiva(entrada, ruta));
+
+  return (
+    <Collapsible open={abierto} onOpenChange={setAbierto}>
+      <CollapsibleTrigger
+        className="flex min-h-11 w-full items-center justify-between py-2 text-base font-medium text-foreground"
+        data-testid={`mobile-${entrada.testid}`}
+      >
+        {entrada.etiqueta}
+        <ChevronDown
+          className={cn("h-4 w-4 transition-transform", abierto && "rotate-180")}
+          aria-hidden="true"
+        />
+      </CollapsibleTrigger>
+      <CollapsibleContent className="space-y-1 pb-2 pl-1">
+        {entrada.destinos?.map((destino) => (
+          <DestinoMovil key={destino.testid} destino={destino} ruta={ruta} />
+        ))}
+      </CollapsibleContent>
+    </Collapsible>
+  );
+}
+
 export default function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [aprendeOpen, setAprendeOpen] = useState(false);
-  const [participaOpen, setParticipaOpen] = useState(false);
-  const [bolsaOpen, setBolsaOpen] = useState(false);
-  const [isVideoOpen, setIsVideoOpen] = useState(false);
+  const [ruta] = useLocation();
+  const [menuAbierto, setMenuAbierto] = useState(false);
+  const [compacto, setCompacto] = useState(false);
+
+  // El panel debe cerrarse al navegar. Antes se quedaba abierto encima de la
+  // página nueva.
+  useEffect(() => setMenuAbierto(false), [ruta]);
+
+  useEffect(() => {
+    const alScroll = () => setCompacto(window.scrollY > 32);
+    alScroll();
+    window.addEventListener("scroll", alScroll, { passive: true });
+    return () => window.removeEventListener("scroll", alScroll);
+  }, []);
+
+  // Al cruzar a escritorio el panel debe cerrarse. Si no, `md:hidden` le pone
+  // `display: none` a mitad de la animación de salida, framer-motion nunca
+  // recibe el fin de la animación y el nodo se queda montado: al girar la
+  // tablet de vuelta a vertical reaparecería un panel invisible tapando la
+  // página. Es el caso de una tablet rotando, no un caso de laboratorio.
+  useEffect(() => {
+    const escritorio = window.matchMedia("(min-width: 768px)");
+    const alCambiar = (evento: MediaQueryListEvent | MediaQueryList) => {
+      if (evento.matches) setMenuAbierto(false);
+    };
+    alCambiar(escritorio);
+    escritorio.addEventListener("change", alCambiar);
+    return () => escritorio.removeEventListener("change", alCambiar);
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 md:px-8">
-        <div className="flex h-16 items-center justify-between">
+        <div
+          className={cn(
+            "flex items-center justify-between transition-[height] duration-200",
+            compacto ? "h-16" : "h-16 md:h-20",
+          )}
+        >
           {/* Logo */}
-          <div className="flex items-center">
-            <a href="/" className="flex items-center" data-testid="link-logo">
+          <div className="flex flex-1 items-center">
+            <Link href="/" className="flex items-center" data-testid="link-logo">
               <img
                 src={logoLight}
-                alt="Aspal"
-                className="h-8 w-auto dark:hidden"
+                alt="Aspal — ir al inicio"
+                className={cn(
+                  "w-auto transition-[height] duration-200 dark:hidden",
+                  compacto ? "h-8" : "h-8 md:h-10",
+                )}
                 data-testid="img-logo-light"
               />
               <img
                 src={logoDark}
-                alt="Aspal"
-                className="h-8 w-auto hidden dark:block"
+                alt="Aspal — ir al inicio"
+                className={cn(
+                  "hidden w-auto transition-[height] duration-200 dark:block",
+                  compacto ? "h-8" : "h-8 md:h-10",
+                )}
                 data-testid="img-logo-dark"
               />
-            </a>
+            </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <NavigationMenu className="hidden md:flex">
+          {/* Navegación de escritorio, ópticamente centrada entre los laterales */}
+          <NavigationMenu className="hidden md:flex" aria-label="Principal">
             <NavigationMenuList>
-              {/* Aprende Menu */}
-              <NavigationMenuItem>
-                <NavigationMenuTrigger data-testid="menu-aprende">
-                  Aprende
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[200px] gap-3 p-4">
-                    <li>
-                      <Link
-                        href="/blog"
-                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                      >
-                        <div
-                          className="text-sm font-medium leading-none"
-                          data-testid="link-blog"
-                        >
-                          Blog
-                        </div>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/podcast"
-                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        data-testid="link-podcast"
-                      >
-                        <div className="text-sm font-medium leading-none">Podcast</div>
-                      </Link>
-                    </li>
-                    <li>
-                      <a
-                        href="#biblioteca"
-                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        data-testid="link-biblioteca"
-                      >
-                        <div className="text-sm font-medium leading-none">
-                          Biblioteca Digital
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#cursos"
-                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        data-testid="link-cursos"
-                      >
-                        <div className="text-sm font-medium leading-none">
-                          Cursos en Línea
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#documentos"
-                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        data-testid="link-documentos"
-                      >
-                        <div className="text-sm font-medium leading-none">Documentos</div>
-                      </a>
-                    </li>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-
-              {/* Participa Menu */}
-              <NavigationMenuItem>
-                <NavigationMenuTrigger data-testid="menu-participa">
-                  Participa
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[240px] gap-3 p-4">
-                    <li>
-                      <a
-                        href="#comunidad"
-                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        data-testid="link-comunidad"
-                      >
-                        <div className="text-sm font-medium leading-none">Comunidad</div>
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#directorio-miembros"
-                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        data-testid="link-directorio-miembros"
-                      >
-                        <div className="text-sm font-medium leading-none">
-                          Directorio de Miembros
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#directorio-industria"
-                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        data-testid="link-directorio-industria"
-                      >
-                        <div className="text-sm font-medium leading-none">
-                          Directorio de la Industria
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#eventos"
-                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        data-testid="link-eventos"
-                      >
-                        <div className="text-sm font-medium leading-none">
-                          Eventos y Grupos
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-
-              {/* Bolsa de Trabajo Menu */}
-              <NavigationMenuItem>
-                <NavigationMenuTrigger data-testid="menu-bolsa">
-                  Bolsa de Trabajo
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[180px] gap-3 p-4">
-                    <li>
-                      <a
-                        href="#bolsa-home"
-                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        data-testid="link-bolsa-home"
-                      >
-                        <div className="text-sm font-medium leading-none">Home</div>
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#candidatos"
-                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        data-testid="link-candidatos"
-                      >
-                        <div className="text-sm font-medium leading-none">Candidatos</div>
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#reclutadores"
-                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        data-testid="link-reclutadores"
-                      >
-                        <div className="text-sm font-medium leading-none">
-                          Reclutadores
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-
-              {/* Se Miembro */}
-              <NavigationMenuItem>
-                <a
-                  href="https://comunidad.asociacionesprofesionales.org/register/membresia-basica/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={navigationMenuTriggerStyle()}
-                  data-testid="link-se-miembro"
-                >
-                  Sé Miembro
-                </a>
-              </NavigationMenuItem>
+              {NAVEGACION.map((entrada) => (
+                <EntradaEscritorio key={entrada.testid} entrada={entrada} ruta={ruta} />
+              ))}
             </NavigationMenuList>
           </NavigationMenu>
 
-          {/* CTA Buttons */}
-          <div className="hidden md:flex items-center gap-4">
-            <Button variant="ghost" data-testid="button-login">
-              Iniciar sesión
+          {/* Acciones: un solo botón lleno en toda la cabecera */}
+          <div className="hidden flex-1 items-center justify-end gap-2 md:flex">
+            <Button variant="ghost" asChild data-testid="button-login">
+              <a href={URL_LOGIN}>Iniciar sesión</a>
             </Button>
-            <Button
-              className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
-              onClick={() => setIsVideoOpen(true)}
-              data-testid="button-demo"
-            >
-              <Play className="mr-2 w-4 h-4" />
-              Ver Video
+            <Button variant="secondary" asChild data-testid="button-registro">
+              <a href={URL_REGISTRO} target="_blank" rel="noopener noreferrer">
+                <UserPlus className="h-4 w-4" />
+                Únete
+              </a>
             </Button>
           </div>
 
-          {/* Mobile menu button */}
           <Button
             variant="ghost"
             size="icon"
             className="md:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            onClick={() => setMenuAbierto(true)}
+            aria-expanded={menuAbierto}
+            aria-controls="menu-movil"
+            aria-label="Abrir menú"
             data-testid="button-mobile-menu"
           >
             <Menu className="h-6 w-6" />
           </Button>
         </div>
-
-        {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <div
-            className="md:hidden py-4 border-t border-border"
-            data-testid="mobile-menu"
-          >
-            <nav className="flex flex-col gap-2">
-              {/* Aprende Collapsible */}
-              <Collapsible open={aprendeOpen} onOpenChange={setAprendeOpen}>
-                <CollapsibleTrigger
-                  className="flex items-center justify-between w-full text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
-                  data-testid="mobile-menu-aprende"
-                >
-                  Aprende
-                  <ChevronDown
-                    className={`h-4 w-4 transition-transform ${aprendeOpen ? "rotate-180" : ""}`}
-                  />
-                </CollapsibleTrigger>
-                <CollapsibleContent className="pl-4 space-y-2 pt-2">
-                  <Link
-                    href="/blog"
-                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
-                    data-testid="mobile-link-blog"
-                  >
-                    Blog
-                  </Link>
-                  <Link
-                    href="/podcast"
-                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
-                    data-testid="mobile-link-podcast"
-                  >
-                    Podcast
-                  </Link>
-                  <a
-                    href="#biblioteca"
-                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
-                    data-testid="mobile-link-biblioteca"
-                  >
-                    Biblioteca Digital
-                  </a>
-                  <a
-                    href="#cursos"
-                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
-                    data-testid="mobile-link-cursos"
-                  >
-                    Cursos en Línea
-                  </a>
-                  <a
-                    href="#documentos"
-                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
-                    data-testid="mobile-link-documentos"
-                  >
-                    Documentos
-                  </a>
-                </CollapsibleContent>
-              </Collapsible>
-
-              {/* Participa Collapsible */}
-              <Collapsible open={participaOpen} onOpenChange={setParticipaOpen}>
-                <CollapsibleTrigger
-                  className="flex items-center justify-between w-full text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
-                  data-testid="mobile-menu-participa"
-                >
-                  Participa
-                  <ChevronDown
-                    className={`h-4 w-4 transition-transform ${participaOpen ? "rotate-180" : ""}`}
-                  />
-                </CollapsibleTrigger>
-                <CollapsibleContent className="pl-4 space-y-2 pt-2">
-                  <a
-                    href="#comunidad"
-                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
-                    data-testid="mobile-link-comunidad"
-                  >
-                    Comunidad
-                  </a>
-                  <a
-                    href="#directorio-miembros"
-                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
-                    data-testid="mobile-link-directorio-miembros"
-                  >
-                    Directorio de Miembros
-                  </a>
-                  <a
-                    href="#directorio-industria"
-                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
-                    data-testid="mobile-link-directorio-industria"
-                  >
-                    Directorio de la Industria
-                  </a>
-                  <a
-                    href="#eventos"
-                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
-                    data-testid="mobile-link-eventos"
-                  >
-                    Eventos y Grupos
-                  </a>
-                </CollapsibleContent>
-              </Collapsible>
-
-              {/* Bolsa de Trabajo Collapsible */}
-              <Collapsible open={bolsaOpen} onOpenChange={setBolsaOpen}>
-                <CollapsibleTrigger
-                  className="flex items-center justify-between w-full text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
-                  data-testid="mobile-menu-bolsa"
-                >
-                  Bolsa de Trabajo
-                  <ChevronDown
-                    className={`h-4 w-4 transition-transform ${bolsaOpen ? "rotate-180" : ""}`}
-                  />
-                </CollapsibleTrigger>
-                <CollapsibleContent className="pl-4 space-y-2 pt-2">
-                  <a
-                    href="#bolsa-home"
-                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
-                    data-testid="mobile-link-bolsa-home"
-                  >
-                    Home
-                  </a>
-                  <a
-                    href="#candidatos"
-                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
-                    data-testid="mobile-link-candidatos"
-                  >
-                    Candidatos
-                  </a>
-                  <a
-                    href="#reclutadores"
-                    className="block text-sm text-muted-foreground hover:text-foreground py-1"
-                    data-testid="mobile-link-reclutadores"
-                  >
-                    Reclutadores
-                  </a>
-                </CollapsibleContent>
-              </Collapsible>
-
-              {/* Se Miembro */}
-              <a
-                href="https://comunidad.asociacionesprofesionales.org/register/membresia-basica/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
-                data-testid="mobile-link-se-miembro"
-              >
-                Sé Miembro
-              </a>
-
-              <div className="flex flex-col gap-2 pt-2">
-                <Button
-                  variant="ghost"
-                  className="w-full"
-                  data-testid="button-mobile-login"
-                >
-                  Iniciar sesión
-                </Button>
-                <Button
-                  className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90"
-                  onClick={() => {
-                    setIsVideoOpen(true);
-                    setMobileMenuOpen(false);
-                  }}
-                  data-testid="button-mobile-demo"
-                >
-                  <Play className="mr-2 w-4 h-4" />
-                  Ver Video
-                </Button>
-              </div>
-            </nav>
-          </div>
-        )}
       </div>
 
-      {/* Video Modal */}
-      <VideoModal isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)} />
+      <PanelMovil abierto={menuAbierto} onCerrar={() => setMenuAbierto(false)} ruta={ruta} />
     </header>
   );
 }

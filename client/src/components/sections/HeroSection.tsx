@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, X, Play } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAnimatedCounter } from "@/hooks/use-animated-counter";
+import { URL_REGISTRO } from "@/lib/navegacion";
 import heroDashboard from "@assets/generated_images/hero_dashboard_with_yellow_background.png";
 
 function AnimatedCounter({
@@ -140,11 +141,7 @@ export default function HeroSection() {
                   asChild
                   data-testid="button-cta-primary"
                 >
-                  <a
-                    href="https://asociacionesprofesionales.org/register/membresia-basica/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <a href={URL_REGISTRO} target="_blank" rel="noopener noreferrer">
                     Comenzar ahora
                     <ArrowRight className="ml-2 w-5 h-5" />
                   </a>
