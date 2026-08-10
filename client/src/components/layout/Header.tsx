@@ -23,26 +23,13 @@ import {
   type DestinoNav,
   type EntradaNav,
 } from "@/lib/navegacion";
+import { Proximamente } from "@/components/layout/Proximamente";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, ChevronDown, Menu, UserPlus, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link, useLocation } from "wouter";
-
-/** Marca de sección todavía no construida. Nunca acompaña a un enlace. */
-function Proximamente({ className }: { className?: string }) {
-  return (
-    <span
-      className={cn(
-        "shrink-0 whitespace-nowrap rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground",
-        className,
-      )}
-    >
-      Próximamente
-    </span>
-  );
-}
 
 /** Un destino dentro de un desplegable de escritorio. */
 function DestinoEscritorio({ destino, ruta }: { destino: DestinoNav; ruta: string }) {
