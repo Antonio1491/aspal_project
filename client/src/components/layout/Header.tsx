@@ -52,16 +52,16 @@ function DestinoEscritorio({ destino, ruta }: { destino: DestinoNav; ruta: strin
 
   const contenido = (
     <div className="flex gap-3">
-      {/* Decorativo: siempre acompaña a la etiqueta, nunca la sustituye. */}
-      <span
+      {/* Decorativo: siempre acompaña a la etiqueta, nunca la sustituye.
+          Sin recuadro de fondo: el amarillo es del CTA y de la marca de ruta
+          activa, y repetirlo en cada fila del menú le quitaba significado. */}
+      <Icono
         className={cn(
-          "mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md",
-          destino.href ? "bg-accent text-accent-foreground" : "bg-muted text-muted-foreground",
+          "mt-0.5 h-5 w-5 shrink-0",
+          destino.href ? "text-foreground" : "text-muted-foreground",
         )}
         aria-hidden="true"
-      >
-        <Icono className="h-4 w-4" />
-      </span>
+      />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1.5">
           <span
