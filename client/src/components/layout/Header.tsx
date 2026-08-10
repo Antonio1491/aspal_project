@@ -100,10 +100,15 @@ function DestinoEscritorio({ destino, ruta }: { destino: DestinoNav; ruta: strin
     );
   }
 
+  // Hover y activo dicen cosas distintas —"apuntas a esto" y "aquí estás"—, así
+  // que no pueden compartir tratamiento. El hover usa `hover-elevate`, el
+  // sistema neutro de la casa. El activo lleva la barra amarilla, el mismo
+  // idioma que el subrayado de la barra superior. El `--accent` que había antes
+  // tiene exactamente la luminosidad del panel (94%): teñía sin resaltar.
   const clases = cn(
-    "block rounded-md p-3 no-underline outline-none transition-colors",
-    "hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:ring-1 focus-visible:ring-ring",
-    activo && "bg-accent",
+    "hover-elevate block rounded-md p-3 no-underline outline-none transition-colors",
+    "focus-visible:ring-1 focus-visible:ring-ring",
+    activo && "bg-foreground/5 shadow-[inset_3px_0_0_0_hsl(var(--secondary))]",
   );
 
   return (
@@ -194,7 +199,7 @@ function DestinoMovil({ destino, ruta }: { destino: DestinoNav; ruta: string }) 
   const activo = esRutaActiva(destino.href, ruta);
   const Icono = destino.icono;
   const clases =
-    "flex min-h-11 items-center gap-3 rounded-md px-3 text-base text-muted-foreground hover:text-foreground";
+    "hover-elevate flex min-h-11 items-center gap-3 rounded-md px-3 text-base text-muted-foreground hover:text-foreground";
   const icono = <Icono className="h-4 w-4 shrink-0" aria-hidden="true" />;
 
   if (!destino.href) {
@@ -230,7 +235,11 @@ function DestinoMovil({ destino, ruta }: { destino: DestinoNav; ruta: string }) 
   return (
     <Link
       href={destino.href}
-      className={cn(clases, activo && "font-semibold text-foreground")}
+      className={cn(
+        clases,
+        activo &&
+          "bg-foreground/5 font-semibold text-foreground shadow-[inset_3px_0_0_0_hsl(var(--secondary))]",
+      )}
       aria-current={activo ? "page" : undefined}
       data-testid={`mobile-${destino.testid}`}
     >
