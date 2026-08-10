@@ -35,7 +35,7 @@ function Proximamente({ className }: { className?: string }) {
   return (
     <span
       className={cn(
-        "rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground",
+        "shrink-0 whitespace-nowrap rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground",
         className,
       )}
     >
@@ -48,24 +48,41 @@ function Proximamente({ className }: { className?: string }) {
 function DestinoEscritorio({ destino, ruta }: { destino: DestinoNav; ruta: string }) {
   const activo = esRutaActiva(destino.href, ruta);
 
+  const Icono = destino.icono;
+
   const contenido = (
-    <>
-      <div className="flex items-center gap-1.5">
-        <span
-          className={cn(
-            "text-sm leading-none",
-            destino.href ? "font-medium text-foreground" : "font-medium text-muted-foreground",
-          )}
-        >
-          {destino.etiqueta}
-        </span>
-        {destino.externo && (
-          <ArrowUpRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
+    <div className="flex gap-3">
+      {/* Decorativo: siempre acompaña a la etiqueta, nunca la sustituye. */}
+      <span
+        className={cn(
+          "mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md",
+          destino.href ? "bg-accent text-accent-foreground" : "bg-muted text-muted-foreground",
         )}
-        {!destino.href && <Proximamente className="ml-auto" />}
+        aria-hidden="true"
+      >
+        <Icono className="h-4 w-4" />
+      </span>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-1.5">
+          <span
+            className={cn(
+              "text-sm leading-none",
+              destino.href ? "font-medium text-foreground" : "font-medium text-muted-foreground",
+            )}
+          >
+            {destino.etiqueta}
+          </span>
+          {destino.externo && (
+            <ArrowUpRight
+              className="h-3.5 w-3.5 shrink-0 text-muted-foreground"
+              aria-hidden="true"
+            />
+          )}
+          {!destino.href && <Proximamente className="ml-auto" />}
+        </div>
+        <p className="mt-1 text-xs leading-snug text-muted-foreground">{destino.descripcion}</p>
       </div>
-      <p className="mt-1 text-xs leading-snug text-muted-foreground">{destino.descripcion}</p>
-    </>
+    </div>
   );
 
   // Sin `href` la sección no existe: se anuncia, pero no se finge navegable.
@@ -160,7 +177,9 @@ function EntradaEscritorio({ entrada, ruta }: { entrada: EntradaNav; ruta: strin
         {subrayado}
       </NavigationMenuTrigger>
       <NavigationMenuContent>
-        <ul className="grid w-[320px] gap-1 p-2">
+        {/* 380px: cabe "Directorio de la Industria" junto a su marca de
+            Próximamente sin partir la etiqueta en dos líneas. */}
+        <ul className="grid w-[380px] gap-1 p-2">
           {entrada.destinos.map((destino) => (
             <DestinoEscritorio key={destino.testid} destino={destino} ruta={ruta} />
           ))}
@@ -173,8 +192,10 @@ function EntradaEscritorio({ entrada, ruta }: { entrada: EntradaNav; ruta: strin
 /** Un destino dentro del panel móvil. */
 function DestinoMovil({ destino, ruta }: { destino: DestinoNav; ruta: string }) {
   const activo = esRutaActiva(destino.href, ruta);
+  const Icono = destino.icono;
   const clases =
-    "flex min-h-11 items-center gap-2 rounded-md px-3 text-base text-muted-foreground hover:text-foreground";
+    "flex min-h-11 items-center gap-3 rounded-md px-3 text-base text-muted-foreground hover:text-foreground";
+  const icono = <Icono className="h-4 w-4 shrink-0" aria-hidden="true" />;
 
   if (!destino.href) {
     return (
@@ -183,6 +204,7 @@ function DestinoMovil({ destino, ruta }: { destino: DestinoNav; ruta: string }) 
         aria-disabled="true"
         data-testid={`mobile-${destino.testid}`}
       >
+        {icono}
         {destino.etiqueta}
         <Proximamente className="ml-auto" />
       </div>
@@ -198,6 +220,7 @@ function DestinoMovil({ destino, ruta }: { destino: DestinoNav; ruta: string }) 
         className={clases}
         data-testid={`mobile-${destino.testid}`}
       >
+        {icono}
         {destino.etiqueta}
         <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" />
       </a>
@@ -211,6 +234,7 @@ function DestinoMovil({ destino, ruta }: { destino: DestinoNav; ruta: string }) 
       aria-current={activo ? "page" : undefined}
       data-testid={`mobile-${destino.testid}`}
     >
+      {icono}
       {destino.etiqueta}
     </Link>
   );
@@ -318,10 +342,11 @@ function PanelMovil({
               ) : (
                 <div
                   key={entrada.testid}
-                  className="flex min-h-11 items-center gap-2 py-2 text-base font-medium text-muted-foreground opacity-70"
+                  className="flex min-h-11 items-center gap-3 py-2 text-base font-medium text-muted-foreground opacity-70"
                   aria-disabled="true"
                   data-testid={`mobile-${entrada.testid}`}
                 >
+                  <entrada.icono className="h-4 w-4 shrink-0" aria-hidden="true" />
                   {entrada.etiqueta}
                   <Proximamente className="ml-auto" />
                 </div>
@@ -361,12 +386,13 @@ function GrupoMovil({ entrada, ruta }: { entrada: EntradaNav; ruta: string }) {
   return (
     <Collapsible open={abierto} onOpenChange={setAbierto}>
       <CollapsibleTrigger
-        className="flex min-h-11 w-full items-center justify-between py-2 text-base font-medium text-foreground"
+        className="flex min-h-11 w-full items-center gap-3 py-2 text-base font-medium text-foreground"
         data-testid={`mobile-${entrada.testid}`}
       >
+        <entrada.icono className="h-4 w-4 shrink-0" aria-hidden="true" />
         {entrada.etiqueta}
         <ChevronDown
-          className={cn("h-4 w-4 transition-transform", abierto && "rotate-180")}
+          className={cn("ml-auto h-4 w-4 transition-transform", abierto && "rotate-180")}
           aria-hidden="true"
         />
       </CollapsibleTrigger>

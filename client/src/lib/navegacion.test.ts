@@ -74,6 +74,22 @@ describe("catálogo de navegación", () => {
     expect(sinDescripcion).toEqual([]);
   });
 
+  it("da icono a toda entrada y todo destino", () => {
+    // Los iconos de lucide son `forwardRef`: objetos, no funciones. Basta con
+    // comprobar que hay algo renderizable.
+    const sinIcono = [...NAVEGACION, ...destinos].filter((e) => !e.icono);
+    expect(sinIcono.map((e) => e.etiqueta)).toEqual([]);
+  });
+
+  it("no repite icono dentro de un mismo desplegable", () => {
+    // Dos destinos con el mismo icono en la misma lista no distinguen nada:
+    // el icono deja de aportar y solo añade ruido visual.
+    for (const entrada of NAVEGACION) {
+      const iconos = (entrada.destinos ?? []).map((d) => d.icono);
+      expect(new Set(iconos).size, `iconos repetidos en "${entrada.etiqueta}"`).toBe(iconos.length);
+    }
+  });
+
   it("marca como externo todo destino que salga del sitio, y solo esos", () => {
     for (const destino of destinos) {
       expect(Boolean(destino.externo)).toBe(Boolean(destino.href?.startsWith("http")));

@@ -158,6 +158,13 @@ Notas de la reorganización:
   acción dos veces en la misma barra, compitiendo entre sí.
 - **Los enlaces externos se marcan** con icono ↗, `target="_blank"` y
   `rel="noopener noreferrer"`. El usuario debe saber que sale del sitio.
+- **Cada destino lleva un icono descriptivo**, decorativo (`aria-hidden`) y
+  siempre junto a la etiqueta escrita, nunca en su lugar. Se eligen siluetas
+  distintas entre sí —periódico, micrófono, birrete, libros, bocadillos,
+  personas, calendario, edificio, maletín— porque a 16px lo que separa un
+  icono de otro es la forma, no el detalle. Aparecen dentro de los menús y en
+  el panel móvil, **no en la barra superior**: ahí añadirían ruido y le
+  restarían foco al único botón lleno.
 
 ### Estructura visual
 
