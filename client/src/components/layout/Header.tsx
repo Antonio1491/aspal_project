@@ -24,6 +24,7 @@ import {
   type EntradaNav,
 } from "@/lib/navegacion";
 import { Proximamente } from "@/components/layout/Proximamente";
+import { registrarEvento } from "@/lib/analitica";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, ChevronDown, Menu, UserPlus, X } from "lucide-react";
@@ -370,7 +371,12 @@ function PanelMovil({
               asChild
               data-testid="button-mobile-registro"
             >
-              <a href={URL_REGISTRO} target="_blank" rel="noopener noreferrer">
+              <a
+                href={URL_REGISTRO}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => registrarEvento("click_unete", { origen: "menu_movil" })}
+              >
                 <UserPlus className="h-4 w-4" />
                 Únete
               </a>
@@ -487,7 +493,12 @@ export default function Header() {
               <a href={URL_LOGIN}>Iniciar sesión</a>
             </Button>
             <Button variant="secondary" asChild data-testid="button-registro">
-              <a href={URL_REGISTRO} target="_blank" rel="noopener noreferrer">
+              <a
+                href={URL_REGISTRO}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => registrarEvento("click_unete", { origen: "header" })}
+              >
                 <UserPlus className="h-4 w-4" />
                 Únete
               </a>

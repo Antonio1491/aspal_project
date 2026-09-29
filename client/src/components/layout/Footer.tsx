@@ -8,6 +8,7 @@ import {
   type DestinoNav,
   type EntradaNav,
 } from "@/lib/navegacion";
+import { registrarEvento } from "@/lib/analitica";
 import { CONTACTO, NOMBRE_MARCA, REDES } from "@/lib/marca";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
@@ -241,6 +242,7 @@ export default function Footer() {
                 href={URL_REGISTRO}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => registrarEvento("click_unete", { origen: "footer" })}
                 data-testid="button-footer-registro"
               >
                 <UserPlus className="h-4 w-4" aria-hidden="true" />
