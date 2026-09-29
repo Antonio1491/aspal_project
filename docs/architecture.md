@@ -15,23 +15,25 @@ de solo lectura y sin estado.
 
 ## Frontend
 
-**Rutas** (`wouter`, definidas en `client/src/App.tsx`):
+**Rutas** (`wouter`): se definen en `client/src/lib/rutas.ts` y se cablean en
+`client/src/App.tsx`.
 
-| Ruta          | Página                                        |
-| ------------- | --------------------------------------------- |
-| `/`           | Landing                                       |
-| `/blog`       | Listado de artículos con filtro por categoría |
-| `/blog/:slug` | Artículo individual                           |
-| `/podcast`    | Listado de episodios                          |
-| `*`           | 404                                           |
+| Ruta          | Página                                                                                 |
+| ------------- | -------------------------------------------------------------------------------------- |
+| `/`           | Home (temporalmente, el mismo contenido que `/plataforma` hasta la home institucional) |
+| `/plataforma` | Contenido de producto SaaS                                                             |
+| `/blog`       | Listado de artículos con filtro por categoría                                          |
+| `/blog/:slug` | Artículo individual                                                                    |
+| `/podcast`    | Listado de episodios                                                                   |
+| `*`           | 404                                                                                    |
 
 **Estado:** TanStack Query para estado de servidor; hooks de React para estado
 local. Hooks propios en `client/src/hooks/` (`use-mobile`, `use-toast`).
 
 **Estilos:** Tailwind CSS como base, shadcn/ui (variante New York) para las
-primitivas accesibles, tipografía Montserrat. La paleta institucional
-morado/amarillo y el resto de decisiones visuales están en
-[design-guidelines.md](design-guidelines.md).
+primitivas accesibles, tipografía Montserrat. La paleta
+institucional (pizarra, miel y noche) y el resto de decisiones visuales están
+en [design-guidelines.md](design-guidelines.md).
 
 **Organización de componentes:**
 

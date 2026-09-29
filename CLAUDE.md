@@ -74,8 +74,10 @@ typecheckear.
 
 - **La UI está en español.** Todo texto visible, en español. Los comentarios de
   código también.
-- Rutas con `wouter` en `client/src/App.tsx`. Añadir una página = añadir su
-  `<Route>` ahí.
+- Rutas con `wouter`. Añadir una página = añadir su ruta en
+  `client/src/lib/rutas.ts` (`RUTAS_ESTATICAS` o `RUTAS_DINAMICAS`) y su
+  componente en `PAGINAS` de `client/src/App.tsx`; TypeScript exige los dos.
+  Un `<Route>` suelto se salta el test de enlaces muertos.
 - Datos con TanStack Query. La `queryKey` es el path del endpoint.
 - Alias: `@/` → `client/src/`, `@shared/` → `shared/`, `@assets/` →
   `client/src/assets/`.
