@@ -1,7 +1,14 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { CONTACTO, NOMBRE_COMPLETO, NOMBRE_MARCA, REDES, TITULO_SITIO } from "./marca";
+import {
+  CONTACTO,
+  NOMBRE_COMPLETO,
+  NOMBRE_MARCA,
+  REDES,
+  TITULO_SITIO,
+  URL_SITIO,
+} from "./marca";
 
 const indexHtml = readFileSync(
   resolve(import.meta.dirname, "..", "..", "index.html"),
@@ -9,6 +16,12 @@ const indexHtml = readFileSync(
 );
 
 describe("marca", () => {
+  it("usa el dominio canónico con www y sin barra final", () => {
+    // El apex responde 307 hacia www: canonical y sitemap deben apuntar al
+    // destino final, no a una redirección.
+    expect(URL_SITIO).toBe("https://www.asociacionesprofesionales.org");
+  });
+
   it("el título de index.html es igual a TITULO_SITIO", () => {
     // Llegó a haber tres nombres distintos en el título, el pie y los
     // documentos. index.html no puede importar TypeScript: este test es lo que
