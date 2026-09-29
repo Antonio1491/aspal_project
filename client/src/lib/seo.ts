@@ -66,6 +66,12 @@ export const SEO: Record<RutaEstatica, MetaRuta> = {
       "Calendario de eventos y webinars de ASPAL para el sector asociativo de América Latina. Muy pronto.",
     indexable: true,
   },
+  "/que-hacemos": {
+    titulo: "¿Qué hacemos? · ASPAL",
+    descripcion:
+      "Comunidad, conocimiento, tecnología y datos: los cuatro pilares con los que ASPAL profesionaliza el sector asociativo de América Latina.",
+    indexable: true,
+  },
 };
 
 export const SEO_404: MetaRuta = {
