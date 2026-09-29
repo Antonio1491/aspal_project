@@ -58,6 +58,27 @@ describe("serveStatic", () => {
     expect(respuesta.headers.get("location")).toBe("/blog?origen=correo");
   });
 
+  it("no redirige fuera del dominio con barras iniciales (`//evil.com/`)", async () => {
+    // `//evil.com` en Location es relativa al protocolo: sale del sitio.
+    const respuesta = await fetch(`${base}//evil.com/`, { redirect: "manual" });
+    expect(respuesta.status).toBe(308);
+    const destino = respuesta.headers.get("location") ?? "";
+    expect(destino.startsWith("//")).toBe(false);
+    expect(destino).toBe("/evil.com");
+  });
+
+  it("redirige `//` a la raíz, sin Location vacío", async () => {
+    const respuesta = await fetch(`${base}//`, { redirect: "manual" });
+    expect(respuesta.status).toBe(308);
+    expect(respuesta.headers.get("location")).toBe("/");
+  });
+
+  it("conserva las mayúsculas al quitar la barra final", async () => {
+    const respuesta = await fetch(`${base}/Blog/`, { redirect: "manual" });
+    expect(respuesta.status).toBe(308);
+    expect(respuesta.headers.get("location")).toBe("/Blog");
+  });
+
   it("sirve el shell a las rutas dinámicas, con 200", async () => {
     // Recargar un artículo no puede dar 404: el cliente lo carga desde la API.
     expect(await pedir("/blog/un-articulo")).toEqual({

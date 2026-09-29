@@ -23,11 +23,14 @@ export function serveStatic(
     );
   }
 
-  // Como `trailingSlash: false` en Vercel: `/blog/` redirige a `/blog`.
+  // Como `trailingSlash: false` en Vercel: `/blog/` redirige a `/blog`. Se
+  // quitan también las barras iniciales y se pone una sola: `//evil.com/`
+  // daría `Location: //evil.com` (relativa al protocolo: sale del dominio) y
+  // `//` daría un `Location` vacío (bucle).
   app.use((req, res, next) => {
     if (req.path.length > 1 && req.path.endsWith("/")) {
       const consulta = req.url.slice(req.path.length);
-      res.redirect(308, req.path.replace(/\/+$/, "") + consulta);
+      res.redirect(308, "/" + req.path.replace(/^\/+|\/+$/g, "") + consulta);
       return;
     }
     next();
