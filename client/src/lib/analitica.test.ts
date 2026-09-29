@@ -21,6 +21,13 @@ describe("registrarEvento", () => {
     ]);
   });
 
+  it("una clave `event` en los datos no sobrescribe el nombre del evento", () => {
+    const ventana: { dataLayer?: unknown[] } = {};
+    vi.stubGlobal("window", ventana);
+    registrarEvento("click_unete", { event: "otro", origen: "header" });
+    expect(ventana.dataLayer).toEqual([{ event: "click_unete", origen: "header" }]);
+  });
+
   it("no falla sin window (tests y prerender)", () => {
     expect(() => registrarEvento("click_menu", { destino: "/blog" })).not.toThrow();
   });

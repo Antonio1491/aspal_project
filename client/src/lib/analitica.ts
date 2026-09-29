@@ -27,5 +27,5 @@ export function registrarEvento(evento: EventoAnalitica, datos: DatosEvento = {}
   // Sin `window` (tests en node, prerender) no hay nada que medir.
   if (typeof window === "undefined") return;
   window.dataLayer ??= [];
-  window.dataLayer.push({ event: evento, ...datos });
+  window.dataLayer.push({ ...datos, event: evento });
 }
