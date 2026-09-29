@@ -294,6 +294,7 @@ function DestinoMovil({ destino, ruta }: { destino: DestinoNav; ruta: string }) 
         target="_blank"
         rel="noopener noreferrer"
         className={clases}
+        onClick={() => registrarClicDestino(destino, "menu_movil")}
         data-testid={`mobile-${destino.testid}`}
       >
         {icono}
@@ -311,6 +312,7 @@ function DestinoMovil({ destino, ruta }: { destino: DestinoNav; ruta: string }) 
         activo &&
           "bg-foreground/5 font-semibold text-foreground shadow-[inset_3px_0_0_0_hsl(var(--secondary))]",
       )}
+      onClick={() => registrarClicDestino(destino, "menu_movil")}
       aria-current={activo ? "page" : undefined}
       data-testid={`mobile-${destino.testid}`}
     >
@@ -419,6 +421,17 @@ function PanelMovil({
             {NAVEGACION.map((entrada) =>
               esDesplegable(entrada) ? (
                 <GrupoMovil key={entrada.testid} entrada={entrada} ruta={ruta} />
+              ) : entrada.href ? (
+                <Link
+                  key={entrada.testid}
+                  href={entrada.href}
+                  className="flex min-h-11 items-center gap-3 py-2 text-base font-medium text-foreground"
+                  aria-current={esEntradaActiva(entrada, ruta) ? "page" : undefined}
+                  data-testid={`mobile-${entrada.testid}`}
+                >
+                  <entrada.icono className="h-4 w-4 shrink-0" aria-hidden="true" />
+                  {entrada.etiqueta}
+                </Link>
               ) : (
                 <div
                   key={entrada.testid}
@@ -482,9 +495,31 @@ function GrupoMovil({ entrada, ruta }: { entrada: EntradaNav; ruta: string }) {
         />
       </CollapsibleTrigger>
       <CollapsibleContent className="space-y-1 pb-2 pl-1">
-        {destinosDe(entrada).map((destino) => (
-          <DestinoMovil key={destino.testid} destino={destino} ruta={ruta} />
-        ))}
+        {entrada.grupos
+          ? entrada.grupos.map((grupo) => (
+              <div
+                key={grupo.testid}
+                className="pt-2"
+                data-testid={`mobile-${grupo.testid}`}
+              >
+                <p
+                  id={`mobile-titulo-${grupo.testid}`}
+                  className="px-3 pb-1 text-[13px] font-semibold uppercase tracking-wider text-miel-texto"
+                >
+                  {grupo.titulo}
+                </p>
+                <div role="list" aria-labelledby={`mobile-titulo-${grupo.testid}`}>
+                  {grupo.destinos.map((destino) => (
+                    <div role="listitem" key={destino.testid}>
+                      <DestinoMovil destino={destino} ruta={ruta} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))
+          : destinosDe(entrada).map((destino) => (
+              <DestinoMovil key={destino.testid} destino={destino} ruta={ruta} />
+            ))}
       </CollapsibleContent>
     </Collapsible>
   );
