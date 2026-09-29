@@ -112,6 +112,7 @@ export function ScrollRestoration() {
       if (frame) return;
       frame = window.requestAnimationFrame(() => {
         frame = 0;
+        if (saltoPendiente.current) return;
         positions.current.set(currentIndex.current, window.scrollY);
       });
     };
@@ -125,6 +126,9 @@ export function ScrollRestoration() {
 
   /** cancelación del reintento de ancla en curso (efecto de ruta o hashchange) */
   const cancelarAncla = useRef<() => void>(() => {});
+  /** salto a un ancla en curso: el scroll aún no debe guardarse (entrada sin sellar) */
+  const saltoPendiente = useRef(false);
+  const temporizadorSalto = useRef(0);
 
   // Anclas internas (<a href="#…">) dentro de la misma página. Wouter solo mira
   // el pathname, así que el efecto de ruta no corre; pero el navegador SÍ crea
@@ -139,6 +143,8 @@ export function ScrollRestoration() {
   //   lo resuelve el efecto de ruta de abajo.
   useEffect(() => {
     const onHashChange = () => {
+      saltoPendiente.current = false;
+      window.clearTimeout(temporizadorSalto.current);
       const state = (window.history.state ?? {}) as IndexedState;
       const stamped = state[INDEX_KEY];
 
@@ -152,6 +158,8 @@ export function ScrollRestoration() {
           "",
           window.location.href,
         );
+        // Sellar no mueve el scroll: se conserva la posición del ancla.
+        positions.current.set(currentIndex.current, window.scrollY);
         return;
       }
 
@@ -186,6 +194,14 @@ export function ScrollRestoration() {
       const enlace = (evento.target as Element).closest?.('a[href^="#"]');
       if (enlace) {
         positions.current.set(currentIndex.current, window.scrollY);
+        // El rAF del scroll del salto correría con el índice de ORIGEN y
+        // pisaría la posición: se bloquea hasta el hashchange. Respaldo por si
+        // no llega (clic en el ancla ya activa).
+        saltoPendiente.current = true;
+        window.clearTimeout(temporizadorSalto.current);
+        temporizadorSalto.current = window.setTimeout(() => {
+          saltoPendiente.current = false;
+        }, 1000);
       }
     };
 
@@ -194,6 +210,7 @@ export function ScrollRestoration() {
     return () => {
       window.removeEventListener("hashchange", onHashChange);
       document.removeEventListener("click", onClick, true);
+      window.clearTimeout(temporizadorSalto.current);
       cancelarAncla.current();
     };
   }, []);
