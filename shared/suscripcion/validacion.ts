@@ -20,8 +20,10 @@ const LARGO_MAXIMO = { nombre: 100, organizacion: 150, cargo: 100 } as const;
 function texto(valor: unknown, maximo: number): string | undefined {
   if (typeof valor !== "string") return undefined;
   const limpio = valor
+    // Los de control (tabulador, saltos…) separan palabras; los de dirección se quitan.
     // eslint-disable-next-line no-control-regex
-    .replace(/[\u0000-\u001F\u007F-\u009F\u202A-\u202E\u2066-\u2069]/g, "")
+    .replace(/[\u0000-\u001F\u007F-\u009F]/g, " ")
+    .replace(/[\u202A-\u202E\u2066-\u2069]/g, "")
     .trim()
     .replace(/\s+/g, " ");
   return limpio ? limpio.slice(0, maximo) : undefined;
