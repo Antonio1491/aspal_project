@@ -19,7 +19,7 @@ export function RutaTimeline({ hitos }: { hitos: Hito[] }) {
         return (
           <li
             key={hito.anio}
-            className={cn("h-full lg:mt-[var(--escalon)]")}
+            className="lg:mt-[var(--escalon)]"
             style={{ "--escalon": `${(hitos.length - 1 - i) * 1.5}rem` } as CSSProperties}
           >
             <details
@@ -43,7 +43,7 @@ export function RutaTimeline({ hitos }: { hitos: Hito[] }) {
                 <span className="text-sm font-semibold">{hito.anio}</span>
                 <span className="text-lg font-bold leading-tight">{hito.nombre}</span>
                 <span className="mt-1 flex items-center gap-1 text-xs font-medium uppercase tracking-wide">
-                  {enCurso ? "En curso" : "Próximo"}
+                  {enCurso ? "Meta en curso" : "Meta"}
                   <ChevronDown
                     className="h-4 w-4 transition-transform group-open:rotate-180"
                     aria-hidden="true"
