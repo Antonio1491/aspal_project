@@ -8,53 +8,18 @@ import {
   type DestinoNav,
   type EntradaNav,
 } from "@/lib/navegacion";
+import { CONTACTO, NOMBRE_MARCA, REDES } from "@/lib/marca";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import {
   ArrowUpRight,
-  Facebook,
-  Instagram,
-  Linkedin,
   Mail,
   MapPin,
   Phone,
-  Twitter,
   UserPlus,
   type LucideIcon,
 } from "lucide-react";
 import { Link } from "wouter";
-
-const REDES = [
-  {
-    nombre: "Facebook",
-    icono: Facebook,
-    href: "https://www.facebook.com/asociacionesprofesionales",
-    testid: "button-social-facebook",
-  },
-  {
-    nombre: "X",
-    icono: Twitter,
-    href: "https://x.com/ASPALATAM",
-    testid: "button-social-twitter",
-  },
-  {
-    nombre: "LinkedIn",
-    icono: Linkedin,
-    // Sin `?viewAsMember=true`: ese parámetro se cuela al copiar la URL desde
-    // una sesión iniciada y no pinta nada en un enlace público.
-    href: "https://www.linkedin.com/company/asociaciones-profesionales-aspal/",
-    testid: "button-social-linkedin",
-  },
-  {
-    nombre: "Instagram",
-    icono: Instagram,
-    href: "https://www.instagram.com/aspalatam/",
-    testid: "button-social-instagram",
-  },
-];
-
-const CORREO = "vinculacion@asociacionesprofesionales.org";
-const TELEFONO = "+52 999 163 4080";
 
 const contenedor = {
   hidden: {},
@@ -252,20 +217,20 @@ export default function Footer() {
             <ul className="mt-2">
               <Contacto
                 icono={Mail}
-                href={`mailto:${CORREO}`}
+                href={`mailto:${CONTACTO.correo}`}
                 testid="text-contact-email"
               >
-                {CORREO}
+                {CONTACTO.correo}
               </Contacto>
               <Contacto
                 icono={Phone}
-                href={`tel:${TELEFONO.replace(/\s/g, "")}`}
+                href={`tel:${CONTACTO.telefono.replace(/\s/g, "")}`}
                 testid="text-contact-phone"
               >
-                {TELEFONO}
+                {CONTACTO.telefono}
               </Contacto>
               <Contacto icono={MapPin} testid="text-contact-address">
-                Mérida, Yucatán
+                {CONTACTO.ciudad}
               </Contacto>
             </ul>
 
@@ -293,8 +258,7 @@ export default function Footer() {
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           <p className="text-sm text-muted-foreground" data-testid="text-copyright">
-            © {new Date().getFullYear()} Asociaciones y Sociedades Profesionales de
-            América Latina. Todos los derechos reservados.
+            © {new Date().getFullYear()} {NOMBRE_MARCA}. Todos los derechos reservados.
           </p>
         </motion.div>
       </div>
