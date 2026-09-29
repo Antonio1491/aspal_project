@@ -19,7 +19,6 @@ import {
   destinosDe,
   esDesplegable,
   URL_LOGIN,
-  URL_REGISTRO,
   esEntradaActiva,
   esRutaActiva,
   registrarClicDestino,
@@ -465,16 +464,13 @@ function PanelMovil({
               asChild
               data-testid="button-mobile-registro"
             >
-              <a
-                href={URL_REGISTRO}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/unete"
                 onClick={() => registrarEvento("click_unete", { origen: "menu_movil" })}
               >
                 <UserPlus className="h-4 w-4" />
                 Únete
-                <AvisoPestanaNueva />
-              </a>
+              </Link>
             </Button>
           </div>
         </motion.div>
@@ -612,16 +608,13 @@ export default function Header() {
               <a href={URL_LOGIN}>Iniciar sesión</a>
             </Button>
             <Button variant="secondary" asChild data-testid="button-registro">
-              <a
-                href={URL_REGISTRO}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/unete"
                 onClick={() => registrarEvento("click_unete", { origen: "header" })}
               >
                 <UserPlus className="h-4 w-4" />
                 Únete
-                <AvisoPestanaNueva />
-              </a>
+              </Link>
             </Button>
           </div>
 

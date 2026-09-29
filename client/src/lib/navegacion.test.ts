@@ -88,16 +88,16 @@ describe("esEntradaActiva", () => {
     expect(esEntradaActiva(entrada("Recursos"), "/")).toBe(false);
   });
 
-  it("nunca marca un rubro que solo apunta fuera o que no existe aún", () => {
+  it("marca un rubro con página propia y no uno que solo apunta fuera", () => {
     expect(esEntradaActiva(entrada("Comunidad"), "/blog")).toBe(false);
-    expect(esEntradaActiva(entrada("Eventos"), "/eventos")).toBe(false);
+    expect(esEntradaActiva(entrada("Eventos"), "/eventos")).toBe(true);
   });
 });
 
 describe("catálogo de navegación", () => {
   it("no enlaza ninguna ruta interna que no exista", () => {
     // RF-01: un enlace interno sin página es un fallo de CI. Por eso
-    // /nosotros, /eventos o /unete siguen en «Próximamente» hasta su PR.
+    // /nosotros y sus hermanas siguen en «Próximamente» hasta su PR.
     const internos = [...NAVEGACION, ...destinos]
       .map((e) => e.href)
       .filter((href): href is string => href !== undefined && !href.startsWith("http"));
@@ -171,7 +171,14 @@ describe("pie", () => {
     const recursos = destinosPie(entrada("Recursos"));
     expect(recursos.length).toBeGreaterThan(0);
     expect(recursos.every((d) => Boolean(d.href))).toBe(true);
-    expect(destinosPie(entrada("Eventos"))).toEqual([]);
+  });
+
+  it("una entrada sin destinos vivos pero con enlace propio se lista a sí misma", () => {
+    const eventos = destinosPie(entrada("Eventos"));
+    expect(eventos).toHaveLength(1);
+    expect(eventos[0].href).toBe("/eventos");
+    expect(eventos[0].etiqueta).toBe("Eventos");
+    expect(destinosPie(entrada("Acerca de"))).toEqual([]);
   });
 });
 

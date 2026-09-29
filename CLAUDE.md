@@ -7,7 +7,7 @@ Contexto para agentes de IA que trabajen en este repositorio.
 Sitio público de ASPAL: landing + blog + podcast. React 18 (Vite) sobre un
 Express mínimo que hace de proxy sobre un WordPress headless.
 
-**No hay base de datos, sesiones, autenticación ni estado de servidor.** Si una
+**No hay base de datos, sesiones, autenticación ni estado de servidor.** La única escritura es `POST /api/suscripcion`, que delega en Mailchimp y no guarda nada (decisión D8). Si una
 tarea parece necesitar cualquiera de esas cosas, es señal de que hay que
 confirmarla antes de implementarla, no de improvisar una capa nueva.
 
@@ -35,10 +35,12 @@ había que sincronizar cada cambio a mano. Divergieron. Por eso existe `shared/`
 
 ### Fronteras de import
 
-| Desde                 | Puede importar                             |
-| --------------------- | ------------------------------------------ |
-| `client/src/**`       | `@shared/wordpress/types` — **solo tipos** |
-| `server/**`, `api/**` | cualquier cosa de `shared/wordpress/`      |
+| Desde                 | Puede importar                                                                                |
+| --------------------- | --------------------------------------------------------------------------------------------- |
+| `client/src/**`       | `@shared/wordpress/types` y `@shared/suscripcion/{tipos,validacion}` — **solo módulos puros** |
+| `server/**`, `api/**` | cualquier cosa de `shared/wordpress/`                                                         |
+
+`shared/suscripcion/mailchimp.ts` es solo-servidor, igual que `client.ts`.
 
 `client.ts` lee `process.env` y hace fetch de red: si acaba en el bundle del
 navegador, rompe. El cliente obtiene datos por `/api/*`, nunca importando ese

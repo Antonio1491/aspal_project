@@ -1,6 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { createServer } from "http";
 import { registerApiRoutes } from "../shared/wordpress/routes";
+import { registrarRutasSuscripcion } from "../shared/suscripcion/rutas";
 import { serveStatic } from "./static";
 import { setupVite, log } from "./vite";
 
@@ -52,6 +53,7 @@ app.use((req, res, next) => {
 
 (async () => {
   registerApiRoutes(app);
+  registrarRutasSuscripcion(app);
   const server = createServer(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {

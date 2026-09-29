@@ -11,7 +11,14 @@
  */
 
 /** Rutas sin parámetros. Cada una tiene su página en `App.tsx`. */
-export const RUTAS_ESTATICAS = ["/", "/blog", "/podcast", "/plataforma"] as const;
+export const RUTAS_ESTATICAS = [
+  "/",
+  "/blog",
+  "/podcast",
+  "/plataforma",
+  "/unete",
+  "/eventos",
+] as const;
 export type RutaEstatica = (typeof RUTAS_ESTATICAS)[number];
 
 /** Rutas con parámetros, en la sintaxis de wouter. */

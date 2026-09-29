@@ -308,7 +308,7 @@ export const NAVEGACION: EntradaNav[] = [
     etiqueta: "Eventos",
     testid: "menu-eventos",
     icono: CalendarDays,
-    // PENDIENTE (PR E): href "/eventos", la página «Próximamente» con captura.
+    href: "/eventos",
   },
   {
     etiqueta: "Membresía",
@@ -323,11 +323,11 @@ export const NAVEGACION: EntradaNav[] = [
         externo: true,
         testid: "link-membresia-basica",
       },
-      // PENDIENTE (PR E): /unete.
       {
         etiqueta: "Únete gratis",
         descripcion: "Suscríbete sin costo",
         icono: UserPlus,
+        href: "/unete",
         testid: "link-unete",
       },
       {
@@ -414,9 +414,24 @@ export function esDesplegable(entrada: EntradaNav): boolean {
   return destinosDe(entrada).length > 0;
 }
 
-/** En el pie solo van destinos vivos: el catálogo completo es del menú. */
+/**
+ * En el pie solo van destinos vivos: el catálogo completo es del menú. Una
+ * entrada sin ninguno pero con `href` propio aparece como un único enlace.
+ */
 export function destinosPie(entrada: EntradaNav): DestinoNav[] {
-  return destinosDe(entrada).filter((destino) => Boolean(destino.href));
+  const vivos = destinosDe(entrada).filter((destino) => Boolean(destino.href));
+  if (vivos.length > 0 || !entrada.href) return vivos;
+  // Sin destinos vivos pero con página propia (Eventos): la columna enlaza a ella.
+  return [
+    {
+      etiqueta: entrada.etiqueta,
+      descripcion: entrada.etiqueta,
+      icono: entrada.icono,
+      href: entrada.href,
+      externo: entrada.externo,
+      testid: `${entrada.testid}-enlace`,
+    },
+  ];
 }
 
 /**

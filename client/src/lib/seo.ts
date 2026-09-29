@@ -54,6 +54,18 @@ export const SEO: Record<RutaEstatica, MetaRuta> = {
       "Membresías, comunidad en línea, contenido, cursos, marketing y bolsa de trabajo para asociaciones profesionales.",
     indexable: true,
   },
+  "/unete": {
+    titulo: "Únete a la casa común · ASPAL",
+    descripcion:
+      "Únete a la red en español que profesionaliza el sector asociativo de América Latina: suscripción gratuita o membresía.",
+    indexable: true,
+  },
+  "/eventos": {
+    titulo: "Eventos · ASPAL",
+    descripcion:
+      "Calendario de eventos y webinars de ASPAL para el sector asociativo de América Latina. Muy pronto.",
+    indexable: true,
+  },
 };
 
 export const SEO_404: MetaRuta = {
