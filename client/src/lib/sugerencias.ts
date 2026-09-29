@@ -42,7 +42,7 @@ function normalizar(ruta: string): string {
   r = r
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .replace(/\/index\.[a-z]+$/, "/")
     .replace(/\.(html?|php|aspx?)$/, "")
     .replace(/\/{2,}/g, "/")

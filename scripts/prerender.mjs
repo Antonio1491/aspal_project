@@ -65,7 +65,12 @@ for (const ruta of RUTAS_ESTATICAS) {
 
 // Cualquier ruta que no esté en rutas.ts renderiza NotFound.
 const cuerpo404 = renderizar("/404");
-if (cuerpo404.includes("Dirección solicitada")) {
+const marcasPorRuta = [
+  'data-testid="text-404-ruta"',
+  'data-testid="card-404-sugerencia"',
+  'data-testid="link-404-reportar"',
+];
+if (marcasPorRuta.some((marca) => cuerpo404.includes(marca))) {
   throw new Error("prerender: el 404 compartido no puede mostrar una dirección concreta");
 }
 await escribir("404.html", componer(null, cuerpo404));

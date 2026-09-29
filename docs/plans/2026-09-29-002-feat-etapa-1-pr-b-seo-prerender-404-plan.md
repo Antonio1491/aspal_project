@@ -1536,7 +1536,7 @@ git merge --no-ff etapa1/b-seo-prerender -m "PR B: SEO por ruta, prerender y 404
 ## Qué queda fuera y a quién le toca
 
 - **Pie de página invisible sin JavaScript.** `Footer.tsx` entra con `whileInView` y `opacity: 0`, así que en el HTML prerenderizado queda a opacidad 0. Lo resuelve el **PR C**, que reescribe el pie, siguiendo la regla de no animar la opacidad del contenido.
-- **La home SaaS prerenderizada sale casi toda a opacidad 0** (103 elementos de framer-motion). Es transitorio hasta el **PR F**, que la sustituye.
+- **`/` y `/plataforma` prerenderizadas salen casi enteras a opacidad 0** (103 elementos de framer-motion en la home SaaS). El **PR F** sustituye `/`, pero `/plataforma` seguirá usando ese componente y necesitará quitar la animación de opacidad: apúntalo al PR F o a la reubicación de la Etapa 3.
 - **Redirecciones de URLs antiguas (RF-17).** No hay una lista de URLs antiguas conocidas; el 404 con sugerencia cubre las erratas. Cuando aparezca la lista, van como `redirects` en `vercel.json` y un `app.get` en `server/static.ts`.
 - **`/blog/:slug` de un artículo que no existe** responde 200 con el shell, y el cliente muestra su aviso de no encontrado (un «soft 404»). Evitarlo exigiría consultar WordPress en el borde, y eso no entra en esta etapa.
 - **La configuración de Vercel solo se valida en un preview.** Aquí no hay CLI de Vercel, y el push lo decide Antonio. El Task 6 prueba las mismas reglas en Express y fija `vercel.json` con un test. Tras el primer despliegue a preview hay que comprobar: `curl -I <preview>/no-existe` → 404, `<preview>/blog` → 200 y un artículo recargado → 200.
