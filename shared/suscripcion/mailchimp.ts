@@ -4,11 +4,12 @@
  * MÓDULO SOLO-SERVIDOR: lee `process.env`. El cliente React no debe
  * importarlo; usa `/api/suscripcion`.
  *
- * No guarda nada: el dato vive solo en Mailchimp. Hace un upsert con
- * `status_if_new: "pending"`: a quien es nuevo, Mailchimp le envía la doble
- * confirmación; a quien ya estaba (suscrito o dado de baja) no le cambia el
- * estado. Por eso la respuesta es la misma en todos los casos y el endpoint
- * no revela quién está en la lista.
+ * No guarda nada: el dato vive solo en Mailchimp. El alta es un POST de solo
+ * creación con `status: "pending"`: a quien es nuevo, Mailchimp le envía la
+ * doble confirmación. Los existentes (suscritos, pendientes, dados de baja u
+ * olvidados por RGPD) reciben la misma respuesta y no se modifican, así que
+ * nadie puede reescribir los datos de otro miembro ni averiguar quién está
+ * en la lista.
  *
  * La audiencia necesita tres campos de texto además de FNAME: PAIS, ORG y
  * CARGO (ver docs/architecture.md).
@@ -16,7 +17,7 @@
 import { createHash } from "node:crypto";
 import type { SuscripcionValida } from "./tipos";
 
-/** Las dos llamadas comparten el presupuesto de una función serverless. */
+/** Cada llamada tiene 4 s (peor caso 8 s, dentro de los 10 s de Vercel). */
 const TIEMPO_MAXIMO_MS = 4000;
 
 export class SuscripcionNoConfigurada extends Error {
@@ -70,59 +71,86 @@ function camposFusion(datos: SuscripcionValida): Record<string, string> {
   return campos;
 }
 
-export async function suscribir(datos: SuscripcionValida): Promise<void> {
-  const { base, cabeceras } = configuracion();
-  const miembro = `${base}/members/${hashSuscriptor(datos.correo)}`;
-
-  let alta: Response;
+/** Llama a Mailchimp con timeout y traduce los fallos de red a `ErrorProveedor`. */
+async function llamar(
+  url: string,
+  init: RequestInit,
+  operacion: string,
+): Promise<Response> {
   try {
-    alta = await fetch(miembro, {
-      method: "PUT",
-      headers: cabeceras,
-      body: JSON.stringify({
-        email_address: datos.correo,
-        status_if_new: "pending",
-        merge_fields: camposFusion(datos),
-      }),
+    return await fetch(url, {
+      ...init,
       signal: AbortSignal.timeout(TIEMPO_MAXIMO_MS),
     });
   } catch (error) {
     if (error instanceof DOMException && error.name === "TimeoutError") {
-      throw new ErrorProveedor(504, "registrar el miembro");
+      throw new ErrorProveedor(504, operacion);
     }
     if (error instanceof TypeError) {
-      throw new ErrorProveedor(502, "registrar el miembro");
+      throw new ErrorProveedor(502, operacion);
     }
     throw error;
   }
+}
+
+/** Títulos con los que Mailchimp rechaza un alta de alguien que ya consta. */
+const YA_REGISTRADO = ["Member Exists", "Forgotten Email Not Subscribed"];
+
+async function tituloDelError(respuesta: Response): Promise<string | undefined> {
+  try {
+    const cuerpo = (await respuesta.json()) as { title?: unknown };
+    return typeof cuerpo.title === "string" ? cuerpo.title : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+export async function suscribir(datos: SuscripcionValida): Promise<void> {
+  const { base, cabeceras } = configuracion();
+
+  const alta = await llamar(
+    `${base}/members`,
+    {
+      method: "POST",
+      headers: cabeceras,
+      body: JSON.stringify({
+        email_address: datos.correo,
+        status: "pending",
+        merge_fields: camposFusion(datos),
+      }),
+    },
+    "registrar el miembro",
+  );
 
   if (!alta.ok) {
+    const titulo = alta.status === 400 ? await tituloDelError(alta) : undefined;
+    if (titulo && YA_REGISTRADO.includes(titulo)) return;
     await alta.body?.cancel().catch(() => {});
     throw new ErrorProveedor(alta.status, "registrar el miembro");
   }
 
-  let etiqueta: Response;
+  // El alta ya ocurrió: si el etiquetado falla, no se le devuelve un error a
+  // quien se suscribió (reintentar toparía con "Member Exists").
   try {
-    etiqueta = await fetch(`${miembro}/tags`, {
-      method: "POST",
-      headers: cabeceras,
-      body: JSON.stringify({
-        tags: [{ name: `origen:${datos.origen}`, status: "active" }],
-      }),
-      signal: AbortSignal.timeout(TIEMPO_MAXIMO_MS),
-    });
+    const etiqueta = await llamar(
+      `${base}/members/${hashSuscriptor(datos.correo)}/tags`,
+      {
+        method: "POST",
+        headers: cabeceras,
+        body: JSON.stringify({
+          tags: [{ name: `origen:${datos.origen}`, status: "active" }],
+        }),
+      },
+      "etiquetar el miembro",
+    );
+    if (!etiqueta.ok) {
+      await etiqueta.body?.cancel().catch(() => {});
+      console.error(`Suscripción: no se pudo etiquetar (estado ${etiqueta.status})`);
+    }
   } catch (error) {
-    if (error instanceof DOMException && error.name === "TimeoutError") {
-      throw new ErrorProveedor(504, "etiquetar el miembro");
-    }
-    if (error instanceof TypeError) {
-      throw new ErrorProveedor(502, "etiquetar el miembro");
-    }
-    throw error;
-  }
-
-  if (!etiqueta.ok) {
-    await etiqueta.body?.cancel().catch(() => {});
-    throw new ErrorProveedor(etiqueta.status, "etiquetar el miembro");
+    console.error(
+      "Suscripción: no se pudo etiquetar:",
+      error instanceof ErrorProveedor ? `estado ${error.estado}` : "desconocido",
+    );
   }
 }
