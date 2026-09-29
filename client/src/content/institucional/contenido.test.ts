@@ -3,6 +3,7 @@ import { INTRO_EQUIPO, PERFILES } from "./equipo";
 import * as nosotros from "./nosotros";
 import { esRutaConocida } from "@/lib/rutas";
 import { PILARES } from "./pilares";
+import { ETAPAS, MAPA_RUTA } from "./mapa-ruta";
 
 /** Todas las cadenas de un valor, recorriendo objetos y arrays (no funciones ni iconos). */
 function cadenas(valor: unknown): string[] {
@@ -24,6 +25,8 @@ const todo = [
   ...cadenas(nosotros),
   ...cadenas(PERFILES),
   INTRO_EQUIPO,
+  ...cadenas(ETAPAS),
+  ...cadenas(MAPA_RUTA),
 ];
 
 describe("contenido institucional", () => {
