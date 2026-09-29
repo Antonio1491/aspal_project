@@ -113,6 +113,29 @@ post no existe.
 
 No se requieren credenciales — la API de WordPress es pública.
 
+## Suscripción al boletín
+
+`POST /api/suscripcion` (lógica en `shared/suscripcion/`, montada en
+`server/index.ts` y `api/index.ts`). Es la única escritura del sitio y no
+guarda nada: valida con `validacion.ts` (la misma función que usa el
+formulario), descarta en silencio a los bots (campo trampa `sitioWeb`) y hace
+un upsert en Mailchimp con `status_if_new: "pending"`, que dispara la doble
+confirmación y no reactiva a quien se dio de baja. Etiqueta al miembro con
+`origen:<unete|home|footer|eventos>`.
+
+Las llamadas a Mailchimp tienen un tiempo máximo de 4 s cada una; el formulario, de 10 s.
+
+Configuración (Vercel → Settings → Environment Variables):
+
+- `MAILCHIMP_API_KEY`: termina en el centro de datos (`…-us21`).
+- `MAILCHIMP_AUDIENCE_ID`: id de la audiencia.
+- En la audiencia: campos de texto `PAIS`, `ORG` y `CARGO` (además de `FNAME`)
+  y la doble confirmación activada.
+
+Respuestas: 200 `{ok:true}` · 400 con `errores` por campo · 503 sin
+configuración · 502 si falla Mailchimp. Nunca registra datos personales en
+los logs.
+
 ## Despliegue
 
 Vercel, según `vercel.json`:
