@@ -55,6 +55,24 @@ Montserrat 400–800 (Google Fonts, `client/index.html`). Escala:
   texto. Pilares: Users (Comunidad), BookOpen (Conocimiento), Cpu (Tecnología), BarChart3 (Datos).
 - Secciones sin construir: `<Proximamente />`, nunca un enlace a ningún sitio.
 
+## Navegación
+
+- Fuente única: `client/src/lib/navegacion.ts`. Cabecera, panel móvil, pie y
+  404 leen de ahí; ningún componente declara enlaces propios.
+- Cinco rubros (Acerca de · Recursos · Eventos · Membresía · Comunidad) y el
+  botón Únete, el único botón lleno de la cabecera. Recursos es un mega-menú
+  de cuatro grupos (Aprende · Certifícate · Participa · Conecta).
+- Un destino sin página no lleva `href` y se muestra «Próximamente». Al crear
+  su página, se le pone `href` en el mismo PR (el test de enlaces muertos lo
+  exige). Dentro de cada lista, los vivos van arriba.
+- Externos: ↗, pestaña nueva, texto `sr-only` «(se abre en otra pestaña)» y
+  evento `salida_plataforma`.
+- Menú completo desde `xl` (1280 px): a 1024 no cabían los cinco rubros; por debajo, panel móvil con un acordeón por rubro y Únete fijo abajo.
+- Teclado en el mega-menú: flechas, Inicio y Fin (`lib/teclado.ts`); Radix da
+  Enter/Espacio para abrir y Escape para cerrar.
+- Pie: solo destinos vivos por columna; si un rubro no tiene ninguno, una sola
+  marca «Próximamente». Sin animaciones de entrada.
+
 ## Movimiento
 
 - Todo framer-motion respeta `MotionConfig reducedMotion="user"` (App.tsx).

@@ -141,7 +141,7 @@ El menú principal queda en 6 rubros: **Acerca de · Recursos · Eventos · Memb
 - Los enlaces que salen del dominio llevan ↗ y abren en pestaña nueva.
 - Cada destino lleva una línea de descripción: el público no conoce el vocabulario interno.
 - La plataforma SaaS sale del menú: vive en `/plataforma`, enlazada desde el pilar Tecnología y el footer, hasta su reubicación al subdominio en E3.
-- Menú completo desde 1024 px; por debajo, el panel móvil actual con acordeones por rubro y Únete fijo abajo.
+- Menú completo desde 1024 px; por debajo, el panel móvil actual con acordeones por rubro y Únete fijo abajo. (En ejecución: desde 1280 px; a 1024 no cabían los cinco rubros. Ver PR C.)
 
 ## 6. Páginas y componentes
 
