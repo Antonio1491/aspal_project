@@ -43,6 +43,14 @@
   --chart-3: 206 40% 35%;
   --chart-4: 42 80% 55%;
   --chart-5: 206 25% 45%;
+  /* Etapa 1. Noche es el azul del logotipo, medido sobre el PNG (#112738).
+     Miel-texto existe porque el miel de marca sobre blanco da 1.5:1: nunca
+     sirve para texto. Solo en :root: el sitio no tiene modo oscuro (nada
+     activa la clase .dark). */
+  --brand-noche: 206 53% 14%;
+  --brand-noche-foreground: 0 0% 100%;
+  --miel-texto: 41 75% 31%;
+  --fondo-suave: 220 23% 97%;
   --font-sans: Montserrat, sans-serif;
   --font-serif: Georgia, serif;
   --font-mono: Menlo, monospace;
