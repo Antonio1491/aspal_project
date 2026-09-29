@@ -44,3 +44,16 @@ export function esRutaConocida(href: string): boolean {
     RUTAS_DINAMICAS.some((patron) => coincidePatron(patron, ruta))
   );
 }
+
+/**
+ * La forma canónica de una ruta estática escrita con otras mayúsculas
+ * (`/Blog` → `/blog`), o `null` si ya es canónica o no es estática. Las
+ * rutas dinámicas no se tocan: el slug es del autor y el servidor ya las sirve.
+ */
+export function rutaCanonica(ruta: string): RutaEstatica | null {
+  const minusculas = ruta.toLowerCase();
+  if (minusculas === ruta) return null;
+  return (RUTAS_ESTATICAS as readonly string[]).includes(minusculas)
+    ? (minusculas as RutaEstatica)
+    : null;
+}

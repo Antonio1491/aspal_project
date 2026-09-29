@@ -3,7 +3,9 @@ import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
 import { registrarEvento } from "@/lib/analitica";
+import { rutaAnterior } from "@/lib/historial";
 import { URL_LOGIN, type DestinoNav } from "@/lib/navegacion";
+import { URL_SITIO } from "@/lib/marca";
 import { SEO_404 } from "@/lib/seo";
 import { destinosSugeridos, enlaceReporte, sugerirRuta } from "@/lib/sugerencias";
 import { ArrowRight, ArrowUpRight, Home, LogIn, Mail } from "lucide-react";
@@ -83,11 +85,18 @@ export default function NotFound() {
   const [referente, setReferente] = useState<string | null>(null);
 
   useEffect(() => {
-    setReferente(document.referrer);
+    // Dentro de la SPA `document.referrer` sigue siendo el origen externo
+    // inicial: si venimos de otra página del sitio, esa es el origen real.
+    const interna = rutaAnterior(ruta);
+    const origen = interna ? `${URL_SITIO}${interna}` : document.referrer;
+    setReferente(origen);
     document.title = SEO_404.titulo;
+    document
+      .querySelector('meta[name="description"]')
+      ?.setAttribute("content", SEO_404.descripcion);
     // Como en los artículos: el lector de pantalla anuncia dónde está.
     tituloRef.current?.focus();
-    registrarEvento("error_404", { ruta, referente: document.referrer || "directo" });
+    registrarEvento("error_404", { ruta, referente: origen || "directo" });
   }, [ruta]);
 
   const enNavegador = referente !== null;

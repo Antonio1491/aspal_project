@@ -1,3 +1,5 @@
+import { registrarRuta } from "@/lib/historial";
+import { rutaCanonica } from "@/lib/rutas";
 import { metaDeRuta } from "@/lib/seo";
 import { useEffect } from "react";
 import { useLocation } from "wouter";
@@ -9,16 +11,25 @@ import { useLocation } from "wouter";
  * que aquí solo se tocan las rutas estáticas.
  */
 export function CabeceraRuta() {
-  const [ruta] = useLocation();
+  const [ruta, navegar] = useLocation();
 
   useEffect(() => {
+    registrarRuta(ruta);
+    // wouter compara sin distinguir mayúsculas, pero el servidor sí: `/Blog`
+    // recibe el 404.html y el cliente pintaría el blog. Se lleva a la forma
+    // canónica para que código, contenido y URL coincidan.
+    const canonica = rutaCanonica(ruta);
+    if (canonica) {
+      navegar(canonica, { replace: true });
+      return;
+    }
     const meta = metaDeRuta(ruta);
     if (!meta) return;
     document.title = meta.titulo;
     document
       .querySelector('meta[name="description"]')
       ?.setAttribute("content", meta.descripcion);
-  }, [ruta]);
+  }, [ruta, navegar]);
 
   return null;
 }
