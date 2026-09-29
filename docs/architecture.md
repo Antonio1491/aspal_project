@@ -18,14 +18,14 @@ de solo lectura y sin estado.
 **Rutas** (`wouter`): se definen en `client/src/lib/rutas.ts` y se cablean en
 `client/src/App.tsx`.
 
-| Ruta          | Página                                                                                 |
-| ------------- | -------------------------------------------------------------------------------------- |
-| `/`           | Home (temporalmente, el mismo contenido que `/plataforma` hasta la home institucional) |
-| `/plataforma` | Contenido de producto SaaS                                                             |
-| `/blog`       | Listado de artículos con filtro por categoría                                          |
-| `/blog/:slug` | Artículo individual                                                                    |
-| `/podcast`    | Listado de episodios                                                                   |
-| `*`           | 404                                                                                    |
+| Ruta          | Página                                                                                                                |
+| ------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `/`           | Home institucional. Consume `/api/posts` y `/api/podcasts` solo en `ContenidoReciente`, que se oculta si la API falla |
+| `/plataforma` | Contenido de producto SaaS                                                                                            |
+| `/blog`       | Listado de artículos con filtro por categoría                                                                         |
+| `/blog/:slug` | Artículo individual                                                                                                   |
+| `/podcast`    | Listado de episodios                                                                                                  |
+| `*`           | 404                                                                                                                   |
 
 **Estado:** TanStack Query para estado de servidor; hooks de React para estado
 local. Hooks propios en `client/src/hooks/` (`use-mobile`, `use-toast`).

@@ -29,11 +29,10 @@ export interface MetaRuta {
 }
 
 export const SEO: Record<RutaEstatica, MetaRuta> = {
-  // PENDIENTE (PR F): la home institucional trae su propia descripción.
   "/": {
     titulo: TITULO_SITIO,
     descripcion:
-      "Comunidad de profesionales de asociaciones de Latinoamérica: formación, recursos, eventos y podcast.",
+      "La red en español del sector asociativo de América Latina: comunidad, conocimiento, tecnología y datos para asociaciones profesionales.",
     indexable: true,
   },
   "/blog": {

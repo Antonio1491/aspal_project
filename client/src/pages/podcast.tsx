@@ -3,22 +3,10 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { PodcastCard } from "@/components/content/PodcastCard";
 import { Headphones } from "lucide-react";
-
-interface WPPodcast {
-  id: number;
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  featuredImage: string;
-  category: string;
-  publishedAt: string;
-  author: string;
-  link: string;
-}
+import type { TransformedPost } from "@shared/wordpress/types";
 
 export default function PodcastPage() {
-  const { data: podcasts, isLoading } = useQuery<WPPodcast[]>({
+  const { data: podcasts, isLoading } = useQuery<TransformedPost[]>({
     queryKey: ["/api/podcasts", { per_page: 6 }],
     queryFn: async () => {
       const response = await fetch("/api/podcasts?per_page=6");

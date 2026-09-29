@@ -92,8 +92,10 @@ typecheckear.
   `null`/404 legítimo es `/api/posts/:slug` cuando el post de verdad no existe.
 
   Antes se degradaba a vacío "para que la landing renderizara aunque el blog
-  no respondiera". Esa justificación era falsa: `home.tsx` no consume la API.
-  Solo lo hacen `blog.tsx` y `blog-post.tsx`.
+  no respondiera". No hace falta: la home (`inicio.tsx`) consume la API solo en
+  `ContenidoReciente`, que oculta el bloque si la petición falla (RF-13) y deja
+  el resto de la página intacto. También la consumen `blog.tsx`,
+  `blog-post.tsx` y `podcast.tsx`.
 
 ### shadcn/ui
 

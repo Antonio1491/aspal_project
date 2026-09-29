@@ -9,6 +9,7 @@ import { ScrollToTop } from "@/components/layout/ScrollToTop";
 import { CabeceraRuta } from "@/components/layout/CabeceraRuta";
 import { ScrollRestoration } from "@/components/layout/ScrollRestoration";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
+import Inicio from "@/pages/inicio";
 import Plataforma from "@/pages/plataforma";
 import Nosotros from "@/pages/nosotros";
 import MapaDeRuta from "@/pages/mapa-de-ruta";
@@ -32,9 +33,7 @@ import {
  * ruta sin su página (o una página sin su ruta) no compile.
  */
 const PAGINAS: Record<RutaEstatica, FunctionComponent> = {
-  // PENDIENTE (PR F): "/" pasa a la home institucional. Hasta entonces sirve el
-  // mismo contenido de producto que /plataforma.
-  "/": Plataforma,
+  "/": Inicio,
   "/blog": Blog,
   "/podcast": Podcast,
   "/plataforma": Plataforma,

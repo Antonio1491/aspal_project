@@ -14,7 +14,7 @@ export function MuroAliados({
   pendientes,
 }: {
   fundadores: Aliado[];
-  pendientes: string[];
+  pendientes?: string[];
 }) {
   return (
     <div>
@@ -55,17 +55,19 @@ export function MuroAliados({
           </li>
         ))}
       </ul>
-      <ul className="mt-8 grid gap-3 md:grid-cols-3">
-        {pendientes.map((categoria) => (
-          <li
-            key={categoria}
-            className="rounded-2xl border border-dashed border-border p-4 text-base text-muted-foreground"
-          >
-            <span className="font-semibold text-foreground">{categoria}.</span> Conforme
-            se firmen convenios.
-          </li>
-        ))}
-      </ul>
+      {pendientes && pendientes.length > 0 && (
+        <ul className="mt-8 grid gap-3 md:grid-cols-3">
+          {pendientes.map((categoria) => (
+            <li
+              key={categoria}
+              className="rounded-2xl border border-dashed border-border p-4 text-base text-muted-foreground"
+            >
+              <span className="font-semibold text-foreground">{categoria}.</span> Conforme
+              se firmen convenios.
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

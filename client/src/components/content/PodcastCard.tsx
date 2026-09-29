@@ -3,22 +3,10 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, ExternalLink } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-
-interface WPPodcast {
-  id: number;
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  featuredImage: string;
-  category: string;
-  publishedAt: string;
-  author: string;
-  link: string;
-}
+import type { TransformedPost } from "@shared/wordpress/types";
 
 interface PodcastCardProps {
-  podcast: WPPodcast;
+  podcast: TransformedPost;
   episodeNumber?: number;
 }
 
@@ -28,21 +16,28 @@ export function PodcastCard({ podcast, episodeNumber }: PodcastCardProps) {
       href={podcast.link}
       target="_blank"
       rel="noopener noreferrer"
-      className="block h-full"
+      className="block h-full rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+      aria-label={`${podcast.title} (se abre en una pestaña nueva)`}
+      data-testid={`link-podcast-${podcast.id}`}
     >
       <Card
         className="flex flex-col h-full hover-elevate cursor-pointer"
         data-testid={`card-podcast-${podcast.id}`}
       >
         <CardHeader className="p-0">
-          <div className="aspect-video w-full overflow-hidden rounded-t-md bg-muted/30">
-            <img
-              src={podcast.featuredImage || "/placeholder-podcast.jpg"}
-              alt={podcast.title}
-              className="w-full h-full object-contain"
-              data-testid={`img-podcast-artwork-${podcast.id}`}
-            />
-          </div>
+          {/* Condicional: un <img src=""> o un placeholder inexistente pinta el
+              icono de imagen rota. Decorativa: el título está en el aria-label. */}
+          {podcast.featuredImage && (
+            <div className="aspect-video w-full overflow-hidden rounded-t-md bg-muted/30">
+              <img
+                src={podcast.featuredImage}
+                alt=""
+                loading="lazy"
+                className="h-full w-full object-contain"
+                data-testid={`img-podcast-artwork-${podcast.id}`}
+              />
+            </div>
+          )}
         </CardHeader>
 
         <CardContent className="flex-1 p-6">
@@ -74,7 +69,7 @@ export function PodcastCard({ podcast, episodeNumber }: PodcastCardProps) {
 
         <CardFooter className="flex items-center justify-between gap-4 pt-4 border-t border-border">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Calendar className="w-4 h-4" />
+            <Calendar className="w-4 h-4" aria-hidden="true" />
             <time
               dateTime={new Date(podcast.publishedAt).toISOString()}
               data-testid={`text-podcast-date-${podcast.id}`}
@@ -85,7 +80,7 @@ export function PodcastCard({ podcast, episodeNumber }: PodcastCardProps) {
 
           <span className="flex items-center gap-1 text-sm text-primary font-medium">
             Ver más
-            <ExternalLink className="w-3 h-3" />
+            <ExternalLink className="w-3 h-3" aria-hidden="true" />
           </span>
         </CardFooter>
       </Card>

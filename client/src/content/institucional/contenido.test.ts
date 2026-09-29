@@ -4,6 +4,7 @@ import * as nosotros from "./nosotros";
 import { esRutaConocida } from "@/lib/rutas";
 import { PILARES } from "./pilares";
 import { ETAPAS, MAPA_RUTA } from "./mapa-ruta";
+import { CIFRAS, TEXTO_EVENTOS } from "./inicio";
 
 /** Todas las cadenas de un valor, recorriendo objetos y arrays (no funciones ni iconos). */
 function cadenas(valor: unknown): string[] {
@@ -27,9 +28,17 @@ const todo = [
   INTRO_EQUIPO,
   ...cadenas(ETAPAS),
   ...cadenas(MAPA_RUTA),
+  ...cadenas(CIFRAS),
+  TEXTO_EVENTOS,
 ];
 
 describe("contenido institucional", () => {
+  it("da a la home cuatro cifras que el sitio respalda", () => {
+    expect(CIFRAS.map((c) => c.valor)).toEqual(["15+", "4", "7", "1,000"]);
+    expect(CIFRAS[2].etiqueta).toContain("23 pasos");
+    expect(CIFRAS[3].etiqueta).toMatch(/meta/i);
+  });
+
   it("no tiene textos vacíos ni marcadores de relleno", () => {
     expect(todo.filter((t) => !t.trim())).toEqual([]);
     expect(todo.filter((t) => /\bTBD\b|lorem|^\[|\]$/i.test(t))).toEqual([]);
