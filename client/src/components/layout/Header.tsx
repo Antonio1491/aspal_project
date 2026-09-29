@@ -22,15 +22,23 @@ import {
   URL_REGISTRO,
   esEntradaActiva,
   esRutaActiva,
+  registrarClicDestino,
   type DestinoNav,
   type EntradaNav,
+  type GrupoNav,
 } from "@/lib/navegacion";
 import { Proximamente } from "@/components/layout/Proximamente";
 import { registrarEvento } from "@/lib/analitica";
+import { indiceSiguiente } from "@/lib/teclado";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, ChevronDown, Menu, UserPlus, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type KeyboardEvent as EventoTecladoReact,
+} from "react";
 import { createPortal } from "react-dom";
 import { Link, useLocation } from "wouter";
 
@@ -53,7 +61,7 @@ function DestinoEscritorio({ destino, ruta }: { destino: DestinoNav; ruta: strin
         aria-hidden="true"
       />
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
           <span
             className={cn(
               "text-sm leading-none",
@@ -113,6 +121,7 @@ function DestinoEscritorio({ destino, ruta }: { destino: DestinoNav; ruta: strin
           target="_blank"
           rel="noopener noreferrer"
           className={clases}
+          onClick={() => registrarClicDestino(destino, "menu")}
           data-testid={destino.testid}
         >
           {contenido}
@@ -121,6 +130,7 @@ function DestinoEscritorio({ destino, ruta }: { destino: DestinoNav; ruta: strin
         <Link
           href={destino.href}
           className={clases}
+          onClick={() => registrarClicDestino(destino, "menu")}
           aria-current={activo ? "page" : undefined}
           data-testid={destino.testid}
         >
@@ -128,6 +138,40 @@ function DestinoEscritorio({ destino, ruta }: { destino: DestinoNav; ruta: strin
         </Link>
       )}
     </li>
+  );
+}
+
+/** Flechas, Inicio y Fin recorren los enlaces del desplegable abierto (RF-02). */
+function alPulsarEnDesplegable(evento: EventoTecladoReact<HTMLElement>) {
+  const enlaces = Array.from(
+    evento.currentTarget.querySelectorAll<HTMLElement>("a[href]"),
+  );
+  const actual = enlaces.indexOf(document.activeElement as HTMLElement);
+  const siguiente = indiceSiguiente(actual, enlaces.length, evento.key);
+  if (siguiente === null) return;
+  evento.preventDefault();
+  enlaces[siguiente].focus();
+}
+
+/** Una columna del mega-menú: título del grupo y sus destinos. */
+function GrupoEscritorio({ grupo, ruta }: { grupo: GrupoNav; ruta: string }) {
+  const idTitulo = `titulo-${grupo.testid}`;
+  return (
+    <div data-testid={grupo.testid}>
+      {/* Párrafo y no encabezado: un h3 dentro de la cabecera saltaría niveles
+          antes del h1 de la página (RF-14). */}
+      <p
+        id={idTitulo}
+        className="px-3 pb-1 pt-2 text-[13px] font-semibold uppercase tracking-wider text-miel-texto"
+      >
+        {grupo.titulo}
+      </p>
+      <ul className="grid gap-1" aria-labelledby={idTitulo}>
+        {grupo.destinos.map((destino) => (
+          <DestinoEscritorio key={destino.testid} destino={destino} ruta={ruta} />
+        ))}
+      </ul>
+    </div>
   );
 }
 
@@ -148,6 +192,27 @@ function EntradaEscritorio({ entrada, ruta }: { entrada: EntradaNav; ruta: strin
   );
 
   if (!esDesplegable(entrada)) {
+    // Rubro con página propia (Eventos, cuando exista /eventos).
+    if (entrada.href) {
+      return (
+        <NavigationMenuItem>
+          <Link
+            href={entrada.href}
+            className={cn(
+              navigationMenuTriggerStyle(),
+              "relative bg-transparent",
+              activa && "font-semibold text-foreground",
+            )}
+            aria-current={activa ? "page" : undefined}
+            data-testid={entrada.testid}
+          >
+            {entrada.etiqueta}
+            {subrayado}
+          </Link>
+        </NavigationMenuItem>
+      );
+    }
+
     return (
       <NavigationMenuItem>
         <div
@@ -178,14 +243,23 @@ function EntradaEscritorio({ entrada, ruta }: { entrada: EntradaNav; ruta: strin
         {entrada.etiqueta}
         {subrayado}
       </NavigationMenuTrigger>
-      <NavigationMenuContent>
-        {/* 380px: cabe "Directorio de la Industria" junto a su marca de
-            Próximamente sin partir la etiqueta en dos líneas. */}
-        <ul className="grid w-[380px] gap-1 p-2">
-          {destinosDe(entrada).map((destino) => (
-            <DestinoEscritorio key={destino.testid} destino={destino} ruta={ruta} />
-          ))}
-        </ul>
+      <NavigationMenuContent onKeyDown={alPulsarEnDesplegable}>
+        {entrada.grupos ? (
+          // Cuatro columnas en 60rem, sin pasar del ancho de la ventana menos
+          // el margen: a 1024 px ocupa 960 px, centrado bajo el menú.
+          <div className="grid w-[min(calc(100vw-4rem),60rem)] grid-cols-4 gap-2 p-3">
+            {entrada.grupos.map((grupo) => (
+              <GrupoEscritorio key={grupo.testid} grupo={grupo} ruta={ruta} />
+            ))}
+          </div>
+        ) : (
+          // 380px: cabe la etiqueta más larga junto a su marca de Próximamente.
+          <ul className="grid w-[380px] gap-1 p-2">
+            {destinosDe(entrada).map((destino) => (
+              <DestinoEscritorio key={destino.testid} destino={destino} ruta={ruta} />
+            ))}
+          </ul>
+        )}
       </NavigationMenuContent>
     </NavigationMenuItem>
   );
