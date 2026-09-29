@@ -42,7 +42,11 @@ export default function Nosotros() {
         <HeroInstitucional overline="Nosotros" titulo={HERO_NOSOTROS.tagline}>
           <p>{HERO_NOSOTROS.parrafo}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button variant="secondary" className="min-h-11 px-6" asChild>
+            <Button
+              variant="secondary"
+              className="min-h-11 px-6 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche"
+              asChild
+            >
               <Link
                 href="/unete"
                 onClick={() => registrarEvento("click_unete", { origen: "nosotros" })}
@@ -53,7 +57,7 @@ export default function Nosotros() {
             </Button>
             <Button
               variant="outline"
-              className="min-h-11 border-white bg-transparent px-6 text-white hover:bg-white/10"
+              className="min-h-11 border-white bg-transparent px-6 text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche"
               asChild
             >
               <a href="#lo-que-defendemos" data-testid="button-nosotros-propuesta">
@@ -145,7 +149,7 @@ export default function Nosotros() {
         <Banda id="ruta" tono="suave">
           <h2 className={h2}>Ruta ASPAL 2026–2030</h2>
           <p className="mt-3 text-lg text-muted-foreground">
-            Abre cada hito para ver el detalle.
+            Nuestras metas, año a año. Abre cada hito para ver el detalle.
           </p>
           <div className="mt-8">
             <RutaTimeline hitos={RUTA} />
@@ -215,7 +219,11 @@ export default function Nosotros() {
             </p>
           ))}
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button variant="secondary" className="min-h-11 px-6" asChild>
+            <Button
+              variant="secondary"
+              className="min-h-11 px-6 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche"
+              asChild
+            >
               <Link
                 href="/unete"
                 onClick={() => registrarEvento("click_unete", { origen: "nosotros" })}
@@ -226,7 +234,7 @@ export default function Nosotros() {
             </Button>
             <Button
               variant="outline"
-              className="min-h-11 border-white bg-transparent px-6 text-white hover:bg-white/10"
+              className="min-h-11 border-white bg-transparent px-6 text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche"
               asChild
             >
               <a href="#boletin" data-testid="button-nosotros-boletin">
@@ -236,7 +244,7 @@ export default function Nosotros() {
             {/* PENDIENTE (Etapa 0): /contacto. Mientras tanto, correo. */}
             <Button
               variant="outline"
-              className="min-h-11 border-white bg-transparent px-6 text-white hover:bg-white/10"
+              className="min-h-11 border-white bg-transparent px-6 text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche"
               asChild
             >
               <a
