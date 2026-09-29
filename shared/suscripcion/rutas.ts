@@ -10,6 +10,12 @@ import { esTrampa, validarSuscripcion } from "./validacion";
 
 export function registrarRutasSuscripcion(app: Express): void {
   app.post("/api/suscripcion", async (req: Request, res: Response) => {
+    // Solo JSON: un formulario HTML de otro sitio no puede mandarlo sin CORS.
+    if (!req.is("application/json")) {
+      res.status(415).json({ ok: false, error: "tipo_no_admitido" });
+      return;
+    }
+
     const entrada: unknown = req.body;
 
     // Al bot se le responde como a una persona: si notara la diferencia,

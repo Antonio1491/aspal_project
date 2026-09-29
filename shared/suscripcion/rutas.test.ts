@@ -68,6 +68,17 @@ describe("POST /api/suscripcion", () => {
     expect(suscribir).not.toHaveBeenCalled();
   });
 
+  it("exige JSON: un formulario HTML entre sitios recibe 415 y no llega al proveedor", async () => {
+    const r = await fetch(`${base}/api/suscripcion`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: "correo=ana%40ejemplo.org&consentimiento=true&origen=footer",
+    });
+    expect(r.status).toBe(415);
+    expect(await r.json()).toEqual({ ok: false, error: "tipo_no_admitido" });
+    expect(suscribir).not.toHaveBeenCalled();
+  });
+
   it("sin configuración responde 503, nunca un éxito falso", async () => {
     vi.mocked(suscribir).mockRejectedValue(new SuscripcionNoConfigurada());
     expect(await enviar(valida)).toEqual({

@@ -62,6 +62,8 @@ export function validarSuscripcion(entrada: unknown): ResultadoValidacion {
     if (!pais) errores.pais = errores.pais ?? "Elige tu país.";
   }
 
+  // La comparación estricta con el booleano también protege frente a envíos
+  // entre sitios (un formulario HTML manda "true" como texto): no relajarla.
   if (e.consentimiento !== true) {
     errores.consentimiento = "Necesitamos tu autorización para escribirte.";
   }
