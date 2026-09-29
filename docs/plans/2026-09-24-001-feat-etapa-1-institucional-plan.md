@@ -13,6 +13,10 @@ origin: Proyecto ASPAL (ASPAL_Auditoria_Web_v4_Julio2026.xlsx y ASPAL_Concepto_N
 > Las decisiones y el estado de la matriz se actualizan en ese documento. Si una decisión
 > cambia el alcance, actualiza también este archivo en el mismo PR.
 
+> **Ejecución:** `docs/plans/2026-09-29-001-feat-etapa-1-ejecucion-plan.md` aterriza
+> este plan sobre el repositorio (inventario de lo que se reutiliza y correcciones).
+> Donde discrepen, manda el plan de ejecución.
+
 ## 0. Instrucciones para agentes (Claude Code)
 
 - Lee `CLAUDE.md` antes de tocar código. Sus reglas mandan sobre este plan.

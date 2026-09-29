@@ -15,24 +15,25 @@ de solo lectura y sin estado.
 
 ## Frontend
 
-**Rutas** (`wouter`, definidas en `client/src/App.tsx`):
+**Rutas** (`wouter`): se definen en `client/src/lib/rutas.ts` y se cablean en
+`client/src/App.tsx`.
 
-| Ruta          | Página                                        |
-| ------------- | --------------------------------------------- |
-| `/`           | Landing                                       |
-| `/blog`       | Listado de artículos con filtro por categoría |
-| `/blog/:slug` | Artículo individual                           |
-| `/podcast`    | Listado de episodios                          |
-| `*`           | 404                                           |
+| Ruta          | Página                                                                                 |
+| ------------- | -------------------------------------------------------------------------------------- |
+| `/`           | Home (temporalmente, el mismo contenido que `/plataforma` hasta la home institucional) |
+| `/plataforma` | Contenido de producto SaaS                                                             |
+| `/blog`       | Listado de artículos con filtro por categoría                                          |
+| `/blog/:slug` | Artículo individual                                                                    |
+| `/podcast`    | Listado de episodios                                                                   |
+| `*`           | 404                                                                                    |
 
 **Estado:** TanStack Query para estado de servidor; hooks de React para estado
-local. Hooks propios en `client/src/hooks/` (`use-mobile`, `use-toast`,
-`use-animated-counter`).
+local. Hooks propios en `client/src/hooks/` (`use-mobile`, `use-toast`).
 
 **Estilos:** Tailwind CSS como base, shadcn/ui (variante New York) para las
-primitivas accesibles, tipografía Montserrat. La paleta institucional
-morado/amarillo y el resto de decisiones visuales están en
-[design-guidelines.md](design-guidelines.md).
+primitivas accesibles, tipografía Montserrat. La paleta
+institucional (pizarra, miel y noche) y el resto de decisiones visuales están
+en [design-guidelines.md](design-guidelines.md).
 
 **Organización de componentes:**
 
@@ -105,9 +106,10 @@ Los podcasts no son un tipo de contenido propio: son posts de la categoría
 `podcast`, cuyo id hay que resolver por slug antes de poder filtrar. Eso
 implica **dos** llamadas a WordPress por petición de podcasts.
 
-**Degradación:** ante cualquier fallo de WordPress las funciones devuelven
-lista vacía o `null` en lugar de propagar el error. Es deliberado: la landing
-debe renderizar aunque el blog esté caído.
+**Errores:** los fallos de WordPress se propagan y salen como 5xx: `client.ts`
+lanza y `routes.ts` traduce. El cliente distingue así «no se pudo cargar» de
+«no hay artículos». El único `null`/404 legítimo es `/api/posts/:slug` cuando el
+post no existe.
 
 No se requieren credenciales — la API de WordPress es pública.
 
@@ -134,7 +136,7 @@ para composición de clases.
 **Servicios referenciados desde la UI:** redes sociales, YouTube para el vídeo
 de portada, y el sistema de registro externo en asociacionesprofesionales.org.
 
-**Assets:** en `attached_assets/` (~11 MB versionados) — logotipos ASPAL para
+**Assets:** en `client/src/assets/` (~11 MB versionados) — logotipos ASPAL para
 fondo claro y oscuro, logos de aliados (ANPR México, Expo Mascotas, World Urban
 Parks) e ilustraciones de producto.
 

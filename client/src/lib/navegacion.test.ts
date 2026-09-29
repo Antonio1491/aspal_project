@@ -8,6 +8,7 @@ import {
   esRutaActiva,
   type DestinoNav,
 } from "./navegacion";
+import { esRutaConocida } from "./rutas";
 
 const destinos: DestinoNav[] = NAVEGACION.flatMap((e) => e.destinos ?? []);
 
@@ -64,6 +65,15 @@ describe("esEntradaActiva", () => {
 });
 
 describe("catálogo de navegación", () => {
+  it("no enlaza ninguna ruta interna que no exista", () => {
+    // RF-01 del plan de la Etapa 1: un enlace interno del menú sin página es
+    // un fallo de CI, no algo que se descubre haciendo clic.
+    const internos = [...NAVEGACION, ...destinos]
+      .map((e) => e.href)
+      .filter((href): href is string => href !== undefined && !href.startsWith("http"));
+    expect(internos.filter((href) => !esRutaConocida(href))).toEqual([]);
+  });
+
   it("no repite ningún data-testid", () => {
     const ids = [...NAVEGACION.map((e) => e.testid), ...destinos.map((d) => d.testid)];
     expect(new Set(ids).size).toBe(ids.length);

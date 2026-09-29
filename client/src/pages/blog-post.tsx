@@ -7,6 +7,7 @@ import BlogCard from "@/components/content/BlogCard";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, Clock, Lock } from "lucide-react";
 import { formatPublishedDate } from "@/lib/date";
+import { TITULO_SITIO } from "@/lib/marca";
 import type { TransformedPost } from "@shared/wordpress/types";
 
 /** URL de alta de socio. Misma que usa el Header; los UTM permiten medir
@@ -102,8 +103,7 @@ export default function BlogPost() {
       document.title = `${post.title} · Blog de ASPAL`;
     }
     return () => {
-      document.title =
-        "ASPAL · Asociación de Profesionales de Asociaciones Latinoamérica";
+      document.title = TITULO_SITIO;
     };
   }, [post]);
 

@@ -53,7 +53,7 @@ export default function CTASection() {
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
           >
-            Únete a cientos de asociaciones que ya están creciendo con nuestra plataforma.
+            {/* PENDIENTE: aquí se afirmaba "cientos de asociaciones"; se retiró por no ser verificable (Etapa 1). Sin copy nuevo hasta que lo apruebe la Coordinación. */}
             Sin riesgos, sin compromisos.
           </motion.p>
 

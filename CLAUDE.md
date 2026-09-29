@@ -74,11 +74,13 @@ typecheckear.
 
 - **La UI está en español.** Todo texto visible, en español. Los comentarios de
   código también.
-- Rutas con `wouter` en `client/src/App.tsx`. Añadir una página = añadir su
-  `<Route>` ahí.
+- Rutas con `wouter`. Añadir una página = añadir su ruta en
+  `client/src/lib/rutas.ts` (`RUTAS_ESTATICAS` o `RUTAS_DINAMICAS`) y su
+  componente en `PAGINAS` de `client/src/App.tsx`; TypeScript exige los dos.
+  Un `<Route>` suelto se salta el test de enlaces muertos.
 - Datos con TanStack Query. La `queryKey` es el path del endpoint.
 - Alias: `@/` → `client/src/`, `@shared/` → `shared/`, `@assets/` →
-  `attached_assets/`.
+  `client/src/assets/`.
 - `data-testid` en elementos interactivos y significativos. Mantenlo.
 - **Los fallos de WordPress se propagan y salen como 5xx.** `client.ts` lanza y
   `routes.ts` traduce. No lo degrades a `[]`: el cliente necesita distinguir
@@ -115,7 +117,7 @@ antes de concluir que hay un fallo.
 
 ## Contexto que ahorra tiempo
 
-- `attached_assets/` pesa ~11 MB y está versionado. Los nombres con timestamp
+- `client/src/assets/` pesa ~11 MB y está versionado. Los nombres con timestamp
   (`image_1764775862961.png`) son heredados; los descriptivos son los buenos.
 - El proyecto nació en Replit y se migró a Vercel. Si encuentras restos de
   Replit, sobran.
