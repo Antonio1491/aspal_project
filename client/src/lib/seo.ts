@@ -66,6 +66,12 @@ export const SEO: Record<RutaEstatica, MetaRuta> = {
       "Calendario de eventos y webinars de ASPAL para el sector asociativo de América Latina. Muy pronto.",
     indexable: true,
   },
+  "/nosotros": {
+    titulo: "Nosotros · ASPAL",
+    descripcion:
+      "La red en español que profesionaliza la gestión asociativa de América Latina. Formación, comunidad, tecnología y datos para asociaciones profesionales LATAM.",
+    indexable: true,
+  },
   "/que-hacemos": {
     titulo: "¿Qué hacemos? · ASPAL",
     descripcion:

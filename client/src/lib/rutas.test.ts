@@ -13,7 +13,7 @@ describe("esRutaConocida", () => {
   });
 
   it("rechaza una ruta que todavía no existe", () => {
-    expect(esRutaConocida("/nosotros")).toBe(false);
+    expect(esRutaConocida("/inexistente")).toBe(false);
   });
 
   it("ignora el ancla y la consulta", () => {
@@ -45,6 +45,6 @@ describe("rutaCanonica", () => {
   it("devuelve null si ya es canónica o no es estática", () => {
     expect(rutaCanonica("/blog")).toBeNull();
     expect(rutaCanonica("/Blog/Mi-Articulo")).toBeNull();
-    expect(rutaCanonica("/Nosotros")).toBeNull();
+    expect(rutaCanonica("/Inexistente")).toBeNull();
   });
 });

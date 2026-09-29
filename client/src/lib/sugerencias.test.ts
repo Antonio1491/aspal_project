@@ -34,7 +34,7 @@ describe("sugerirRuta", () => {
   });
 
   it("no inventa cuando nada se parece", () => {
-    expect(sugerirRuta("/nosotros")).toBeNull();
+    expect(sugerirRuta("/inexistente")).toBeNull();
     expect(sugerirRuta("/wp-admin")).toBeNull();
     expect(sugerirRuta("/b")).toBeNull();
   });

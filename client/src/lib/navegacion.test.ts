@@ -96,8 +96,8 @@ describe("esEntradaActiva", () => {
 
 describe("catálogo de navegación", () => {
   it("no enlaza ninguna ruta interna que no exista", () => {
-    // RF-01: un enlace interno sin página es un fallo de CI. Por eso
-    // /nosotros y sus hermanas siguen en «Próximamente» hasta su PR.
+    // RF-01: un enlace interno sin página es un fallo de CI. Un destino sin
+    // página se queda en «Próximamente» hasta el PR que crea su ruta.
     const internos = [...NAVEGACION, ...destinos]
       .map((e) => e.href)
       .filter((href): href is string => href !== undefined && !href.startsWith("http"));
@@ -173,12 +173,19 @@ describe("pie", () => {
     expect(recursos.every((d) => Boolean(d.href))).toBe(true);
   });
 
+  it("lista en Acerca de solo las tres páginas que ya existen", () => {
+    expect(destinosPie(entrada("Acerca de")).map((d) => d.href)).toEqual([
+      "/nosotros",
+      "/que-hacemos",
+      "/nuestro-equipo",
+    ]);
+  });
+
   it("una entrada sin destinos vivos pero con enlace propio se lista a sí misma", () => {
     const eventos = destinosPie(entrada("Eventos"));
     expect(eventos).toHaveLength(1);
     expect(eventos[0].href).toBe("/eventos");
     expect(eventos[0].etiqueta).toBe("Eventos");
-    expect(destinosPie(entrada("Acerca de"))).toEqual([]);
   });
 });
 

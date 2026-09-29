@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { INTRO_EQUIPO, PERFILES } from "./equipo";
 import * as nosotros from "./nosotros";
+import { esRutaConocida } from "@/lib/rutas";
 import { PILARES } from "./pilares";
 
 /** Todas las cadenas de un valor, recorriendo objetos y arrays (no funciones ni iconos). */
@@ -37,18 +38,17 @@ describe("contenido institucional", () => {
     for (const id of ids) expect(id).toMatch(/^[a-z]+$/);
   });
 
-  it.todo(
-    "enlaza solo rutas internas que existen, y externos por https (se activa en el Task 4)",
-  );
-  // const enlaces = [
-  //   ...PILARES.flatMap((p) => p.enlaces),
-  //   ...nosotros.HACEN_POSIBLE.map((t) => t.enlace),
-  // ];
-  // for (const e of enlaces) {
-  //   if (!e.href) continue;
-  //   if (e.externo) expect(e.href, e.etiqueta).toMatch(/^https:\/\//);
-  //   else if (!e.href.startsWith("#")) expect(esRutaConocida(e.href), e.href).toBe(true);
-  // }
+  it("enlaza solo rutas internas que existen, y externos por https", () => {
+    const enlaces = [
+      ...PILARES.flatMap((p) => p.enlaces),
+      ...nosotros.HACEN_POSIBLE.map((t) => t.enlace),
+    ];
+    for (const e of enlaces) {
+      if (!e.href) continue;
+      if (e.externo) expect(e.href, e.etiqueta).toMatch(/^https:\/\//);
+      else if (!e.href.startsWith("#")) expect(esRutaConocida(e.href), e.href).toBe(true);
+    }
+  });
 
   it("respeta la estructura del Concepto NOSOTROS", () => {
     expect(nosotros.QUIENES_SOMOS).toHaveLength(3);
