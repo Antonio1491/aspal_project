@@ -30,8 +30,8 @@ export default function LogoCarousel() {
         <motion.h2
           className="text-3xl md:text-4xl font-bold text-center"
           data-testid="text-clients-title"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 30 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
         >
@@ -39,13 +39,7 @@ export default function LogoCarousel() {
         </motion.h2>
       </div>
 
-      <motion.div
-        className="relative"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-      >
+      <div className="relative">
         {/* First row - scrolling right */}
         <div
           className="flex gap-12 mb-8 animate-scroll-right"
@@ -86,7 +80,7 @@ export default function LogoCarousel() {
         {/* Gradient overlays */}
         <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-background to-transparent pointer-events-none"></div>
         <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-background to-transparent pointer-events-none"></div>
-      </motion.div>
+      </div>
 
       <style>{`
         @keyframes scroll-right {

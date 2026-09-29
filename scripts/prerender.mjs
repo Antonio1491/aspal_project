@@ -41,6 +41,14 @@ if (!plantilla.includes(RAIZ_APP)) {
 function componer(ruta, cuerpo) {
   const nombre = ruta ?? "404";
   if (!cuerpo.includes("<h1")) throw new Error(`prerender: ${nombre} no tiene <h1>`);
+  // Contenido a opacidad 0 en el HTML: sin JavaScript (buscadores, JS
+  // bloqueado, antes de hidratar) no se ve. framer-motion lo escribe como
+  // style="opacity:0…" al renderizar `initial`. 0.5 sí vale; 0 no.
+  if (/opacity:\s*0(?![.\d])/.test(cuerpo)) {
+    throw new Error(
+      `prerender: ${nombre} tiene contenido a opacity:0 (animación de entrada)`,
+    );
+  }
   return plantilla
     .replace(TITULO, () => "")
     .replace(DESCRIPCION, () => "")

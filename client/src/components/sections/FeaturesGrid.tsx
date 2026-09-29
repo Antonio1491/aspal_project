@@ -26,9 +26,8 @@ const containerVariants = {
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { y: 40 },
   visible: {
-    opacity: 1,
     y: 0,
     transition: {
       duration: 0.5,
@@ -54,8 +53,8 @@ export default function FeaturesGrid({
       <div className="container mx-auto px-4 md:px-8">
         <motion.div
           className="text-center max-w-3xl mx-auto mb-16 space-y-4"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 30 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
         >

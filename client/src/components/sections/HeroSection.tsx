@@ -89,8 +89,8 @@ export default function HeroSection() {
             {/* Title - enters from right */}
             <motion.h1
               className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight"
-              initial={{ opacity: 0, x: 60 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ x: 60 }}
+              animate={{ x: 0 }}
               transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
             >
               Crea y Gestiona{" "}
@@ -103,13 +103,13 @@ export default function HeroSection() {
             {/* Buttons - staggered entrance */}
             <motion.div
               className="flex flex-wrap gap-4"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ y: 30 }}
+              animate={{ y: 0 }}
               transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
             >
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ scale: 0.9 }}
+                animate={{ scale: 1 }}
                 transition={{ duration: 0.4, delay: 0.5 }}
               >
                 <Button
@@ -125,8 +125,8 @@ export default function HeroSection() {
                 </Button>
               </motion.div>
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ scale: 0.9 }}
+                animate={{ scale: 1 }}
                 transition={{ duration: 0.4, delay: 0.65 }}
               >
                 <Button
@@ -151,8 +151,8 @@ export default function HeroSection() {
           {/* Right side - Illustration - enters from below */}
           <motion.div
             className="relative"
-            initial={{ opacity: 0, y: 80 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ y: 80 }}
+            animate={{ y: 0 }}
             transition={{ duration: 0.9, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
           >
             <motion.div
