@@ -171,7 +171,14 @@ describe("pie", () => {
     const recursos = destinosPie(entrada("Recursos"));
     expect(recursos.length).toBeGreaterThan(0);
     expect(recursos.every((d) => Boolean(d.href))).toBe(true);
-    expect(destinosPie(entrada("Eventos"))).toEqual([]);
+  });
+
+  it("una entrada sin destinos vivos pero con enlace propio se lista a sí misma", () => {
+    const eventos = destinosPie(entrada("Eventos"));
+    expect(eventos).toHaveLength(1);
+    expect(eventos[0].href).toBe("/eventos");
+    expect(eventos[0].etiqueta).toBe("Eventos");
+    expect(destinosPie(entrada("Acerca de"))).toEqual([]);
   });
 });
 

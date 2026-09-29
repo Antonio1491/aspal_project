@@ -99,9 +99,10 @@ function DestinoPie({ destino }: { destino: DestinoNav }) {
 
 /**
  * Una columna del pie: los destinos vivos del rubro. Si todavía no tiene
- * ninguno (Eventos, Acerca de hasta el PR E), se anuncia una sola vez como
- * «Próximamente» en lugar de listar el catálogo pendiente: el pie resume, el
- * catálogo completo es del menú.
+ * ninguno se enlaza a su propia página si la tiene (Eventos ya enlaza a
+ * /eventos); si tampoco (Acerca de, hasta el PR E2), se anuncia una sola vez
+ * como «Próximamente» en lugar de listar el catálogo pendiente: el pie
+ * resume, el catálogo completo es del menú.
  */
 function ColumnaPie({ entrada }: { entrada: EntradaNav }) {
   const destinos = destinosPie(entrada);
