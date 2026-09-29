@@ -1,4 +1,5 @@
 import { Banda } from "@/components/layout/Banda";
+import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 
 /**
@@ -7,16 +8,24 @@ import type { ReactNode } from "react";
  */
 export function HeroInstitucional({
   overline,
+  overlineNormal,
   titulo,
   children,
 }: {
   overline: string;
+  /** Sin mayúsculas forzadas: para hashtags, que se leen mal en versalitas. */
+  overlineNormal?: boolean;
   titulo: string;
   children?: ReactNode;
 }) {
   return (
     <Banda tono="noche">
-      <p className="text-[13px] font-semibold uppercase tracking-wider text-secondary">
+      <p
+        className={cn(
+          "text-[13px] font-semibold tracking-wider text-secondary",
+          overlineNormal ? "normal-case" : "uppercase",
+        )}
+      >
         {overline}
       </p>
       <h1

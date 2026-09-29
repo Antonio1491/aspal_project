@@ -130,12 +130,17 @@ export function FormSuscripcion({ origen, variante, tono = "claro" }: Props) {
           "flex items-start gap-3 rounded-2xl p-5",
           oscuro ? "bg-white/10 text-white" : "bg-accent text-foreground",
         )}
-        data-testid="text-suscripcion-exito"
+        data-testid={`text-suscripcion-exito-${origen}`}
       >
         <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
         <p className="text-base">
           ¡Listo! Te enviamos un correo para confirmar tu suscripción. Ábrelo y pulsa el
-          botón de confirmación; sin ese paso no podemos escribirte.
+          botón de confirmación; sin ese paso no podemos escribirte. Si no te llega en
+          unos minutos, revisa el correo no deseado o escríbenos a{" "}
+          <a href={`mailto:${CONTACTO.correo}`} className="underline underline-offset-4">
+            {CONTACTO.correo}
+          </a>
+          .
         </p>
       </div>
     );
@@ -154,7 +159,7 @@ export function FormSuscripcion({ origen, variante, tono = "claro" }: Props) {
       ? undefined
       : "true") as "true" | undefined,
     "aria-describedby": errores[nombre] ? `${id}-${nombre}-error` : undefined,
-    "data-testid": `input-suscripcion-${nombre}`,
+    "data-testid": `input-suscripcion-${nombre}-${origen}`,
   });
   const error = (nombre: CampoSuscripcion) =>
     errores[nombre] ? (
@@ -162,7 +167,7 @@ export function FormSuscripcion({ origen, variante, tono = "claro" }: Props) {
         role="alert"
         id={`${id}-${nombre}-error`}
         className={cn(ayudaError, oscuro && "text-secondary")}
-        data-testid={`error-suscripcion-${nombre}`}
+        data-testid={`error-suscripcion-${nombre}-${origen}`}
       >
         {errores[nombre]}
       </p>
@@ -283,7 +288,7 @@ export function FormSuscripcion({ origen, variante, tono = "claro" }: Props) {
             aria-describedby={
               errores.consentimiento ? `${id}-consentimiento-error` : undefined
             }
-            data-testid="checkbox-suscripcion-consentimiento"
+            data-testid={`checkbox-suscripcion-consentimiento-${origen}`}
           />
           {/* PENDIENTE (Etapa 0): enlazar el aviso de privacidad cuando exista
               /aviso-privacidad. Texto a revisar por la Coordinación. */}
@@ -299,7 +304,7 @@ export function FormSuscripcion({ origen, variante, tono = "claro" }: Props) {
         <p
           role="alert"
           className={cn(ayudaError, oscuro && "text-secondary")}
-          data-testid="text-suscripcion-error"
+          data-testid={`text-suscripcion-error-${origen}`}
         >
           No pudimos completar tu registro. Inténtalo de nuevo en unos minutos o
           escríbenos a{" "}
@@ -313,9 +318,9 @@ export function FormSuscripcion({ origen, variante, tono = "claro" }: Props) {
       <Button
         type="submit"
         variant="secondary"
-        className="min-h-11 w-full px-6 sm:w-auto"
+        className="min-h-11 w-full px-6 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 sm:w-auto"
         aria-disabled={estado === "enviando"}
-        data-testid="button-suscripcion-enviar"
+        data-testid={`button-suscripcion-enviar-${origen}`}
       >
         {estado === "enviando" && <Loader2 className="animate-spin" aria-hidden="true" />}
         {estado === "enviando" ? "Enviando…" : completo ? "Unirme gratis" : "Suscribirme"}

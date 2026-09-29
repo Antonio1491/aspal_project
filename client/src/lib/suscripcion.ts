@@ -19,7 +19,11 @@ export async function enviarSuscripcion(
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(datos),
       // Tiempo máximo: si el servidor no contesta, el formulario no se queda colgado.
-      signal: AbortSignal.timeout(10000),
+      // Safari < 16 no tiene AbortSignal.timeout.
+      signal:
+        typeof AbortSignal.timeout === "function"
+          ? AbortSignal.timeout(10000)
+          : undefined,
     });
     if (respuesta.ok) return { estado: "exito" };
     if (respuesta.status === 400) {

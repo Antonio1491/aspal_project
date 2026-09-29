@@ -22,6 +22,7 @@ export default function Unete() {
       <main className="flex-1">
         <HeroInstitucional
           overline="#NingunDirectorDirigeSolo"
+          overlineNormal
           titulo="Únete a la casa común"
         >
           <p>
