@@ -17,10 +17,12 @@ export function CabeceraRuta() {
     registrarRuta(ruta);
     // wouter compara sin distinguir mayúsculas, pero el servidor sí: `/Blog`
     // recibe el 404.html y el cliente pintaría el blog. Se lleva a la forma
-    // canónica para que código, contenido y URL coincidan.
+    // canónica para que código, contenido y URL coincidan, conservando consulta y ancla.
     const canonica = rutaCanonica(ruta);
     if (canonica) {
-      navegar(canonica, { replace: true });
+      navegar(canonica + window.location.search + window.location.hash, {
+        replace: true,
+      });
       return;
     }
     const meta = metaDeRuta(ruta);

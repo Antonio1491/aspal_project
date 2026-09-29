@@ -1,7 +1,7 @@
 import express from "express";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import type { Server } from "node:http";
-import type { AddressInfo } from "node:net";
+import { connect, type AddressInfo } from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
@@ -41,6 +41,29 @@ async function pedir(ruta: string) {
   return { estado: respuesta.status, cuerpo: await respuesta.text() };
 }
 
+/**
+ * Petición con la ruta tal cual, por un socket crudo: `fetch` normaliza `\` a
+ * `/` y no reproduce el ataque.
+ */
+function pedirCrudo(rutaLiteral: string) {
+  return new Promise<{ estado: number; location: string }>((resolver, rechazar) => {
+    const puerto = (servidor.address() as AddressInfo).port;
+    const socket = connect(puerto, "127.0.0.1", () => {
+      socket.write(
+        `GET ${rutaLiteral} HTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: close\r\n\r\n`,
+      );
+    });
+    let texto = "";
+    socket.on("data", (trozo) => (texto += trozo.toString()));
+    socket.on("error", rechazar);
+    socket.on("close", () => {
+      const estado = Number(/^HTTP\/1\.1 (\d+)/.exec(texto)?.[1]);
+      const location = /^location: (.*)\r$/im.exec(texto)?.[1] ?? "";
+      resolver({ estado, location });
+    });
+  });
+}
+
 describe("serveStatic", () => {
   it("sirve la home prerenderizada", async () => {
     expect(await pedir("/")).toEqual({ estado: 200, cuerpo: "<html>HOME</html>" });
@@ -78,6 +101,18 @@ describe("serveStatic", () => {
     expect(respuesta.status).toBe(308);
     expect(respuesta.headers.get("location")).toBe("/Blog");
   });
+
+  it.each([String.raw`/\evil.com/`, String.raw`//\evil.com/`, String.raw`/\/evil.com/`])(
+    "no redirige fuera del dominio con barras invertidas (%s)",
+    async (ruta) => {
+      // Los navegadores tratan `/\` como `//`.
+      const { estado, location } = await pedirCrudo(ruta);
+      expect(estado).toBe(308);
+      expect(location.startsWith("//")).toBe(false);
+      expect(location.startsWith("/\\")).toBe(false);
+      expect(location).toBe("/evil.com");
+    },
+  );
 
   it("sirve el shell a las rutas dinámicas, con 200", async () => {
     // Recargar un artículo no puede dar 404: el cliente lo carga desde la API.
