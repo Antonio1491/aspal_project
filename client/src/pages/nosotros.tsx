@@ -156,7 +156,7 @@ export default function Nosotros() {
         <Banda>
           <h2 className={h2}>Quiénes hacen posible ASPAL</h2>
           <ul className="mt-8 grid gap-6 md:grid-cols-3">
-            {HACEN_POSIBLE.map((tarjeta) => (
+            {HACEN_POSIBLE.map((tarjeta, i) => (
               <li key={tarjeta.titulo}>
                 <article className="flex h-full flex-col rounded-2xl border border-border bg-background p-6 md:p-8">
                   <h3 className="text-xl font-bold text-foreground">{tarjeta.titulo}</h3>
@@ -166,6 +166,7 @@ export default function Nosotros() {
                       tarjeta.enlace.href.startsWith("/") ? (
                         <Link
                           href={tarjeta.enlace.href}
+                          data-testid={`enlace-hacen-posible-${i}`}
                           className="inline-flex min-h-11 items-center font-medium text-primary underline underline-offset-4"
                         >
                           {tarjeta.enlace.etiqueta}
@@ -173,6 +174,7 @@ export default function Nosotros() {
                       ) : (
                         <a
                           href={tarjeta.enlace.href}
+                          data-testid={`enlace-hacen-posible-${i}`}
                           className="inline-flex min-h-11 items-center font-medium text-primary underline underline-offset-4"
                         >
                           {tarjeta.enlace.etiqueta}

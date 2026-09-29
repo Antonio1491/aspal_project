@@ -19,7 +19,7 @@ export function RutaTimeline({ hitos }: { hitos: Hito[] }) {
         return (
           <li
             key={hito.anio}
-            className={cn("lg:mt-[var(--escalon)]")}
+            className={cn("h-full lg:mt-[var(--escalon)]")}
             style={{ "--escalon": `${(hitos.length - 1 - i) * 1.5}rem` } as CSSProperties}
           >
             <details
@@ -27,11 +27,19 @@ export function RutaTimeline({ hitos }: { hitos: Hito[] }) {
                 "group h-full rounded-2xl border-2 p-4",
                 enCurso
                   ? "border-primary bg-primary text-primary-foreground"
-                  : "border-primary/30 bg-background text-foreground",
+                  : "border-primary/50 bg-background text-foreground",
               )}
               data-testid={`hito-${i}`}
             >
-              <summary className="flex min-h-11 cursor-pointer list-none flex-col gap-1 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring [&::-webkit-details-marker]:hidden">
+              <summary
+                data-testid={`hito-${i}-resumen`}
+                className={cn(
+                  "flex min-h-11 cursor-pointer list-none flex-col gap-1 rounded-md outline-none focus-visible:ring-2 [&::-webkit-details-marker]:hidden",
+                  enCurso
+                    ? "focus-visible:ring-primary-foreground"
+                    : "focus-visible:ring-ring",
+                )}
+              >
                 <span className="text-sm font-semibold">{hito.anio}</span>
                 <span className="text-lg font-bold leading-tight">{hito.nombre}</span>
                 <span className="mt-1 flex items-center gap-1 text-xs font-medium uppercase tracking-wide">

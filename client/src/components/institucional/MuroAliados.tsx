@@ -33,6 +33,8 @@ export function MuroAliados({
                 <img
                   src={LOGOS[aliado.logo]}
                   alt={aliado.nombre}
+                  width={aliado.logo === "wup" ? 240 : 207}
+                  height={aliado.logo === "wup" ? 95 : 102}
                   className="max-h-20 w-auto"
                   loading="lazy"
                 />
