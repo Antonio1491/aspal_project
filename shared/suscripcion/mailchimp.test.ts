@@ -64,6 +64,11 @@ describe("suscribir", () => {
     // Nunca `status`: reactivaría a quien se dio de baja.
     expect(cuerpo).not.toHaveProperty("status");
     expect(miembro.headers.Authorization).toMatch(/^Basic /);
+    const decoded = Buffer.from(
+      miembro.headers.Authorization.replace(/^Basic /, ""),
+      "base64",
+    ).toString("utf-8");
+    expect(decoded).toBe("aspal:abc123-us21");
 
     const [urlEtiquetas, etiquetas] = fetchMock.mock.calls[1];
     expect(urlEtiquetas).toBe(
@@ -72,6 +77,10 @@ describe("suscribir", () => {
     expect(JSON.parse(etiquetas.body)).toEqual({
       tags: [{ name: "origen:unete", status: "active" }],
     });
+
+    // Ambas llamadas llevan timeout
+    expect(miembro.signal).toBeInstanceOf(AbortSignal);
+    expect(etiquetas.signal).toBeInstanceOf(AbortSignal);
   });
 
   it("no manda campos vacíos", async () => {
@@ -102,5 +111,28 @@ describe("suscribir", () => {
   it("también falla si no se puede etiquetar", async () => {
     fetchMock.mockResolvedValueOnce(respuesta()).mockResolvedValueOnce(respuesta(500));
     await expect(suscribir(datos)).rejects.toBeInstanceOf(ErrorProveedor);
+  });
+
+  it("falta MAILCHIMP_AUDIENCE_ID (con clave presente) lanza SuscripcionNoConfigurada y no llama a fetch", async () => {
+    vi.stubEnv("MAILCHIMP_AUDIENCE_ID", "");
+    await expect(suscribir(datos)).rejects.toBeInstanceOf(SuscripcionNoConfigurada);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("fetch rechaza con TypeError convierte a ErrorProveedor con estado 502", async () => {
+    fetchMock.mockRejectedValue(new TypeError("fetch failed"));
+    const error = await suscribir(datos).catch((e) => e);
+    expect(error).toBeInstanceOf(ErrorProveedor);
+    expect(error.estado).toBe(502);
+    expect(error.message).not.toContain("ana@ejemplo.org");
+  });
+
+  it("fetch rechaza con TimeoutError convierte a ErrorProveedor con estado 504", async () => {
+    const timeoutError = new DOMException("Timeout", "TimeoutError");
+    fetchMock.mockRejectedValue(timeoutError);
+    const error = await suscribir(datos).catch((e) => e);
+    expect(error).toBeInstanceOf(ErrorProveedor);
+    expect(error.estado).toBe(504);
+    expect(error.message).not.toContain("ana@ejemplo.org");
   });
 });

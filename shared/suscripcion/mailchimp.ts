@@ -16,6 +16,9 @@
 import { createHash } from "node:crypto";
 import type { SuscripcionValida } from "./tipos";
 
+/** Las dos llamadas comparten el presupuesto de una función serverless. */
+const TIEMPO_MAXIMO_MS = 4000;
+
 export class SuscripcionNoConfigurada extends Error {
   constructor(motivo = "Faltan MAILCHIMP_API_KEY o MAILCHIMP_AUDIENCE_ID") {
     super(motivo);
@@ -71,23 +74,55 @@ export async function suscribir(datos: SuscripcionValida): Promise<void> {
   const { base, cabeceras } = configuracion();
   const miembro = `${base}/members/${hashSuscriptor(datos.correo)}`;
 
-  const alta = await fetch(miembro, {
-    method: "PUT",
-    headers: cabeceras,
-    body: JSON.stringify({
-      email_address: datos.correo,
-      status_if_new: "pending",
-      merge_fields: camposFusion(datos),
-    }),
-  });
-  if (!alta.ok) throw new ErrorProveedor(alta.status, "registrar el miembro");
+  let alta: Response;
+  try {
+    alta = await fetch(miembro, {
+      method: "PUT",
+      headers: cabeceras,
+      body: JSON.stringify({
+        email_address: datos.correo,
+        status_if_new: "pending",
+        merge_fields: camposFusion(datos),
+      }),
+      signal: AbortSignal.timeout(TIEMPO_MAXIMO_MS),
+    });
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "TimeoutError") {
+      throw new ErrorProveedor(504, "registrar el miembro");
+    }
+    if (error instanceof TypeError) {
+      throw new ErrorProveedor(502, "registrar el miembro");
+    }
+    throw error;
+  }
 
-  const etiqueta = await fetch(`${miembro}/tags`, {
-    method: "POST",
-    headers: cabeceras,
-    body: JSON.stringify({
-      tags: [{ name: `origen:${datos.origen}`, status: "active" }],
-    }),
-  });
-  if (!etiqueta.ok) throw new ErrorProveedor(etiqueta.status, "etiquetar el miembro");
+  if (!alta.ok) {
+    await alta.body?.cancel().catch(() => {});
+    throw new ErrorProveedor(alta.status, "registrar el miembro");
+  }
+
+  let etiqueta: Response;
+  try {
+    etiqueta = await fetch(`${miembro}/tags`, {
+      method: "POST",
+      headers: cabeceras,
+      body: JSON.stringify({
+        tags: [{ name: `origen:${datos.origen}`, status: "active" }],
+      }),
+      signal: AbortSignal.timeout(TIEMPO_MAXIMO_MS),
+    });
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "TimeoutError") {
+      throw new ErrorProveedor(504, "etiquetar el miembro");
+    }
+    if (error instanceof TypeError) {
+      throw new ErrorProveedor(502, "etiquetar el miembro");
+    }
+    throw error;
+  }
+
+  if (!etiqueta.ok) {
+    await etiqueta.body?.cancel().catch(() => {});
+    throw new ErrorProveedor(etiqueta.status, "etiquetar el miembro");
+  }
 }
