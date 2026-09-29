@@ -48,7 +48,12 @@ import {
   Wallet,
 } from "lucide-react";
 
-export default function Home() {
+/**
+ * Contenido de producto (la plataforma SaaS para asociaciones). Era la home
+ * hasta la Etapa 1; se mudó intacto aquí para dejar la raíz a la home
+ * institucional. Se reubica al subdominio en la Etapa 3.
+ */
+export default function Plataforma() {
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Decorative background elements */}
