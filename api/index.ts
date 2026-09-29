@@ -5,6 +5,7 @@
  */
 import express, { type NextFunction, type Request, type Response } from "express";
 import { registerApiRoutes } from "../shared/wordpress/routes";
+import { registrarRutasSuscripcion } from "../shared/suscripcion/rutas";
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 registerApiRoutes(app);
+registrarRutasSuscripcion(app);
 
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   const status = err.status || err.statusCode || 500;
