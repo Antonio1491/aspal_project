@@ -69,10 +69,17 @@ export default function Inicio() {
           <h2 className="sr-only">ASPAL en cifras</h2>
           <dl className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {CIFRAS.map((cifra) => (
-              <div key={cifra.valor} data-testid={`cifra-${cifra.valor}`}>
-                <dt className="sr-only">{cifra.etiqueta}</dt>
-                <dd className="text-5xl font-extrabold text-primary">{cifra.valor}</dd>
-                <dd className="mt-2 text-lg text-muted-foreground">{cifra.etiqueta}</dd>
+              <div
+                key={cifra.valor}
+                className="flex flex-col"
+                data-testid={`cifra-${cifra.valor}`}
+              >
+                <dt className="order-2 mt-2 text-lg text-muted-foreground">
+                  {cifra.etiqueta}
+                </dt>
+                <dd className="order-1 text-5xl font-extrabold text-primary">
+                  {cifra.valor}
+                </dd>
               </div>
             ))}
           </dl>
@@ -163,7 +170,7 @@ export default function Inicio() {
           </div>
         </Banda>
       </main>
-      <Footer />
+      <Footer conBoletin={false} />
     </div>
   );
 }

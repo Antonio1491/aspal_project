@@ -110,7 +110,7 @@ export default function Unete() {
               NOSOTROS; las redacta la Coordinación. */}
         </Banda>
       </main>
-      <Footer />
+      <Footer conBoletin={false} />
     </div>
   );
 }

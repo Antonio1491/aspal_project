@@ -30,7 +30,7 @@ export default function Eventos() {
           </div>
         </Banda>
       </main>
-      <Footer />
+      <Footer conBoletin={false} />
     </div>
   );
 }

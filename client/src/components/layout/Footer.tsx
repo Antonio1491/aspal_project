@@ -135,8 +135,11 @@ function ColumnaPie({ entrada }: { entrada: EntradaNav }) {
  *
  * Sin framer-motion: el pie entraba con `whileInView` y opacidad 0, así que en
  * el HTML prerenderizado (y para quien no ejecuta JavaScript) era invisible.
+ *
+ * `conBoletin`: las páginas que ya traen su propio formulario de suscripción
+ * lo desactivan para no repetir el mismo formulario justo encima del pie.
  */
-export default function Footer() {
+export default function Footer({ conBoletin = true }: { conBoletin?: boolean }) {
   const columnas = ENTRADAS_PIE.map((id) =>
     NAVEGACION.find((e) => e.testid === id),
   ).filter((entrada): entrada is EntradaNav => entrada !== undefined);
@@ -146,23 +149,25 @@ export default function Footer() {
       <h2 className="sr-only">Pie de página</h2>
 
       <div className="container mx-auto px-4 py-16 md:px-8">
-        <div
-          id="boletin"
-          className="mb-12 grid scroll-mt-32 gap-6 border-b border-border pb-12 lg:grid-cols-2 lg:items-end"
-        >
-          <div>
-            <h3
-              className="text-xl font-semibold text-foreground"
-              data-testid="text-footer-boletin"
-            >
-              Recibe el boletín de ASPAL
-            </h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Novedades del sector asociativo de América Latina, en tu correo.
-            </p>
+        {conBoletin && (
+          <div
+            id="boletin"
+            className="mb-12 grid scroll-mt-32 gap-6 border-b border-border pb-12 lg:grid-cols-2 lg:items-end"
+          >
+            <div>
+              <h3
+                className="text-xl font-semibold text-foreground"
+                data-testid="text-footer-boletin"
+              >
+                Recibe el boletín de ASPAL
+              </h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Novedades del sector asociativo de América Latina, en tu correo.
+              </p>
+            </div>
+            <FormSuscripcion origen="footer" variante="compacto" />
           </div>
-          <FormSuscripcion origen="footer" variante="compacto" />
-        </div>
+        )}
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           {/* Marca */}
           <div className="sm:col-span-2 lg:col-span-3 xl:col-span-1">
