@@ -29,11 +29,10 @@ export interface MetaRuta {
 }
 
 export const SEO: Record<RutaEstatica, MetaRuta> = {
-  // PENDIENTE (PR F): la home institucional trae su propia descripción.
   "/": {
     titulo: TITULO_SITIO,
     descripcion:
-      "Comunidad de profesionales de asociaciones de Latinoamérica: formación, recursos, eventos y podcast.",
+      "La red en español del sector asociativo de América Latina: comunidad, conocimiento, tecnología y datos para asociaciones profesionales.",
     indexable: true,
   },
   "/blog": {
@@ -70,6 +69,12 @@ export const SEO: Record<RutaEstatica, MetaRuta> = {
     titulo: "Nosotros · ASPAL",
     descripcion:
       "La red en español que profesionaliza la gestión asociativa de América Latina. Formación, comunidad, tecnología y datos para asociaciones profesionales LATAM.",
+    indexable: true,
+  },
+  "/mapa-de-ruta": {
+    titulo: "Mapa de Ruta para Organizaciones Profesionales · ASPAL",
+    descripcion:
+      "Guía práctica sobre las etapas de gestión de una asociación o sociedad profesional: 7 etapas y 23 pasos, de la gobernanza a la mejora continua.",
     indexable: true,
   },
   "/que-hacemos": {

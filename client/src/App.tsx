@@ -6,11 +6,14 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { MotionConfig } from "framer-motion";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
+import { SaltarAlContenido } from "@/components/layout/SaltarAlContenido";
 import { CabeceraRuta } from "@/components/layout/CabeceraRuta";
 import { ScrollRestoration } from "@/components/layout/ScrollRestoration";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
+import Inicio from "@/pages/inicio";
 import Plataforma from "@/pages/plataforma";
 import Nosotros from "@/pages/nosotros";
+import MapaDeRuta from "@/pages/mapa-de-ruta";
 import QueHacemos from "@/pages/que-hacemos";
 import NuestroEquipo from "@/pages/nuestro-equipo";
 import Unete from "@/pages/unete";
@@ -31,14 +34,13 @@ import {
  * ruta sin su página (o una página sin su ruta) no compile.
  */
 const PAGINAS: Record<RutaEstatica, FunctionComponent> = {
-  // PENDIENTE (PR F): "/" pasa a la home institucional. Hasta entonces sirve el
-  // mismo contenido de producto que /plataforma.
-  "/": Plataforma,
+  "/": Inicio,
   "/blog": Blog,
   "/podcast": Podcast,
   "/plataforma": Plataforma,
   "/unete": Unete,
   "/nosotros": Nosotros,
+  "/mapa-de-ruta": MapaDeRuta,
   "/que-hacemos": QueHacemos,
   "/nuestro-equipo": NuestroEquipo,
   "/eventos": Eventos,
@@ -70,6 +72,7 @@ function App() {
           cubre. Parte del público lo tiene activado por motivos médicos. */}
       <MotionConfig reducedMotion="user">
         <TooltipProvider>
+          <SaltarAlContenido />
           <Toaster />
           <CabeceraRuta />
           <ScrollRestoration />

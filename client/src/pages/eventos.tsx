@@ -1,3 +1,4 @@
+import { TEXTO_EVENTOS } from "@/content/institucional/inicio";
 import { FormSuscripcion } from "@/components/forms/FormSuscripcion";
 import { Banda } from "@/components/layout/Banda";
 import Footer from "@/components/layout/Footer";
@@ -13,11 +14,11 @@ export default function Eventos() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
-      <main className="flex-1">
+      <main id="contenido" tabIndex={-1} className="flex-1 focus:outline-none">
         <HeroInstitucional overline="Próximamente" titulo="Eventos">
           <p>
-            Estamos preparando el calendario de eventos y los webinars mensuales de ASPAL.
-            Déjanos tu correo y te avisamos en cuanto abramos inscripciones.
+            {TEXTO_EVENTOS} Déjanos tu correo y te avisamos en cuanto abramos
+            inscripciones.
           </p>
         </HeroInstitucional>
         <Banda tono="suave">
@@ -29,7 +30,7 @@ export default function Eventos() {
           </div>
         </Banda>
       </main>
-      <Footer />
+      <Footer conBoletin={false} />
     </div>
   );
 }

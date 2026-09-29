@@ -1,4 +1,4 @@
-import iconoAspal from "@assets/Aspal-Icono_1763675356866.png";
+import iconoAspal from "@assets/Aspal-Icono_1763675356866.webp";
 import { AvisoPestanaNueva } from "@/components/layout/AvisoPestanaNueva";
 import type { Perfil } from "@/content/institucional/equipo";
 import { registrarEvento } from "@/lib/analitica";
@@ -29,8 +29,8 @@ export function PerfilCard({ perfil }: { perfil: Perfil }) {
             src={iconoAspal}
             alt=""
             aria-hidden="true"
-            width={1500}
-            height={1877}
+            width={512}
+            height={641}
             className="h-24 w-auto opacity-60"
           />
         )}

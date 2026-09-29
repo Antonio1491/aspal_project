@@ -92,8 +92,10 @@ typecheckear.
   `null`/404 legítimo es `/api/posts/:slug` cuando el post de verdad no existe.
 
   Antes se degradaba a vacío "para que la landing renderizara aunque el blog
-  no respondiera". Esa justificación era falsa: `home.tsx` no consume la API.
-  Solo lo hacen `blog.tsx` y `blog-post.tsx`.
+  no respondiera". No hace falta: la home (`inicio.tsx`) consume la API solo en
+  `ContenidoReciente`, que oculta el bloque si la petición falla (RF-13) y deja
+  el resto de la página intacto. También la consumen `blog.tsx`,
+  `blog-post.tsx` y `podcast.tsx`.
 
 ### shadcn/ui
 
@@ -124,8 +126,10 @@ antes de concluir que hay un fallo.
 
 ## Contexto que ahorra tiempo
 
-- `client/src/assets/` pesa ~11 MB y está versionado. Los nombres con timestamp
-  (`image_1764775862961.png`) son heredados; los descriptivos son los buenos.
+- `client/src/assets/` solo contiene lo que se usa (lo vigila `check-assets`) y
+  ninguna imagen supera 250 KB: pesa ~520 KB (antes ~11 MB). Está versionado.
+  Los nombres con timestamp (`Aspal-Icono_1763675356866.webp`) son heredados;
+  los descriptivos son los buenos.
 - El proyecto nació en Replit y se migró a Vercel. Si encuentras restos de
   Replit, sobran.
 - La documentación de arquitectura está en `docs/architecture.md`; la guía de

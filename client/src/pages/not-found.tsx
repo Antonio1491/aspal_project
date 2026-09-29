@@ -1,4 +1,4 @@
-import iconoAspal from "@assets/Aspal-Icono_1763675356866.png";
+import iconoAspal from "@assets/Aspal-Icono_1763675356866.webp";
 import { AvisoPestanaNueva } from "@/components/layout/AvisoPestanaNueva";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
@@ -107,14 +107,18 @@ export default function NotFound() {
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
 
-      <main className="flex-1 px-4 py-16 md:px-8 md:py-24">
+      <main
+        id="contenido"
+        tabIndex={-1}
+        className="flex-1 px-4 py-16 md:px-8 md:py-24 focus:outline-none"
+      >
         <div className="mx-auto max-w-3xl">
           <img
             src={iconoAspal}
             alt=""
             aria-hidden="true"
-            width={1500}
-            height={1877}
+            width={512}
+            height={641}
             className="h-14 w-auto"
           />
 

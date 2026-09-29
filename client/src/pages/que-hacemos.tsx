@@ -21,7 +21,7 @@ export default function QueHacemos() {
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
       <SubnavSeccion />
-      <main className="flex-1">
+      <main id="contenido" tabIndex={-1} className="flex-1 focus:outline-none">
         <HeroInstitucional overline="¿Qué hacemos?" titulo="Los 4 Pilares ASPAL">
           <p>{QUIENES_SOMOS[1]}</p>
         </HeroInstitucional>

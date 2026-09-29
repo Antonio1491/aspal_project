@@ -19,7 +19,7 @@ export default function Unete() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
-      <main className="flex-1">
+      <main id="contenido" tabIndex={-1} className="flex-1 focus:outline-none">
         <HeroInstitucional
           overline="#NingunDirectorDirigeSolo"
           overlineNormal
@@ -110,7 +110,7 @@ export default function Unete() {
               NOSOTROS; las redacta la Coordinación. */}
         </Banda>
       </main>
-      <Footer />
+      <Footer conBoletin={false} />
     </div>
   );
 }

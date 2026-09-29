@@ -225,4 +225,9 @@ describe("registrarClicDestino", () => {
     );
     expect(ventana.dataLayer).toBeUndefined();
   });
+
+  it("enlaza el Mapa de Ruta desde Recursos › Aprende", () => {
+    const mapa = destinos.find((d) => d.testid === "link-mapa-ruta");
+    expect(mapa?.href).toBe("/mapa-de-ruta");
+  });
 });

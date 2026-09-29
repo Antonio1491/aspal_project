@@ -18,14 +18,16 @@ de solo lectura y sin estado.
 **Rutas** (`wouter`): se definen en `client/src/lib/rutas.ts` y se cablean en
 `client/src/App.tsx`.
 
-| Ruta          | Página                                                                                 |
-| ------------- | -------------------------------------------------------------------------------------- |
-| `/`           | Home (temporalmente, el mismo contenido que `/plataforma` hasta la home institucional) |
-| `/plataforma` | Contenido de producto SaaS                                                             |
-| `/blog`       | Listado de artículos con filtro por categoría                                          |
-| `/blog/:slug` | Artículo individual                                                                    |
-| `/podcast`    | Listado de episodios                                                                   |
-| `*`           | 404                                                                                    |
+| Ruta            | Página                                                                                                                |
+| --------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `/`             | Home institucional. Consume `/api/posts` y `/api/podcasts` solo en `ContenidoReciente`, que se oculta si la API falla |
+| `/nosotros`     | Quiénes somos                                                                                                         |
+| `/mapa-de-ruta` | Mapa de Ruta: las 7 etapas paso a paso                                                                                |
+| `/plataforma`   | Contenido de producto SaaS                                                                                            |
+| `/blog`         | Listado de artículos con filtro por categoría                                                                         |
+| `/blog/:slug`   | Artículo individual                                                                                                   |
+| `/podcast`      | Listado de episodios                                                                                                  |
+| `*`             | 404                                                                                                                   |
 
 **Estado:** TanStack Query para estado de servidor; hooks de React para estado
 local. Hooks propios en `client/src/hooks/` (`use-mobile`, `use-toast`).
@@ -149,9 +151,13 @@ impide); se le indica escribir al correo de contacto.
 
 Vercel, según `vercel.json`:
 
-- `buildCommand`: `npm run build`. Son dos builds de Vite (cliente y `--ssr`) más
+- `buildCommand`: `npm run build`. Primero corre `scripts/check-assets.mjs`
+  (referencias rotas, huérfanos y el límite de 250 KB por imagen) y luego son
+  dos builds de Vite (cliente y `--ssr`) más
   `scripts/prerender.mjs`, que escribe un HTML por ruta estática, `404.html`,
   `spa.html`, `sitemap.xml` y `robots.txt`.
+- `sharp` es dependencia solo de desarrollo: la usa `scripts/imagenes.mjs`
+  (conversión única a WebP), no el build.
 - `outputDirectory`: `dist/public`
 - `cleanUrls`: `/blog` sirve `blog.html`
 - `trailingSlash: false`: `/blog/` redirige a `/blog` (308)
