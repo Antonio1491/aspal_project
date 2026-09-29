@@ -11,6 +11,8 @@ import { Facebook, Instagram, Linkedin, Twitter, type LucideIcon } from "lucide-
 export const NOMBRE_CORTO = "ASPAL";
 export const NOMBRE_COMPLETO = "Asociaciones Profesionales de Latinoamérica";
 export const NOMBRE_MARCA = `${NOMBRE_CORTO} — ${NOMBRE_COMPLETO}`;
+// Es el `<title>` por defecto del sitio.
+export const TITULO_SITIO = `${NOMBRE_CORTO} · ${NOMBRE_COMPLETO}`;
 
 export const CONTACTO = {
   correo: "vinculacion@asociacionesprofesionales.org",

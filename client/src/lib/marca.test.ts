@@ -1,7 +1,7 @@
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { readdirSync, readFileSync } from "node:fs";
+import { basename, join, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { CONTACTO, NOMBRE_COMPLETO, NOMBRE_MARCA, REDES } from "./marca";
+import { CONTACTO, NOMBRE_COMPLETO, NOMBRE_MARCA, REDES, TITULO_SITIO } from "./marca";
 
 const indexHtml = readFileSync(
   resolve(import.meta.dirname, "..", "..", "index.html"),
@@ -9,12 +9,33 @@ const indexHtml = readFileSync(
 );
 
 describe("marca", () => {
-  it("el título de index.html usa el nombre de marca", () => {
+  it("el título de index.html es igual a TITULO_SITIO", () => {
     // Llegó a haber tres nombres distintos en el título, el pie y los
     // documentos. index.html no puede importar TypeScript: este test es lo que
     // impide que vuelva a divergir.
-    const titulo = indexHtml.match(/<title>(.*?)<\/title>/)?.[1] ?? "";
-    expect(titulo).toContain(NOMBRE_COMPLETO);
+    const titulo = indexHtml.match(/<title>([\s\S]*?)<\/title>/)?.[1] ?? "";
+    expect(titulo.trim()).toBe(TITULO_SITIO);
+  });
+
+  it("ningún archivo de client/src repite un nombre antiguo de la marca", () => {
+    const raiz = resolve(import.meta.dirname, "..");
+    const archivos = (dir: string): string[] =>
+      readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+        const ruta = join(dir, e.name);
+        return e.isDirectory() ? archivos(ruta) : [ruta];
+      });
+    const obsoletos = [
+      "Asociación de Profesionales de Asociaciones",
+      "Asociaciones y Sociedades Profesionales",
+    ];
+    const infractores = archivos(raiz)
+      .filter((f) => /\.tsx?$/.test(f))
+      .filter((f) => basename(f) !== "marca.ts" && !/\.test\.ts$/.test(f))
+      .filter((f) => {
+        const texto = readFileSync(f, "utf8");
+        return obsoletos.some((o) => texto.includes(o));
+      });
+    expect(infractores).toEqual([]);
   });
 
   it("compone el nombre visible a partir de sus partes", () => {
