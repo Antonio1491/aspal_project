@@ -193,11 +193,11 @@ export const NAVEGACION: EntradaNav[] = [
             href: "/podcast",
             testid: "link-podcast",
           },
-          // PENDIENTE (PR F): /mapa-de-ruta.
           {
             etiqueta: "Mapa de Ruta",
             descripcion: "El camino de una asociación en siete etapas",
             icono: Route,
+            href: "/mapa-de-ruta",
             testid: "link-mapa-ruta",
           },
           {

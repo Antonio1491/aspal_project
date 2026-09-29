@@ -72,6 +72,12 @@ export const SEO: Record<RutaEstatica, MetaRuta> = {
       "La red en español que profesionaliza la gestión asociativa de América Latina. Formación, comunidad, tecnología y datos para asociaciones profesionales LATAM.",
     indexable: true,
   },
+  "/mapa-de-ruta": {
+    titulo: "Mapa de Ruta para Organizaciones Profesionales · ASPAL",
+    descripcion:
+      "Guía práctica sobre las etapas de gestión de una asociación o sociedad profesional: 7 etapas y 23 pasos, de la gobernanza a la mejora continua.",
+    indexable: true,
+  },
   "/que-hacemos": {
     titulo: "¿Qué hacemos? · ASPAL",
     descripcion:

@@ -6,6 +6,7 @@ describe("esRutaConocida", () => {
     for (const ruta of RUTAS_ESTATICAS) {
       expect(esRutaConocida(ruta), ruta).toBe(true);
     }
+    expect(esRutaConocida("/mapa-de-ruta")).toBe(true);
   });
 
   it("acepta un artículo del blog por su slug", () => {
