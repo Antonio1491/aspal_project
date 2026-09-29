@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Check } from "lucide-react";
-import membershipIllustration from "@assets/recurso-13-membresias.png";
+import membershipIllustration from "@assets/recurso-13-membresias.webp";
 
 interface ProblemSectionProps {
   question: string;
@@ -10,6 +10,9 @@ interface ProblemSectionProps {
   benefits: string[];
   image: string;
   imageAlt: string;
+  /** Dimensiones reales de la imagen: reservan su hueco y evitan el salto de layout. */
+  anchoImagen?: number;
+  altoImagen?: number;
   reverse?: boolean;
 }
 
@@ -31,6 +34,8 @@ export default function ProblemSection({
   benefits,
   image,
   imageAlt,
+  anchoImagen,
+  altoImagen,
   reverse = false,
 }: ProblemSectionProps) {
   return (
@@ -117,6 +122,10 @@ export default function ProblemSection({
                   <img
                     src={image}
                     alt={imageAlt}
+                    width={anchoImagen}
+                    height={altoImagen}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-auto rounded-xl"
                     data-testid="img-problem-illustration"
                   />
@@ -153,6 +162,8 @@ export function MembershipProblemSection() {
       ]}
       image={membershipIllustration}
       imageAlt="Automatización de membresías"
+      anchoImagen={960}
+      altoImagen={998}
     />
   );
 }

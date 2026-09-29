@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, X, Play } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { URL_REGISTRO } from "@/lib/navegacion";
-import heroDashboard from "@assets/generated_images/hero_dashboard_with_yellow_background.png";
+import heroDashboard from "@assets/generated_images/hero_dashboard_with_yellow_background.webp";
 
 function VideoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   return (
@@ -163,6 +163,11 @@ export default function HeroSection() {
               <img
                 src={heroDashboard}
                 alt="Dashboard de plataforma"
+                width={1400}
+                height={764}
+                // React 18 no conoce `fetchPriority`: el atributo va en minúsculas.
+                {...{ fetchpriority: "high" }}
+                decoding="async"
                 className="w-full h-auto"
                 data-testid="img-hero-dashboard"
               />

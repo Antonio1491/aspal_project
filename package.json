@@ -13,7 +13,7 @@
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsx server/index.ts",
-    "build": "vite build && vite build --ssr src/entry-server.tsx --outDir ../dist/ssr --emptyOutDir && node scripts/prerender.mjs && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
+    "build": "node scripts/check-assets.mjs && vite build && vite build --ssr src/entry-server.tsx --outDir ../dist/ssr --emptyOutDir && node scripts/prerender.mjs && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "check": "tsc && npm run check:assets",
     "check:assets": "node scripts/check-assets.mjs",
@@ -61,6 +61,7 @@
     "globals": "^17.9.0",
     "postcss": "^8.4.47",
     "prettier": "^3.9.6",
+    "sharp": "^0.35.5",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.20.5",
     "typescript": "5.6.3",

@@ -126,7 +126,7 @@ antes de concluir que hay un fallo.
 
 ## Contexto que ahorra tiempo
 
-- `client/src/assets/` pesa ~11 MB y está versionado. Los nombres con timestamp
+- `client/src/assets/` solo contiene lo que se usa (lo vigila `check-assets`) y ninguna imagen supera 250 KB: pesa ~520 KB (antes ~11 MB). Está versionado. Los nombres con timestamp
   (`image_1764775862961.png`) son heredados; los descriptivos son los buenos.
 - El proyecto nació en Replit y se migró a Vercel. Si encuentras restos de
   Replit, sobran.

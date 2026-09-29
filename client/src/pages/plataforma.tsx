@@ -5,11 +5,11 @@ import FeaturesGrid from "@/components/sections/FeaturesGrid";
 import LogoCarousel from "@/components/sections/LogoCarousel";
 import CTASection from "@/components/sections/CTASection";
 import Footer from "@/components/layout/Footer";
-import communityImage from "@assets/recurso-8-comunidad.png";
-import blogImage from "@assets/recurso-3-blog.png";
-import certificationsImage from "@assets/recurso-40-certificaciones.png";
-import marketingImage from "@assets/recurso-27-marketing.png";
-import jobBoardImage from "@assets/recurso-26-bolsa-trabajo.png";
+import communityImage from "@assets/recurso-8-comunidad.webp";
+import blogImage from "@assets/recurso-3-blog.webp";
+import certificationsImage from "@assets/recurso-40-certificaciones.webp";
+import marketingImage from "@assets/recurso-27-marketing.webp";
+import jobBoardImage from "@assets/recurso-26-bolsa-trabajo.webp";
 import ProblemSection from "@/components/sections/ProblemSection";
 import {
   NetworkNodes,
@@ -147,6 +147,8 @@ export default function Plataforma() {
           ]}
           image={communityImage}
           imageAlt="Comunidad en línea"
+          anchoImagen={850}
+          altoImagen={923}
           reverse={true}
         />
       </div>
@@ -202,6 +204,8 @@ export default function Plataforma() {
         ]}
         image={blogImage}
         imageAlt="Contenido y recursos"
+        anchoImagen={837}
+        altoImagen={861}
       />
 
       <FeaturesGrid
@@ -250,6 +254,8 @@ export default function Plataforma() {
           ]}
           image={certificationsImage}
           imageAlt="Certificaciones y cursos"
+          anchoImagen={862}
+          altoImagen={981}
           reverse={true}
         />
       </div>
@@ -305,6 +311,8 @@ export default function Plataforma() {
           ]}
           image={marketingImage}
           imageAlt="Marketing y comunicación"
+          anchoImagen={960}
+          altoImagen={1102}
         />
       </div>
 
@@ -364,6 +372,8 @@ export default function Plataforma() {
           ]}
           image={jobBoardImage}
           imageAlt="Bolsa de trabajo"
+          anchoImagen={801}
+          altoImagen={951}
           reverse={true}
         />
       </div>
