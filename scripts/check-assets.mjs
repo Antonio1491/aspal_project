@@ -50,7 +50,7 @@ const huerfanos = walk(ASSETS)
 // 250 KB. Las de 1 MB eran la causa del Lighthouse de 68.
 const LIMITE = 250 * 1024;
 const pesados = [...referencias]
-  .filter((asset) => /.(png|jpe?g|webp|avif|gif)$/i.test(asset))
+  .filter((asset) => /\.(png|jpe?g|webp|avif|gif)$/i.test(asset))
   .map((asset) => ({
     asset,
     bytes: statSync(join(ASSETS, asset), { throwIfNoEntry: false })?.size ?? 0,
@@ -58,13 +58,11 @@ const pesados = [...referencias]
   .filter(({ bytes }) => bytes > LIMITE);
 
 if (huerfanos.length > 0) {
-  console.error(`✗ ${huerfanos.length} asset(s) sin usar en client/src/assets:
-`);
+  console.error(`✗ ${huerfanos.length} asset(s) sin usar en client/src/assets:\n`);
   for (const asset of huerfanos) console.error(`  ${asset}`);
 }
 if (pesados.length > 0) {
-  console.error(`✗ ${pesados.length} imagen(es) por encima de ${LIMITE / 1024} KB:
-`);
+  console.error(`✗ ${pesados.length} imagen(es) por encima de ${LIMITE / 1024} KB:\n`);
   for (const { asset, bytes } of pesados)
     console.error(`  ${asset} (${Math.round(bytes / 1024)} KB)`);
 }
