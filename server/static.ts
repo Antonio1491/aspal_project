@@ -33,7 +33,8 @@ export function serveStatic(
     next();
   });
 
-  app.use(express.static(distPath, { extensions: ["html"] }));
+  // Sin redirect: si no, /assets -> 301 /assets/ y la barra final -> 308 /assets, en bucle.
+  app.use(express.static(distPath, { extensions: ["html"], redirect: false }));
 
   for (const ruta of RUTAS_DINAMICAS) {
     app.get(ruta, (_req, res) => {

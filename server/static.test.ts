@@ -1,5 +1,5 @@
 import express from "express";
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import type { Server } from "node:http";
 import type { AddressInfo } from "node:net";
 import { tmpdir } from "node:os";
@@ -21,6 +21,8 @@ beforeAll(async () => {
   ]) {
     writeFileSync(join(dist, archivo), `<html>${marca}</html>`);
   }
+  mkdirSync(join(dist, "assets"));
+  writeFileSync(join(dist, "assets", "app.js"), "console.log(1)");
   const app = express();
   serveStatic(app, dist);
   await new Promise<void>((listo) => {
@@ -70,5 +72,12 @@ describe("serveStatic", () => {
       cuerpo: "<html>NO-ENCONTRADA</html>",
     });
     expect((await pedir("/blog/a/b")).estado).toBe(404);
+  });
+
+  it("no entra en bucle de redirecciones con los directorios del build", async () => {
+    // express.static redirigiría /assets a /assets/ y la barra final volvería
+    // a /assets, sin fin. Un directorio no es una página: 404.
+    expect((await pedir("/assets")).estado).toBe(404);
+    expect((await pedir("/assets/app.js")).estado).toBe(200);
   });
 });
