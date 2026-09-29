@@ -12,7 +12,7 @@ export default function NuestroEquipo() {
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
       <SubnavSeccion />
-      <main className="flex-1">
+      <main id="contenido" tabIndex={-1} className="flex-1 focus:outline-none">
         <HeroInstitucional overline="Nuestro equipo" titulo="Quiénes hacen posible ASPAL">
           <p>{INTRO_EQUIPO}</p>
         </HeroInstitucional>

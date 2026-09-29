@@ -49,6 +49,10 @@ function componer(ruta, cuerpo) {
       `prerender: ${nombre} tiene contenido a opacity:0 (animación de entrada)`,
     );
   }
+  // RF-14: el enlace «Saltar al contenido» apunta a #contenido en todas las rutas.
+  if (!cuerpo.includes('id="contenido"')) {
+    throw new Error(`prerender: ${nombre} no tiene <main id="contenido">`);
+  }
   return plantilla
     .replace(TITULO, () => "")
     .replace(DESCRIPCION, () => "")

@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { MotionConfig } from "framer-motion";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
+import { SaltarAlContenido } from "@/components/layout/SaltarAlContenido";
 import { CabeceraRuta } from "@/components/layout/CabeceraRuta";
 import { ScrollRestoration } from "@/components/layout/ScrollRestoration";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
@@ -71,6 +72,7 @@ function App() {
           cubre. Parte del público lo tiene activado por motivos médicos. */}
       <MotionConfig reducedMotion="user">
         <TooltipProvider>
+          <SaltarAlContenido />
           <Toaster />
           <CabeceraRuta />
           <ScrollRestoration />

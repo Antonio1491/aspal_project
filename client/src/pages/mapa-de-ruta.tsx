@@ -27,7 +27,7 @@ export default function MapaDeRuta() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
-      <main className="flex-1">
+      <main id="contenido" tabIndex={-1} className="flex-1 focus:outline-none">
         <HeroInstitucional overline="Mapa de Ruta" titulo={MAPA_RUTA.titulo}>
           <p>{MAPA_RUTA.subtitulo}</p>
           <p className="mt-4">{MAPA_RUTA.comoUsar}</p>

@@ -37,7 +37,7 @@ export default function Nosotros() {
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
       <SubnavSeccion />
-      <main className="flex-1">
+      <main id="contenido" tabIndex={-1} className="flex-1 focus:outline-none">
         {/* 1. Hero */}
         <HeroInstitucional overline="Nosotros" titulo={HERO_NOSOTROS.tagline}>
           <p>{HERO_NOSOTROS.parrafo}</p>

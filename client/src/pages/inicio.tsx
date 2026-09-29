@@ -36,7 +36,7 @@ export default function Inicio() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
-      <main className="flex-1">
+      <main id="contenido" tabIndex={-1} className="flex-1 focus:outline-none">
         {/* 1. Hero */}
         <HeroInstitucional overline={NOMBRE_COMPLETO} titulo={HERO_NOSOTROS.tagline}>
           <p>{HERO_NOSOTROS.parrafo}</p>
