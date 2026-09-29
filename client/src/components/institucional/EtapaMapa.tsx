@@ -2,7 +2,7 @@ import { ETAPAS, type EtapaMapa as Etapa } from "@/content/institucional/mapa-ru
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const CLASES_VECINA =
-  "inline-flex min-h-11 items-center gap-2 font-medium text-primary underline underline-offset-4";
+  "inline-flex min-h-11 items-center gap-2 rounded-sm font-medium text-primary underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
 
 /**
  * Una etapa del Mapa de Ruta: sus pasos, la frase de cierre de la guía y
@@ -41,8 +41,9 @@ export function EtapaMapa({
             <p className="text-sm font-semibold text-primary">Paso {paso.numero}</p>
             <h3 className="mt-1 text-xl font-bold text-foreground">{paso.nombre}</h3>
             <p className="mt-1 italic text-muted-foreground">{paso.linea}</p>
-            {paso.descripcion.map((parrafo) => (
-              <p key={parrafo.slice(0, 24)} className="mt-3 text-base text-foreground">
+            {paso.descripcion.map((parrafo, i) => (
+              // Contenido estático: el orden no cambia.
+              <p key={i} className="mt-3 text-base text-foreground">
                 {parrafo}
               </p>
             ))}

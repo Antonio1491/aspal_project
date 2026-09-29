@@ -117,8 +117,8 @@ export default function NotFound() {
             src={iconoAspal}
             alt=""
             aria-hidden="true"
-            width={1500}
-            height={1877}
+            width={512}
+            height={641}
             className="h-14 w-auto"
           />
 

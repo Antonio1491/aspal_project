@@ -15,7 +15,7 @@ import { Link } from "wouter";
 const BOTON_MIEL =
   "min-h-11 px-6 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche";
 const BOTON_CONTORNO =
-  "min-h-11 border-white bg-transparent px-6 text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche";
+  "min-h-11 [border-color:white] bg-transparent px-6 text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche";
 
 /**
  * Mapa de Ruta (§6.5): las 7 etapas de la guía oficial en un paso a paso
@@ -72,7 +72,7 @@ export default function MapaDeRuta() {
             key={etapa.id}
             id={etapa.id}
             tono={i % 2 === 0 ? "blanco" : "suave"}
-            className="scroll-mt-16"
+            className="scroll-mt-32"
           >
             <EtapaMapa etapa={etapa} anterior={ETAPAS[i - 1]} siguiente={ETAPAS[i + 1]} />
           </Banda>

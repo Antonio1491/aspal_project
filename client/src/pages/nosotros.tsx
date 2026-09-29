@@ -57,7 +57,7 @@ export default function Nosotros() {
             </Button>
             <Button
               variant="outline"
-              className="min-h-11 border-white bg-transparent px-6 text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche"
+              className="min-h-11 [border-color:white] bg-transparent px-6 text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche"
               asChild
             >
               <a href="#lo-que-defendemos" data-testid="button-nosotros-propuesta">
@@ -234,7 +234,7 @@ export default function Nosotros() {
             </Button>
             <Button
               variant="outline"
-              className="min-h-11 border-white bg-transparent px-6 text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche"
+              className="min-h-11 [border-color:white] bg-transparent px-6 text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche"
               asChild
             >
               <a href="#boletin" data-testid="button-nosotros-boletin">
@@ -244,7 +244,7 @@ export default function Nosotros() {
             {/* PENDIENTE (Etapa 0): /contacto. Mientras tanto, correo. */}
             <Button
               variant="outline"
-              className="min-h-11 border-white bg-transparent px-6 text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche"
+              className="min-h-11 [border-color:white] bg-transparent px-6 text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche"
               asChild
             >
               <a

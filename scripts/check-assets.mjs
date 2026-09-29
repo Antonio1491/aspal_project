@@ -68,16 +68,15 @@ if (pesados.length > 0) {
   for (const { asset, bytes } of pesados)
     console.error(`  ${asset} (${Math.round(bytes / 1024)} KB)`);
 }
-if (huerfanos.length > 0 || pesados.length > 0) process.exit(1);
-
 if (missing.length > 0) {
   console.error(`✗ ${missing.length} asset(s) referenciado(s) que no existe(n):\n`);
   for (const { file, asset } of missing) {
     console.error(`  ${file}`);
     console.error(`    @assets/${asset}`);
   }
-  process.exit(1);
 }
+
+if (missing.length > 0 || huerfanos.length > 0 || pesados.length > 0) process.exit(1);
 
 console.log(
   "✓ assets: referencias resueltas, sin huérfanos y ninguna imagen por encima de 250 KB",

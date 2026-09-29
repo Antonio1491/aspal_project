@@ -29,8 +29,8 @@ export function PerfilCard({ perfil }: { perfil: Perfil }) {
             src={iconoAspal}
             alt=""
             aria-hidden="true"
-            width={1500}
-            height={1877}
+            width={512}
+            height={641}
             className="h-24 w-auto opacity-60"
           />
         )}

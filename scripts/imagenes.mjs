@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 /**
- * Conversión única de las imágenes en uso a WebP (RF-15). Escribe el .webp
+ * Conversión única de las imágenes en uso a WebP (RF-15). Los originales .png
+ * ya no existen: viven en el historial de git, commit anterior a d94cccc. Cada
+ * origen ausente se salta con un aviso. Escribe el .webp
  * junto al original e imprime tamaño y dimensiones, que son los `width` y
  * `height` que llevan los <img>. Los originales se borran a mano después, con
  * `git rm`: git los conserva si hay que regenerar.
@@ -8,6 +10,7 @@
  * Uso: node scripts/imagenes.mjs
  */
 import sharp from "sharp";
+import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
 
 const ASSETS = resolve(import.meta.dirname, "..", "client", "src", "assets");
@@ -26,6 +29,10 @@ const TRABAJOS = [
 
 for (const [archivo, ancho] of TRABAJOS) {
   const origen = join(ASSETS, archivo);
+  if (!existsSync(origen)) {
+    console.warn(`(salta) no existe ${archivo}`);
+    continue;
+  }
   const destino = origen.replace(/\.png$/, ".webp");
   const info = await sharp(origen)
     .resize({ width: ancho, withoutEnlargement: true })

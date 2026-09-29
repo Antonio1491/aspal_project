@@ -25,7 +25,7 @@ const h2 = "text-3xl font-bold text-foreground md:text-4xl";
 const BOTON_MIEL =
   "min-h-11 px-6 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche";
 const BOTON_CONTORNO =
-  "min-h-11 border-white bg-transparent px-6 text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche";
+  "min-h-11 [border-color:white] bg-transparent px-6 text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche";
 
 /**
  * Home institucional (§6.1): 8 bandas. El contenido de producto que ocupaba la
@@ -150,8 +150,9 @@ export default function Inicio() {
               <h2 className="mt-2 text-3xl font-bold md:text-4xl">
                 Únete a la casa común
               </h2>
-              {CTA_FINAL.map((parrafo) => (
-                <p key={parrafo.slice(0, 20)} className="mt-4 text-lg text-white/85">
+              {CTA_FINAL.map((parrafo, i) => (
+                // Contenido estático: el orden no cambia.
+                <p key={i} className="mt-4 text-lg text-white/85">
                   {parrafo}
                 </p>
               ))}

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Link } from "wouter";
 
 const CLASES_ENLACE =
-  "flex h-full min-h-11 flex-col rounded-2xl border border-border bg-background p-4 transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
+  "flex h-full min-h-11 flex-col rounded-2xl border border-border bg-background transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
 
 /**
  * Las 7 etapas del Mapa de Ruta como lista ordenada. En la home es la franja
@@ -19,7 +19,7 @@ export function IndiceEtapas({ origen }: { origen: "home" | "mapa" }) {
         "grid gap-3",
         enPagina
           ? "sm:grid-cols-2 lg:grid-cols-4"
-          : "grid-cols-2 sm:grid-cols-4 lg:grid-cols-7",
+          : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7",
       )}
       data-testid={`indice-etapas-${origen}`}
     >
@@ -29,11 +29,13 @@ export function IndiceEtapas({ origen }: { origen: "home" | "mapa" }) {
             <span className="text-sm font-semibold uppercase tracking-wider text-primary">
               Etapa {etapa.numero}
             </span>
-            <span className="mt-1 text-base font-bold text-foreground">
+            <span className="mt-1 hyphens-auto break-words text-base font-bold text-foreground">
               {etapa.nombre}
             </span>
             {enPagina && (
-              <span className="mt-1 text-sm text-muted-foreground">{etapa.resumen}</span>
+              <span className="mt-1 hyphens-auto break-words text-sm text-muted-foreground">
+                {etapa.resumen}
+              </span>
             )}
           </>
         );
@@ -41,13 +43,17 @@ export function IndiceEtapas({ origen }: { origen: "home" | "mapa" }) {
         return (
           <li key={etapa.id}>
             {enPagina ? (
-              <a href={`#${etapa.id}`} className={CLASES_ENLACE} data-testid={testid}>
+              <a
+                href={`#${etapa.id}`}
+                className={cn(CLASES_ENLACE, "p-4")}
+                data-testid={testid}
+              >
                 {contenido}
               </a>
             ) : (
               <Link
                 href={`/mapa-de-ruta#${etapa.id}`}
-                className={CLASES_ENLACE}
+                className={cn(CLASES_ENLACE, "p-3 xl:p-4")}
                 onClick={() =>
                   registrarEvento("click_mapa_ruta", {
                     origen: "home_etapa",

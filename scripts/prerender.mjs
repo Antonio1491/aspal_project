@@ -50,8 +50,8 @@ function componer(ruta, cuerpo) {
     );
   }
   // RF-14: el enlace «Saltar al contenido» apunta a #contenido en todas las rutas.
-  if (!cuerpo.includes('id="contenido"')) {
-    throw new Error(`prerender: ${nombre} no tiene <main id="contenido">`);
+  if (cuerpo.match(/id="contenido"/g)?.length !== 1) {
+    throw new Error(`prerender: ${nombre} no tiene exactamente un <main id="contenido">`);
   }
   return plantilla
     .replace(TITULO, () => "")
