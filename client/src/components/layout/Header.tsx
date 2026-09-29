@@ -396,7 +396,7 @@ function PanelMovil({
         <motion.div
           ref={panelRef}
           id="menu-movil"
-          className="fixed inset-0 z-[100] flex flex-col bg-background lg:hidden"
+          className="fixed inset-0 z-[100] flex flex-col bg-background xl:hidden"
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
@@ -506,13 +506,13 @@ export default function Header() {
     return () => window.removeEventListener("scroll", alScroll);
   }, []);
 
-  // Al cruzar a escritorio el panel debe cerrarse. Si no, `lg:hidden` le pone
+  // Al cruzar a escritorio el panel debe cerrarse. Si no, `xl:hidden` le pone
   // `display: none` a mitad de la animación de salida, framer-motion nunca
   // recibe el fin de la animación y el nodo se queda montado: al girar la
   // tablet de vuelta a vertical reaparecería un panel invisible tapando la
   // página. Es el caso de una tablet rotando, no un caso de laboratorio.
   useEffect(() => {
-    const escritorio = window.matchMedia("(min-width: 1024px)");
+    const escritorio = window.matchMedia("(min-width: 1280px)");
     const alCambiar = (evento: MediaQueryListEvent | MediaQueryList) => {
       if (evento.matches) setMenuAbierto(false);
     };
@@ -555,9 +555,9 @@ export default function Header() {
           </div>
 
           {/* Navegación de escritorio, ópticamente centrada entre los laterales.
-              Desde `lg` (1024px), no `md`: a 768px el menú y las acciones no
-              caben, el logo se aplastaba a ancho 0 y Únete quedaba cortado. */}
-          <NavigationMenu className="hidden lg:flex" aria-label="Principal">
+              Desde `xl` (1280 px): con cinco rubros y la marca Próximamente, a 1024 no
+              cabían. */}
+          <NavigationMenu className="hidden xl:flex" aria-label="Principal">
             <NavigationMenuList>
               {NAVEGACION.map((entrada) => (
                 <EntradaEscritorio key={entrada.testid} entrada={entrada} ruta={ruta} />
@@ -566,7 +566,7 @@ export default function Header() {
           </NavigationMenu>
 
           {/* Acciones: un solo botón lleno en toda la cabecera */}
-          <div className="hidden flex-1 items-center justify-end gap-2 lg:flex">
+          <div className="hidden flex-1 items-center justify-end gap-2 xl:flex">
             <Button variant="ghost" asChild data-testid="button-login">
               <a href={URL_LOGIN}>Iniciar sesión</a>
             </Button>
@@ -586,7 +586,7 @@ export default function Header() {
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden"
+            className="xl:hidden"
             onClick={() => setMenuAbierto(true)}
             aria-expanded={menuAbierto}
             aria-controls="menu-movil"
