@@ -164,12 +164,36 @@ export function ScrollRestoration() {
         window.scrollTo(0, guardada);
       } else if (window.location.hash) {
         cancelarAncla.current = irAlAncla(window.location.hash);
+      } else {
+        window.scrollTo(0, 0);
+      }
+    };
+
+    // Carrera: el `scroll` del salto al ancla puede guardarse bajo el índice de
+    // la entrada ORIGEN antes de que `hashchange` selle la nueva. Se fija la
+    // posición previa en captura, antes de que el navegador actúe, para que
+    // Atrás restaure el valor real aunque el listener de scroll pise la clave.
+    const onClick = (evento: MouseEvent) => {
+      if (
+        evento.button !== 0 ||
+        evento.metaKey ||
+        evento.ctrlKey ||
+        evento.shiftKey ||
+        evento.altKey
+      ) {
+        return;
+      }
+      const enlace = (evento.target as Element).closest?.('a[href^="#"]');
+      if (enlace) {
+        positions.current.set(currentIndex.current, window.scrollY);
       }
     };
 
     window.addEventListener("hashchange", onHashChange);
+    document.addEventListener("click", onClick, true);
     return () => {
       window.removeEventListener("hashchange", onHashChange);
+      document.removeEventListener("click", onClick, true);
       cancelarAncla.current();
     };
   }, []);
