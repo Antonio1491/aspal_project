@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 const FONDOS = {
   blanco: "bg-background text-foreground",
   suave: "bg-fondo-suave text-foreground",
-  noche: "bg-noche text-noche-foreground",
+  noche: "bg-noche text-noche-foreground [--ring:42_93%_68%]",
 } as const;
 
 /**
