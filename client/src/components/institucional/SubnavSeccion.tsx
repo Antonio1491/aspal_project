@@ -32,7 +32,7 @@ export function SubnavSeccion() {
                   className={cn(
                     "flex min-h-11 items-center whitespace-nowrap border-b-2 px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
                     activo
-                      ? "border-secondary text-foreground"
+                      ? "border-secondary font-semibold text-foreground"
                       : "border-transparent text-muted-foreground hover:text-foreground",
                   )}
                   data-testid={`subnav-${destino.testid}`}
