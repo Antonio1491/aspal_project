@@ -4,6 +4,8 @@ import { Proximamente } from "@/components/layout/Proximamente";
 import { Button } from "@/components/ui/button";
 import {
   NAVEGACION,
+  destinosDe,
+  esDesplegable,
   URL_REGISTRO,
   type DestinoNav,
   type EntradaNav,
@@ -135,7 +137,7 @@ function ColumnaNav({ entrada }: { entrada: EntradaNav }) {
         {entrada.etiqueta}
       </h3>
       <ul className="mt-2">
-        {entrada.destinos?.map((destino) => (
+        {destinosDe(entrada).map((destino) => (
           <DestinoPie key={destino.testid} destino={destino} />
         ))}
       </ul>
@@ -149,7 +151,7 @@ export default function Footer() {
   // Servicios, Casos de éxito, Testimonios— que no coincidía con la del menú y
   // cuyas once anclas no existían en ninguna página. Heredándola no puede
   // volver a divergir ni a apuntar al vacío.
-  const columnas = NAVEGACION.filter((entrada) => entrada.destinos?.length);
+  const columnas = NAVEGACION.filter(esDesplegable);
 
   return (
     <footer className="border-t border-border bg-muted/30" data-testid="footer">

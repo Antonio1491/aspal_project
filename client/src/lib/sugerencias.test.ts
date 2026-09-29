@@ -57,6 +57,11 @@ describe("destinosSugeridos", () => {
     const ids = destinos.map((d) => d.testid);
     expect(new Set(ids).size).toBe(ids.length);
   });
+
+  it("no ofrece dos veces la misma URL", () => {
+    const hrefs = destinosSugeridos().map((d) => d.href);
+    expect(new Set(hrefs).size).toBe(hrefs.length);
+  });
 });
 
 describe("enlaceReporte", () => {

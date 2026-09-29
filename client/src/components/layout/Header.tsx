@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/navigation-menu";
 import {
   NAVEGACION,
+  destinosDe,
+  esDesplegable,
   URL_LOGIN,
   URL_REGISTRO,
   esEntradaActiva,
@@ -145,7 +147,7 @@ function EntradaEscritorio({ entrada, ruta }: { entrada: EntradaNav; ruta: strin
     />
   );
 
-  if (!entrada.destinos) {
+  if (!esDesplegable(entrada)) {
     return (
       <NavigationMenuItem>
         <div
@@ -180,7 +182,7 @@ function EntradaEscritorio({ entrada, ruta }: { entrada: EntradaNav; ruta: strin
         {/* 380px: cabe "Directorio de la Industria" junto a su marca de
             Próximamente sin partir la etiqueta en dos líneas. */}
         <ul className="grid w-[380px] gap-1 p-2">
-          {entrada.destinos.map((destino) => (
+          {destinosDe(entrada).map((destino) => (
             <DestinoEscritorio key={destino.testid} destino={destino} ruta={ruta} />
           ))}
         </ul>
@@ -341,7 +343,7 @@ function PanelMovil({
 
           <nav className="flex-1 overflow-y-auto px-4 py-4" aria-label="Principal">
             {NAVEGACION.map((entrada) =>
-              entrada.destinos ? (
+              esDesplegable(entrada) ? (
                 <GrupoMovil key={entrada.testid} entrada={entrada} ruta={ruta} />
               ) : (
                 <div
@@ -406,7 +408,7 @@ function GrupoMovil({ entrada, ruta }: { entrada: EntradaNav; ruta: string }) {
         />
       </CollapsibleTrigger>
       <CollapsibleContent className="space-y-1 pb-2 pl-1">
-        {entrada.destinos?.map((destino) => (
+        {destinosDe(entrada).map((destino) => (
           <DestinoMovil key={destino.testid} destino={destino} ruta={ruta} />
         ))}
       </CollapsibleContent>

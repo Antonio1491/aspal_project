@@ -6,7 +6,7 @@
  */
 
 import { CONTACTO, URL_SITIO } from "./marca";
-import { NAVEGACION, type DestinoNav } from "./navegacion";
+import { NAVEGACION, destinosDe, type DestinoNav } from "./navegacion";
 import { RUTAS_ESTATICAS, esRutaConocida } from "./rutas";
 
 /** Erratas que se perdonan: hasta dos letras cambiadas, sobrantes o faltantes. */
@@ -77,11 +77,17 @@ export function sugerirRuta(ruta: string): string | null {
   return resto.length > 0 && esRutaConocida(completa) ? completa : mejor;
 }
 
-/** Destinos del menú que existen, en su orden: las salidas que ofrece el 404. */
+/**
+ * Destinos del menú que existen, en su orden y sin repetir URL: la comunidad
+ * aparece en Recursos y en su propio rubro, y el 404 no debe ofrecerla dos veces.
+ */
 export function destinosSugeridos(): DestinoNav[] {
-  return NAVEGACION.flatMap((entrada) => entrada.destinos ?? []).filter((d) =>
-    Boolean(d.href),
-  );
+  const vistos = new Set<string>();
+  return NAVEGACION.flatMap(destinosDe).filter((destino) => {
+    if (!destino.href || vistos.has(destino.href)) return false;
+    vistos.add(destino.href);
+    return true;
+  });
 }
 
 /** Correo prellenado para avisar de un enlace roto: dirección y origen incluidos. */
