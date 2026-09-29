@@ -2,7 +2,12 @@ import logoLight from "@assets/ASPAL-para fondo claro_1763675327795.png";
 import logoDark from "@assets/ASPAL-para fondo oscuro_1763675345456.png";
 import { Proximamente } from "@/components/layout/Proximamente";
 import { Button } from "@/components/ui/button";
-import { NAVEGACION, URL_REGISTRO, type DestinoNav, type EntradaNav } from "@/lib/navegacion";
+import {
+  NAVEGACION,
+  URL_REGISTRO,
+  type DestinoNav,
+  type EntradaNav,
+} from "@/lib/navegacion";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import {
@@ -58,7 +63,11 @@ const contenedor = {
 
 const elemento = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.4, 0.25, 1] } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.25, 0.4, 0.25, 1] },
+  },
 };
 
 /** Un dato de contacto que se puede accionar: escribir, llamar o ubicar. */
@@ -138,7 +147,11 @@ function DestinoPie({ destino }: { destino: DestinoNav }) {
           <ArrowUpRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
         </a>
       ) : (
-        <Link href={destino.href} className={clases} data-testid={`footer-${destino.testid}`}>
+        <Link
+          href={destino.href}
+          className={clases}
+          data-testid={`footer-${destino.testid}`}
+        >
           {destino.etiqueta}
         </Link>
       )}
@@ -149,7 +162,10 @@ function DestinoPie({ destino }: { destino: DestinoNav }) {
 function ColumnaNav({ entrada }: { entrada: EntradaNav }) {
   return (
     <motion.div variants={elemento}>
-      <h3 className="font-semibold text-foreground" data-testid={`footer-${entrada.testid}`}>
+      <h3
+        className="font-semibold text-foreground"
+        data-testid={`footer-${entrada.testid}`}
+      >
         {entrada.etiqueta}
       </h3>
       <ul className="mt-2">
@@ -227,11 +243,18 @@ export default function Footer() {
 
           {/* Contacto */}
           <motion.div variants={elemento}>
-            <h3 className="font-semibold text-foreground" data-testid="text-footer-contact-title">
+            <h3
+              className="font-semibold text-foreground"
+              data-testid="text-footer-contact-title"
+            >
               Contacto
             </h3>
             <ul className="mt-2">
-              <Contacto icono={Mail} href={`mailto:${CORREO}`} testid="text-contact-email">
+              <Contacto
+                icono={Mail}
+                href={`mailto:${CORREO}`}
+                testid="text-contact-email"
+              >
                 {CORREO}
               </Contacto>
               <Contacto
@@ -270,8 +293,8 @@ export default function Footer() {
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           <p className="text-sm text-muted-foreground" data-testid="text-copyright">
-            © {new Date().getFullYear()} Asociaciones y Sociedades Profesionales de América
-            Latina. Todos los derechos reservados.
+            © {new Date().getFullYear()} Asociaciones y Sociedades Profesionales de
+            América Latina. Todos los derechos reservados.
           </p>
         </motion.div>
       </div>

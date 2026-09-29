@@ -24,9 +24,9 @@ fuera, aunque el componente se deja preparado para recibirla.
 `Header.tsx` contra las rutas de `App.tsx` y contra los `id` que existen de
 verdad en `client/src/pages` y `client/src/components/sections`:
 
-| Estado | Enlaces |
-| --- | --- |
-| Funcionan | `Blog`, `Podcast`, `Sé Miembro` |
+| Estado                          | Enlaces                                                                                                                                                                                               |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Funcionan                       | `Blog`, `Podcast`, `Sé Miembro`                                                                                                                                                                       |
 | Ancla a una sección inexistente | `Biblioteca Digital`, `Cursos en Línea`, `Documentos`, `Comunidad`, `Directorio de Miembros`, `Directorio de la Industria`, `Eventos y Grupos`, `Bolsa de Trabajo → Home / Candidatos / Reclutadores` |
 
 Ninguno de esos `id` (`#biblioteca`, `#cursos`, `#documentos`, `#comunidad`,
@@ -50,16 +50,16 @@ La divergencia es exactamente el patrón que `CLAUDE.md` describe para
 `comunidad.asociacionesprofesionales.org` se encontraron cuatro secciones
 reales que el menú daba por inexistentes:
 
-| Sección | Ruta verificada | Título servido |
-| --- | --- | --- |
-| Comunidad | `/comunidad/` | Comunidad ASPAL |
-| Directorio de Miembros | `/miembros/` | Miembros |
-| Eventos y Grupos | `/grupos/` | Grupos |
-| Cursos en Línea | `/cursos/` | Courses archivo |
-| Login | `/login/` | Login |
+| Sección                | Ruta verificada | Título servido  |
+| ---------------------- | --------------- | --------------- |
+| Comunidad              | `/comunidad/`   | Comunidad ASPAL |
+| Directorio de Miembros | `/miembros/`    | Miembros        |
+| Eventos y Grupos       | `/grupos/`      | Grupos          |
+| Cursos en Línea        | `/cursos/`      | Courses archivo |
+| Login                  | `/login/`       | Login           |
 
 Sin destino real: Biblioteca Digital, Documentos, Directorio de la Industria y
-Bolsa de Trabajo. `/calendario/` existe pero es un *Calendario Editorial*
+Bolsa de Trabajo. `/calendario/` existe pero es un _Calendario Editorial_
 interno: no sirve como agenda pública.
 
 El hallazgo invierte el balance del menú: **de 3 destinos vivos y 7 en gris,
@@ -72,7 +72,7 @@ partida doble.
 ## El público condiciona las decisiones
 
 ASPAL le habla a directivos y personal de asociaciones profesionales de
-Latinoamérica: gente que *gestiona* una asociación, no early adopters de SaaS.
+Latinoamérica: gente que _gestiona_ una asociación, no early adopters de SaaS.
 
 - **Vienen a resolver, no a explorar.** El menú debe mapear tareas —asociarse,
   capacitarse, entrar a la comunidad, buscar contenido— y no el organigrama.
@@ -125,20 +125,22 @@ descripción de una línea: el público no conoce el vocabulario interno del
 proyecto.
 
 **Aprende**
-| Ítem | Descripción | Destino |
-| --- | --- | --- |
-| Blog | Artículos y análisis del sector | `/blog` (interno) |
-| Podcast | Conversaciones con el sector | `/podcast` (interno) |
-| Cursos en Línea | Capacitación para tu equipo | `comunidad.…/cursos/` ↗ |
-| Biblioteca Digital | Documentos y recursos descargables | Próximamente |
+
+| Ítem               | Descripción                        | Destino                 |
+| ------------------ | ---------------------------------- | ----------------------- |
+| Blog               | Artículos y análisis del sector    | `/blog` (interno)       |
+| Podcast            | Conversaciones con el sector       | `/podcast` (interno)    |
+| Cursos en Línea    | Capacitación para tu equipo        | `comunidad.…/cursos/` ↗ |
+| Biblioteca Digital | Documentos y recursos descargables | Próximamente            |
 
 **Comunidad**
-| Ítem | Descripción | Destino |
-| --- | --- | --- |
-| Comunidad | El feed de la red ASPAL | `comunidad.…/comunidad/` ↗ |
-| Directorio de Miembros | Quién es quién en la red | `comunidad.…/miembros/` ↗ |
-| Eventos y Grupos | Agenda y grupos de trabajo | `comunidad.…/grupos/` ↗ |
-| Directorio de la Industria | Proveedores y aliados | Próximamente |
+
+| Ítem                       | Descripción                | Destino                    |
+| -------------------------- | -------------------------- | -------------------------- |
+| Comunidad                  | El feed de la red ASPAL    | `comunidad.…/comunidad/` ↗ |
+| Directorio de Miembros     | Quién es quién en la red   | `comunidad.…/miembros/` ↗  |
+| Eventos y Grupos           | Agenda y grupos de trabajo | `comunidad.…/grupos/` ↗    |
+| Directorio de la Industria | Proveedores y aliados      | Próximamente               |
 
 **Bolsa de Trabajo** — enlace simple, marcado Próximamente.
 
@@ -147,7 +149,7 @@ Notas de la reorganización:
 - **"Documentos" se absorbe en Biblioteca Digital.** Eran lo mismo con dos
   nombres.
 - **"Bolsa de Trabajo" deja de ser desplegable.** Sus tres hijos —Home,
-  Candidatos, Reclutadores— son navegación *interna* de una sección, no
+  Candidatos, Reclutadores— son navegación _interna_ de una sección, no
   navegación de sitio.
 - **"Eventos" no sube a primer nivel**, aunque el público lo justificaría: su
   destino real es una página titulada "Grupos". Prometer "Eventos" y aterrizar

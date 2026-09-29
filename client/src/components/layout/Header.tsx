@@ -54,7 +54,9 @@ function DestinoEscritorio({ destino, ruta }: { destino: DestinoNav; ruta: strin
           <span
             className={cn(
               "text-sm leading-none",
-              destino.href ? "font-medium text-foreground" : "font-medium text-muted-foreground",
+              destino.href
+                ? "font-medium text-foreground"
+                : "font-medium text-muted-foreground",
             )}
           >
             {destino.etiqueta}
@@ -67,7 +69,9 @@ function DestinoEscritorio({ destino, ruta }: { destino: DestinoNav; ruta: strin
           )}
           {!destino.href && <Proximamente className="ml-auto" />}
         </div>
-        <p className="mt-1 text-xs leading-snug text-muted-foreground">{destino.descripcion}</p>
+        <p className="mt-1 text-xs leading-snug text-muted-foreground">
+          {destino.descripcion}
+        </p>
       </div>
     </div>
   );
@@ -162,7 +166,10 @@ function EntradaEscritorio({ entrada, ruta }: { entrada: EntradaNav; ruta: strin
   return (
     <NavigationMenuItem>
       <NavigationMenuTrigger
-        className={cn("relative bg-transparent", activa && "font-semibold text-foreground")}
+        className={cn(
+          "relative bg-transparent",
+          activa && "font-semibold text-foreground",
+        )}
         data-testid={entrada.testid}
       >
         {entrada.etiqueta}
@@ -502,7 +509,11 @@ export default function Header() {
         </div>
       </div>
 
-      <PanelMovil abierto={menuAbierto} onCerrar={() => setMenuAbierto(false)} ruta={ruta} />
+      <PanelMovil
+        abierto={menuAbierto}
+        onCerrar={() => setMenuAbierto(false)}
+        ruta={ruta}
+      />
     </header>
   );
 }

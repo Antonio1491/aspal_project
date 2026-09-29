@@ -86,7 +86,9 @@ describe("catálogo de navegación", () => {
     // el icono deja de aportar y solo añade ruido visual.
     for (const entrada of NAVEGACION) {
       const iconos = (entrada.destinos ?? []).map((d) => d.icono);
-      expect(new Set(iconos).size, `iconos repetidos en "${entrada.etiqueta}"`).toBe(iconos.length);
+      expect(new Set(iconos).size, `iconos repetidos en "${entrada.etiqueta}"`).toBe(
+        iconos.length,
+      );
     }
   });
 
