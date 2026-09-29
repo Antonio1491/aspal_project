@@ -1,6 +1,7 @@
 import { AvisoPestanaNueva } from "@/components/layout/AvisoPestanaNueva";
 import { Proximamente } from "@/components/layout/Proximamente";
 import type { EnlaceContenido, Pilar } from "@/content/institucional/pilares";
+import { registrarEvento } from "@/lib/analitica";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Link } from "wouter";
 
@@ -24,6 +25,9 @@ function EnlacePilar({ enlace, testid }: { enlace: EnlaceContenido; testid: stri
         target="_blank"
         rel="noopener noreferrer"
         className={clases}
+        onClick={() =>
+          registrarEvento("salida_plataforma", { destino: enlace.href!, origen: "pilar" })
+        }
         data-testid={testid}
       >
         {enlace.etiqueta}

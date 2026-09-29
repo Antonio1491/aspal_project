@@ -1,6 +1,7 @@
 import iconoAspal from "@assets/Aspal-Icono_1763675356866.png";
 import { AvisoPestanaNueva } from "@/components/layout/AvisoPestanaNueva";
 import type { Perfil } from "@/content/institucional/equipo";
+import { registrarEvento } from "@/lib/analitica";
 import { Linkedin } from "lucide-react";
 
 /**
@@ -9,10 +10,11 @@ import { Linkedin } from "lucide-react";
  * llegar los retratos basta con rellenar `foto` en equipo.ts.
  */
 export function PerfilCard({ perfil }: { perfil: Perfil }) {
+  const testid = `perfil-${perfil.nombre.toLowerCase().split(" ")[0]}`;
   return (
     <article
       className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-background"
-      data-testid={`perfil-${perfil.nombre.toLowerCase().split(" ")[0]}`}
+      data-testid={testid}
     >
       <div className="flex aspect-[4/5] items-center justify-center bg-fondo-suave">
         {perfil.foto ? (
@@ -42,6 +44,13 @@ export function PerfilCard({ perfil }: { perfil: Perfil }) {
             href={perfil.linkedin}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() =>
+              registrarEvento("salida_plataforma", {
+                destino: perfil.linkedin!,
+                origen: "equipo",
+              })
+            }
+            data-testid={`${testid}-linkedin`}
             className="mt-auto inline-flex min-h-11 items-center gap-2 pt-4 font-medium text-primary underline underline-offset-4"
           >
             <Linkedin className="h-4 w-4" aria-hidden="true" />
