@@ -308,7 +308,7 @@ export const NAVEGACION: EntradaNav[] = [
     etiqueta: "Eventos",
     testid: "menu-eventos",
     icono: CalendarDays,
-    // PENDIENTE (PR E): href "/eventos", la página «Próximamente» con captura.
+    href: "/eventos",
   },
   {
     etiqueta: "Membresía",
@@ -323,11 +323,11 @@ export const NAVEGACION: EntradaNav[] = [
         externo: true,
         testid: "link-membresia-basica",
       },
-      // PENDIENTE (PR E): /unete.
       {
         etiqueta: "Únete gratis",
         descripcion: "Suscríbete sin costo",
         icono: UserPlus,
+        href: "/unete",
         testid: "link-unete",
       },
       {

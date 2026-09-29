@@ -1,4 +1,5 @@
 import logoLight from "@assets/ASPAL-para fondo claro_1763675327795.png";
+import { FormSuscripcion } from "@/components/forms/FormSuscripcion";
 import { AvisoPestanaNueva } from "@/components/layout/AvisoPestanaNueva";
 import { Proximamente } from "@/components/layout/Proximamente";
 import { Button } from "@/components/ui/button";
@@ -7,7 +8,6 @@ import { CONTACTO, NOMBRE_MARCA, REDES } from "@/lib/marca";
 import {
   ENTRADAS_PIE,
   NAVEGACION,
-  URL_REGISTRO,
   destinosPie,
   registrarClicDestino,
   type DestinoNav,
@@ -134,9 +134,6 @@ function ColumnaPie({ entrada }: { entrada: EntradaNav }) {
  *
  * Sin framer-motion: el pie entraba con `whileInView` y opacidad 0, así que en
  * el HTML prerenderizado (y para quien no ejecuta JavaScript) era invisible.
- *
- * PENDIENTE (PR E): el formulario del boletín en la fila de marca, cuando exista
- * /api/suscripcion (decisión D8).
  */
 export default function Footer() {
   const columnas = ENTRADAS_PIE.map((id) =>
@@ -148,6 +145,20 @@ export default function Footer() {
       <h2 className="sr-only">Pie de página</h2>
 
       <div className="container mx-auto px-4 py-16 md:px-8">
+        <div className="mb-12 grid gap-6 border-b border-border pb-12 lg:grid-cols-2 lg:items-end">
+          <div>
+            <h3
+              className="text-xl font-semibold text-foreground"
+              data-testid="text-footer-boletin"
+            >
+              Recibe el boletín de ASPAL
+            </h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Novedades del sector asociativo de América Latina, en tu correo.
+            </p>
+          </div>
+          <FormSuscripcion origen="footer" variante="compacto" />
+        </div>
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           {/* Marca */}
           <div className="sm:col-span-2 lg:col-span-3 xl:col-span-1">
@@ -222,17 +233,14 @@ export default function Footer() {
             {/* El pie es el final del recorrido: quien llega hasta aquí merece
                 encontrar la conversión sin volver arriba. */}
             <Button variant="secondary" className="mt-4 min-h-11 w-full" asChild>
-              <a
-                href={URL_REGISTRO}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/unete"
                 onClick={() => registrarEvento("click_unete", { origen: "footer" })}
                 data-testid="button-footer-registro"
               >
                 <UserPlus className="h-4 w-4" aria-hidden="true" />
                 Únete a ASPAL
-                <AvisoPestanaNueva />
-              </a>
+              </Link>
             </Button>
           </div>
         </div>
