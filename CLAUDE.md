@@ -78,7 +78,7 @@ typecheckear.
   `<Route>` ahí.
 - Datos con TanStack Query. La `queryKey` es el path del endpoint.
 - Alias: `@/` → `client/src/`, `@shared/` → `shared/`, `@assets/` →
-  `attached_assets/`.
+  `client/src/assets/`.
 - `data-testid` en elementos interactivos y significativos. Mantenlo.
 - **Los fallos de WordPress se propagan y salen como 5xx.** `client.ts` lanza y
   `routes.ts` traduce. No lo degrades a `[]`: el cliente necesita distinguir
@@ -115,7 +115,7 @@ antes de concluir que hay un fallo.
 
 ## Contexto que ahorra tiempo
 
-- `attached_assets/` pesa ~11 MB y está versionado. Los nombres con timestamp
+- `client/src/assets/` pesa ~11 MB y está versionado. Los nombres con timestamp
   (`image_1764775862961.png`) son heredados; los descriptivos son los buenos.
 - El proyecto nació en Replit y se migró a Vercel. Si encuentras restos de
   Replit, sobran.
