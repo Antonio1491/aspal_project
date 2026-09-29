@@ -2,31 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, X, Play } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAnimatedCounter } from "@/hooks/use-animated-counter";
 import { URL_REGISTRO } from "@/lib/navegacion";
 import heroDashboard from "@assets/generated_images/hero_dashboard_with_yellow_background.png";
-
-function AnimatedCounter({
-  end,
-  suffix = "",
-  label,
-}: {
-  end: number;
-  suffix?: string;
-  label: string;
-}) {
-  const { count, ref } = useAnimatedCounter(end, { duration: 2500, delay: 500 });
-
-  return (
-    <div ref={ref}>
-      <div className="text-3xl font-bold text-foreground">
-        {count.toLocaleString()}
-        {suffix}
-      </div>
-      <div className="text-sm text-muted-foreground">{label}</div>
-    </div>
-  );
-}
 
 function VideoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   return (
@@ -165,17 +142,10 @@ export default function HeroSection() {
               </motion.div>
             </motion.div>
 
-            {/* Stats - animated counters */}
-            <motion.div
-              className="flex items-center gap-8 pt-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
-            >
-              <AnimatedCounter end={500} suffix="+" label="Asociaciones activas" />
-              <div className="h-12 w-px bg-border"></div>
-              <AnimatedCounter end={50000} suffix="+" label="Miembros conectados" />
-            </motion.div>
+            {/* Aquí había dos contadores —"500+ asociaciones activas" y
+                            "50,000+ miembros"— que no correspondían a ninguna cifra real.
+                            Se retiraron en la Etapa 1; las cifras verificables van en la
+                            home institucional. */}
           </div>
 
           {/* Right side - Illustration - enters from below */}
