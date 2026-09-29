@@ -27,6 +27,7 @@ import {
   type EntradaNav,
   type GrupoNav,
 } from "@/lib/navegacion";
+import { AvisoPestanaNueva } from "@/components/layout/AvisoPestanaNueva";
 import { Proximamente } from "@/components/layout/Proximamente";
 import { registrarEvento } from "@/lib/analitica";
 import { indiceSiguiente } from "@/lib/teclado";
@@ -73,10 +74,13 @@ function DestinoEscritorio({ destino, ruta }: { destino: DestinoNav; ruta: strin
             {destino.etiqueta}
           </span>
           {destino.externo && (
-            <ArrowUpRight
-              className="h-3.5 w-3.5 shrink-0 text-muted-foreground"
-              aria-hidden="true"
-            />
+            <>
+              <ArrowUpRight
+                className="h-3.5 w-3.5 shrink-0 text-muted-foreground"
+                aria-hidden="true"
+              />
+              <AvisoPestanaNueva />
+            </>
           )}
           {!destino.href && <Proximamente className="ml-auto" />}
         </div>
@@ -246,7 +250,7 @@ function EntradaEscritorio({ entrada, ruta }: { entrada: EntradaNav; ruta: strin
       <NavigationMenuContent onKeyDown={alPulsarEnDesplegable}>
         {entrada.grupos ? (
           // Cuatro columnas en 60rem, sin pasar del ancho de la ventana menos
-          // el margen: a 1024 px ocupa 960 px, centrado bajo el menú.
+          // el margen: a 1280 px ocupa 960 px, centrado bajo el menú.
           <div className="grid w-[min(calc(100vw-4rem),60rem)] grid-cols-4 gap-2 p-3">
             {entrada.grupos.map((grupo) => (
               <GrupoEscritorio key={grupo.testid} grupo={grupo} ruta={ruta} />
@@ -300,6 +304,7 @@ function DestinoMovil({ destino, ruta }: { destino: DestinoNav; ruta: string }) 
         {icono}
         {destino.etiqueta}
         <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+        <AvisoPestanaNueva />
       </a>
     );
   }
@@ -468,6 +473,7 @@ function PanelMovil({
               >
                 <UserPlus className="h-4 w-4" />
                 Únete
+                <AvisoPestanaNueva />
               </a>
             </Button>
           </div>
@@ -614,6 +620,7 @@ export default function Header() {
               >
                 <UserPlus className="h-4 w-4" />
                 Únete
+                <AvisoPestanaNueva />
               </a>
             </Button>
           </div>

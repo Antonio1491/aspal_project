@@ -1,4 +1,5 @@
 import logoLight from "@assets/ASPAL-para fondo claro_1763675327795.png";
+import { AvisoPestanaNueva } from "@/components/layout/AvisoPestanaNueva";
 import { Proximamente } from "@/components/layout/Proximamente";
 import { Button } from "@/components/ui/button";
 import { registrarEvento } from "@/lib/analitica";
@@ -37,7 +38,7 @@ function Contacto({
   const contenido = (
     <>
       <Icono className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-      <span className="break-all">{children}</span>
+      <span className="[overflow-wrap:anywhere]">{children}</span>
     </>
   );
   const clases = "flex min-h-11 items-start gap-2 py-2 text-sm text-muted-foreground";
@@ -80,7 +81,7 @@ function DestinoPie({ destino }: { destino: DestinoNav }) {
         >
           {destino.etiqueta}
           <ArrowUpRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-          <span className="sr-only">(se abre en otra pestaña)</span>
+          <AvisoPestanaNueva />
         </a>
       ) : (
         <Link
@@ -147,9 +148,9 @@ export default function Footer() {
       <h2 className="sr-only">Pie de página</h2>
 
       <div className="container mx-auto px-4 py-16 md:px-8">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-6">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           {/* Marca */}
-          <div className="sm:col-span-2 lg:col-span-1">
+          <div className="sm:col-span-2 lg:col-span-3 xl:col-span-1">
             <img
               src={logoLight}
               alt={NOMBRE_MARCA}
@@ -230,6 +231,7 @@ export default function Footer() {
               >
                 <UserPlus className="h-4 w-4" aria-hidden="true" />
                 Únete a ASPAL
+                <AvisoPestanaNueva />
               </a>
             </Button>
           </div>

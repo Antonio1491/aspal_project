@@ -84,7 +84,7 @@ const NavigationMenuViewport = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Viewport>
 >(({ className, ...props }, ref) => (
   // Editado (Etapa 1, PR C): centrado bajo el menú en lugar de alineado a su
-  // borde izquierdo, para que el mega-menú de Recursos quepa a 1024 px.
+  // borde izquierdo, para que el mega-menú de Recursos quepa desde 1280 px.
   <div className={cn("absolute left-1/2 top-full flex -translate-x-1/2 justify-center")}>
     <NavigationMenuPrimitive.Viewport
       className={cn(

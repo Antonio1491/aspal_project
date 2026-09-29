@@ -1,4 +1,5 @@
 import iconoAspal from "@assets/Aspal-Icono_1763675356866.png";
+import { AvisoPestanaNueva } from "@/components/layout/AvisoPestanaNueva";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
@@ -29,7 +30,7 @@ function DestinoSugerido({ destino }: { destino: DestinoNav }) {
                 className="h-4 w-4 text-muted-foreground"
                 aria-hidden="true"
               />
-              <span className="sr-only">(se abre en otra pestaña)</span>
+              <AvisoPestanaNueva />
             </>
           )}
         </span>
