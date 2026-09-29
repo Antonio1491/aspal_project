@@ -84,7 +84,7 @@ export function ScrollRestoration() {
     const state = (window.history.state ?? {}) as IndexedState;
     const stamped = state[INDEX_KEY];
 
-    // Entrada nueva: sellarla e ir al top.
+    // Entrada nueva: sellarla e ir al ancla (si la URL trae #) o al top.
     if (typeof stamped !== "number") {
       counter.current += 1;
       currentIndex.current = counter.current;
@@ -95,8 +95,51 @@ export function ScrollRestoration() {
         window.location.href,
       );
 
-      window.scrollTo(0, 0);
-      return;
+      const hash = window.location.hash;
+      if (!hash) {
+        window.scrollTo(0, 0);
+        return;
+      }
+
+      // Con hash: ir al elemento. Primer intento síncrono (mismo motivo que en
+      // la restauración); si aún no existe, reintento por frames y, si nunca
+      // aparece, al top. Sin `behavior: smooth`, para respetar el movimiento
+      // reducido; `scroll-mt-*` del destino compensa el header fijo.
+      let id = hash.slice(1);
+      try {
+        id = decodeURIComponent(id);
+      } catch {
+        // hash mal codificado: se usa tal cual
+      }
+
+      let anchorAttempts = 0;
+      let anchorFrame = 0;
+
+      const goToAnchor = () => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView();
+          return true;
+        }
+        if (anchorAttempts >= 60) {
+          window.scrollTo(0, 0);
+          return true;
+        }
+        anchorAttempts += 1;
+        return false;
+      };
+
+      if (goToAnchor()) {
+        return;
+      }
+
+      const retryAnchor = () => {
+        if (goToAnchor()) return;
+        anchorFrame = window.requestAnimationFrame(retryAnchor);
+      };
+
+      anchorFrame = window.requestAnimationFrame(retryAnchor);
+      return () => window.cancelAnimationFrame(anchorFrame);
     }
 
     // Entrada ya conocida: viene de Atrás o Adelante.
