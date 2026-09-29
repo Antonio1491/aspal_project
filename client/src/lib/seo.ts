@@ -72,6 +72,12 @@ export const SEO: Record<RutaEstatica, MetaRuta> = {
       "Comunidad, conocimiento, tecnología y datos: los cuatro pilares con los que ASPAL profesionaliza el sector asociativo de América Latina.",
     indexable: true,
   },
+  "/nuestro-equipo": {
+    titulo: "Nuestro equipo · ASPAL",
+    descripcion:
+      "La operación diaria de ASPAL está a cargo de un equipo compacto y experimentado, respaldado por el secretariado compartido con WUP y ANPR.",
+    indexable: true,
+  },
 };
 
 export const SEO_404: MetaRuta = {

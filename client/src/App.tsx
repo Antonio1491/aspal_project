@@ -11,6 +11,7 @@ import { ScrollRestoration } from "@/components/layout/ScrollRestoration";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
 import Plataforma from "@/pages/plataforma";
 import QueHacemos from "@/pages/que-hacemos";
+import NuestroEquipo from "@/pages/nuestro-equipo";
 import Unete from "@/pages/unete";
 import Eventos from "@/pages/eventos";
 import Blog from "@/pages/blog";
@@ -37,6 +38,7 @@ const PAGINAS: Record<RutaEstatica, FunctionComponent> = {
   "/plataforma": Plataforma,
   "/unete": Unete,
   "/que-hacemos": QueHacemos,
+  "/nuestro-equipo": NuestroEquipo,
   "/eventos": Eventos,
 };
 
