@@ -13,9 +13,19 @@ import {
 } from "@shared/suscripcion/tipos";
 import { validarSuscripcion } from "@shared/suscripcion/validacion";
 import { CheckCircle2, Loader2 } from "lucide-react";
-import { useId, useRef, useState, type FormEvent } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 
 type Estado = "inactivo" | "enviando" | "exito" | "error";
+
+/** Orden visual de los campos: el foco va al primero con error en este orden. */
+const ORDEN_CAMPOS = [
+  "nombre",
+  "pais",
+  "organizacion",
+  "cargo",
+  "correo",
+  "consentimiento",
+] as const;
 
 interface Props {
   origen: OrigenSuscripcion;
@@ -34,13 +44,48 @@ interface Props {
 export function FormSuscripcion({ origen, variante, tono = "claro" }: Props) {
   const id = useId();
   const formRef = useRef<HTMLFormElement>(null);
+  const exitoRef = useRef<HTMLDivElement>(null);
+  const enviandoRef = useRef(false);
+  const debeEnfocarRef = useRef(false);
   const [estado, setEstado] = useState<Estado>("inactivo");
   const [errores, setErrores] = useState<ErroresSuscripcion>({});
   const completo = variante === "completo";
   const oscuro = tono === "noche";
 
+  function campoEnDom(nombre: string) {
+    return formRef.current?.querySelector<HTMLElement>(`[name="${nombre}"]`) ?? null;
+  }
+
+  // El foco se mueve al primer error una vez pintado, cuando aria-invalid y
+  // aria-describedby ya están en el DOM.
+  useEffect(() => {
+    if (!debeEnfocarRef.current) return;
+    debeEnfocarRef.current = false;
+    const primero = ORDEN_CAMPOS.find((nombre) => errores[nombre] && campoEnDom(nombre));
+    if (primero) campoEnDom(primero)?.focus();
+  }, [errores]);
+
+  // Al confirmar el envío el formulario desaparece: el foco pasa al aviso.
+  useEffect(() => {
+    if (estado === "exito") exitoRef.current?.focus();
+  }, [estado]);
+
+  /** Muestra los errores; si ninguno cae en un campo visible, avisa en general. */
+  function mostrarErrores(lista: ErroresSuscripcion) {
+    const visible = ORDEN_CAMPOS.some((nombre) => lista[nombre] && campoEnDom(nombre));
+    if (!visible) {
+      setErrores({});
+      setEstado("error");
+      return;
+    }
+    debeEnfocarRef.current = true;
+    setEstado("inactivo");
+    setErrores(lista);
+  }
+
   async function alEnviar(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
+    if (enviandoRef.current) return;
     const formulario = new FormData(evento.currentTarget);
     const datos = {
       correo: formulario.get("correo"),
@@ -55,37 +100,33 @@ export function FormSuscripcion({ origen, variante, tono = "claro" }: Props) {
 
     const local = validarSuscripcion(datos);
     if (!local.ok) {
-      setErrores(local.errores);
-      enfocarPrimerError(local.errores);
+      mostrarErrores(local.errores);
       return;
     }
 
     setErrores({});
+    enviandoRef.current = true;
     setEstado("enviando");
     const respuesta = await enviarSuscripcion(datos);
+    enviandoRef.current = false;
     if (respuesta.estado === "exito") {
       setEstado("exito");
       registrarEvento("signup_suscriptor", { origen });
     } else if (respuesta.estado === "invalido") {
-      setEstado("inactivo");
-      setErrores(respuesta.errores);
-      enfocarPrimerError(respuesta.errores);
+      mostrarErrores(respuesta.errores);
     } else {
       setEstado("error");
     }
   }
 
-  function enfocarPrimerError(lista: ErroresSuscripcion) {
-    const primero = Object.keys(lista)[0];
-    if (!primero) return;
-    formRef.current?.querySelector<HTMLElement>(`[name="${primero}"]`)?.focus();
-  }
-
   if (estado === "exito") {
     return (
       <div
+        ref={exitoRef}
+        tabIndex={-1}
         role="status"
         className={cn(
+          "outline-none focus-visible:ring-2 focus-visible:ring-ring",
           "flex items-start gap-3 rounded-2xl p-5",
           oscuro ? "bg-white/10 text-white" : "bg-accent text-foreground",
         )}
@@ -109,12 +150,16 @@ export function FormSuscripcion({ origen, variante, tono = "claro" }: Props) {
     id: `${id}-${nombre}`,
     name: nombre,
     "aria-invalid": errores[nombre] ? true : undefined,
+    "aria-required": (nombre === "organizacion" || nombre === "cargo"
+      ? undefined
+      : "true") as "true" | undefined,
     "aria-describedby": errores[nombre] ? `${id}-${nombre}-error` : undefined,
     "data-testid": `input-suscripcion-${nombre}`,
   });
   const error = (nombre: CampoSuscripcion) =>
     errores[nombre] ? (
       <p
+        role="alert"
         id={`${id}-${nombre}-error`}
         className={cn(ayudaError, oscuro && "text-secondary")}
         data-testid={`error-suscripcion-${nombre}`}
@@ -132,6 +177,12 @@ export function FormSuscripcion({ origen, variante, tono = "claro" }: Props) {
       aria-busy={estado === "enviando"}
       data-testid={`form-suscripcion-${origen}`}
     >
+      {completo && (
+        <p className={cn("text-sm", oscuro ? "text-white" : "text-muted-foreground")}>
+          Los campos sin «(opcional)» son obligatorios.
+        </p>
+      )}
+
       {completo && (
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
@@ -200,8 +251,9 @@ export function FormSuscripcion({ origen, variante, tono = "claro" }: Props) {
 
       {/* Campo trampa: invisible y fuera del orden de tabulación. Solo lo
           rellenan los bots. */}
+      {/* inert: fuera del árbol de accesibilidad y del foco sin aria-hidden. */}
       <div
-        aria-hidden="true"
+        {...{ inert: "" }}
         className="absolute left-[-10000px] h-px w-px overflow-hidden"
       >
         <label htmlFor={`${id}-${CAMPO_TRAMPA}`}>No rellenes este campo</label>
@@ -226,6 +278,7 @@ export function FormSuscripcion({ origen, variante, tono = "claro" }: Props) {
             name="consentimiento"
             value="si"
             className="mt-0.5 h-5 w-5 shrink-0 accent-[hsl(var(--primary))]"
+            aria-required="true"
             aria-invalid={errores.consentimiento ? true : undefined}
             aria-describedby={
               errores.consentimiento ? `${id}-consentimiento-error` : undefined
@@ -261,12 +314,15 @@ export function FormSuscripcion({ origen, variante, tono = "claro" }: Props) {
         type="submit"
         variant="secondary"
         className="min-h-11 w-full px-6 sm:w-auto"
-        disabled={estado === "enviando"}
+        aria-disabled={estado === "enviando"}
         data-testid="button-suscripcion-enviar"
       >
         {estado === "enviando" && <Loader2 className="animate-spin" aria-hidden="true" />}
         {estado === "enviando" ? "Enviando…" : completo ? "Unirme gratis" : "Suscribirme"}
       </Button>
+      <p className="sr-only" aria-live="polite">
+        {estado === "enviando" ? "Enviando…" : ""}
+      </p>
     </form>
   );
 }

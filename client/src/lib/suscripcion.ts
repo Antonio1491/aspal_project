@@ -18,6 +18,8 @@ export async function enviarSuscripcion(
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(datos),
+      // Tiempo máximo: si el servidor no contesta, el formulario no se queda colgado.
+      signal: AbortSignal.timeout(10000),
     });
     if (respuesta.ok) return { estado: "exito" };
     if (respuesta.status === 400) {

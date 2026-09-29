@@ -50,4 +50,10 @@ describe("enviarSuscripcion", () => {
     } as unknown as Response);
     expect(await enviarSuscripcion({})).toEqual({ estado: "invalido", errores: {} });
   });
+
+  it("lleva un tiempo máximo y trata su vencimiento como error", async () => {
+    fetchMock.mockRejectedValueOnce(new DOMException("timeout", "TimeoutError"));
+    expect(await enviarSuscripcion({})).toEqual({ estado: "error" });
+    expect(fetchMock.mock.calls[0][1].signal).toBeInstanceOf(AbortSignal);
+  });
 });
