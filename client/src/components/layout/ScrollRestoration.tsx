@@ -9,6 +9,49 @@ interface IndexedState {
 }
 
 /**
+ * Lleva al elemento del hash. Primer intento síncrono (mismo motivo que en la
+ * restauración); si aún no existe, reintento por frames y, si nunca aparece,
+ * al top. Sin `behavior: smooth`, para respetar el movimiento reducido;
+ * `scroll-mt-*` del destino compensa el header fijo. Devuelve la función que
+ * cancela el reintento.
+ */
+function irAlAncla(hash: string): () => void {
+  let id = hash.slice(1);
+  try {
+    id = decodeURIComponent(id);
+  } catch {
+    // hash mal codificado: se usa tal cual
+  }
+
+  let intentos = 0;
+  let frame = 0;
+
+  const intentar = () => {
+    const elemento = document.getElementById(id);
+    if (elemento) {
+      elemento.scrollIntoView();
+      return true;
+    }
+    if (intentos >= 60) {
+      window.scrollTo(0, 0);
+      return true;
+    }
+    intentos += 1;
+    return false;
+  };
+
+  if (!intentar()) {
+    const reintentar = () => {
+      if (intentar()) return;
+      frame = window.requestAnimationFrame(reintentar);
+    };
+    frame = window.requestAnimationFrame(reintentar);
+  }
+
+  return () => window.cancelAnimationFrame(frame);
+}
+
+/**
  * Restauración de scroll entre rutas.
  *
  * `ScrollToTop.tsx` es el botón flotante — el nombre estaba ocupado.
@@ -80,7 +123,59 @@ export function ScrollRestoration() {
     };
   }, []);
 
+  /** cancelación del reintento de ancla en curso (efecto de ruta o hashchange) */
+  const cancelarAncla = useRef<() => void>(() => {});
+
+  // Anclas internas (<a href="#…">) dentro de la misma página. Wouter solo mira
+  // el pathname, así que el efecto de ruta no corre; pero el navegador SÍ crea
+  // una entrada de historial sin sellar. Sin este listener, esa entrada
+  // quedaría sin índice y al volver con Atrás no habría posición que restaurar.
+  //
+  // Dos escenarios distintos:
+  // - Atrás/Adelante DENTRO de la página (entre entradas con y sin hash, ya
+  //   selladas): solo cambia el hash. Se restaura la posición guardada de esa
+  //   entrada o, si no la hay, se va al ancla.
+  // - Atrás DESDE OTRA página hacia una entrada con hash: cambia el pathname,
+  //   lo resuelve el efecto de ruta de abajo.
   useEffect(() => {
+    const onHashChange = () => {
+      const state = (window.history.state ?? {}) as IndexedState;
+      const stamped = state[INDEX_KEY];
+
+      // Clic en un ancla: entrada nueva. Se sella y NO se mueve el scroll: el
+      // navegador ya saltó al ancla.
+      if (typeof stamped !== "number") {
+        counter.current += 1;
+        currentIndex.current = counter.current;
+        window.history.replaceState(
+          { ...state, [INDEX_KEY]: currentIndex.current },
+          "",
+          window.location.href,
+        );
+        return;
+      }
+
+      currentIndex.current = stamped;
+      counter.current = Math.max(counter.current, stamped);
+      cancelarAncla.current();
+
+      const guardada = positions.current.get(stamped);
+      if (guardada !== undefined) {
+        window.scrollTo(0, guardada);
+      } else if (window.location.hash) {
+        cancelarAncla.current = irAlAncla(window.location.hash);
+      }
+    };
+
+    window.addEventListener("hashchange", onHashChange);
+    return () => {
+      window.removeEventListener("hashchange", onHashChange);
+      cancelarAncla.current();
+    };
+  }, []);
+
+  useEffect(() => {
+    cancelarAncla.current();
     const state = (window.history.state ?? {}) as IndexedState;
     const stamped = state[INDEX_KEY];
 
@@ -95,51 +190,14 @@ export function ScrollRestoration() {
         window.location.href,
       );
 
-      const hash = window.location.hash;
-      if (!hash) {
+      if (!window.location.hash) {
         window.scrollTo(0, 0);
         return;
       }
 
-      // Con hash: ir al elemento. Primer intento síncrono (mismo motivo que en
-      // la restauración); si aún no existe, reintento por frames y, si nunca
-      // aparece, al top. Sin `behavior: smooth`, para respetar el movimiento
-      // reducido; `scroll-mt-*` del destino compensa el header fijo.
-      let id = hash.slice(1);
-      try {
-        id = decodeURIComponent(id);
-      } catch {
-        // hash mal codificado: se usa tal cual
-      }
-
-      let anchorAttempts = 0;
-      let anchorFrame = 0;
-
-      const goToAnchor = () => {
-        const element = document.getElementById(id);
-        if (element) {
-          element.scrollIntoView();
-          return true;
-        }
-        if (anchorAttempts >= 60) {
-          window.scrollTo(0, 0);
-          return true;
-        }
-        anchorAttempts += 1;
-        return false;
-      };
-
-      if (goToAnchor()) {
-        return;
-      }
-
-      const retryAnchor = () => {
-        if (goToAnchor()) return;
-        anchorFrame = window.requestAnimationFrame(retryAnchor);
-      };
-
-      anchorFrame = window.requestAnimationFrame(retryAnchor);
-      return () => window.cancelAnimationFrame(anchorFrame);
+      const cancelar = irAlAncla(window.location.hash);
+      cancelarAncla.current = cancelar;
+      return cancelar;
     }
 
     // Entrada ya conocida: viene de Atrás o Adelante.
@@ -149,6 +207,13 @@ export function ScrollRestoration() {
     const target = positions.current.get(stamped) ?? 0;
 
     if (target === 0) {
+      // Sin posición guardada (p. ej. F5 sobre `/que-hacemos#tecnologia`): si
+      // la URL trae hash, al ancla; si no, al top.
+      if (window.location.hash) {
+        const cancelar = irAlAncla(window.location.hash);
+        cancelarAncla.current = cancelar;
+        return cancelar;
+      }
       window.scrollTo(0, 0);
       return;
     }
