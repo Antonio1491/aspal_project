@@ -52,7 +52,7 @@ transformada)—. Importa `TransformedPost`.
 
 ```bash
 npm run dev      # Express + Vite HMR en :5000
-npm run build    # cliente -> dist/public, servidor -> dist/
+npm run build    # cliente -> dist/public, prerender por ruta, servidor -> dist/
 npm run check    # typecheck: client + server + shared + api
 ```
 
@@ -76,8 +76,9 @@ typecheckear.
   código también.
 - Rutas con `wouter`. Añadir una página = añadir su ruta en
   `client/src/lib/rutas.ts` (`RUTAS_ESTATICAS` o `RUTAS_DINAMICAS`) y su
-  componente en `PAGINAS` de `client/src/App.tsx`; TypeScript exige los dos.
-  Un `<Route>` suelto se salta el test de enlaces muertos.
+  componente en `PAGINAS` de `client/src/App.tsx`; TypeScript exige los dos,
+  y su título y descripción en `SEO` de `client/src/lib/seo.ts` (también lo
+  exige TypeScript). Un `<Route>` suelto se salta el test de enlaces muertos.
 - Datos con TanStack Query. La `queryKey` es el path del endpoint.
 - Alias: `@/` → `client/src/`, `@shared/` → `shared/`, `@assets/` →
   `client/src/assets/`.
@@ -108,7 +109,11 @@ npm run check
 PORT=5001 npm run dev
 curl http://localhost:5001/api/health
 curl "http://localhost:5001/api/posts?per_page=2"
+curl -s -o /dev/null -w "%{http_code}\n" http://localhost:5001/no-existe   # en dev: 200 (Vite); en build: 404
 ```
+
+El 404 real solo existe en el build (`npm run build && PORT=5002 npm start`);
+el servidor de desarrollo de Vite responde 200 a todo.
 
 Y para cambios de UI, abrir la ruta afectada en el navegador y mirarla. Las
 secciones usan animaciones de entrada de framer-motion: una captura tomada al

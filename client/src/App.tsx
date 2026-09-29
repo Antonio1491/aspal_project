@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { MotionConfig } from "framer-motion";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
+import { CabeceraRuta } from "@/components/layout/CabeceraRuta";
 import { ScrollRestoration } from "@/components/layout/ScrollRestoration";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
 import Plataforma from "@/pages/plataforma";
@@ -60,6 +61,7 @@ function App() {
       <MotionConfig reducedMotion="user">
         <TooltipProvider>
           <Toaster />
+          <CabeceraRuta />
           <ScrollRestoration />
           <ErrorBoundary>
             <Router />

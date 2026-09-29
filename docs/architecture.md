@@ -117,10 +117,17 @@ No se requieren credenciales — la API de WordPress es pública.
 
 Vercel, según `vercel.json`:
 
-- `buildCommand`: `npm run build`
+- `buildCommand`: `npm run build`. Son dos builds de Vite (cliente y `--ssr`) más
+  `scripts/prerender.mjs`, que escribe un HTML por ruta estática, `404.html`,
+  `spa.html`, `sitemap.xml` y `robots.txt`.
 - `outputDirectory`: `dist/public`
+- `cleanUrls`: `/blog` sirve `blog.html`
+- `trailingSlash: false`: `/blog/` redirige a `/blog` (308)
 - `/api/(.*)` → la función serverless
-- `/(.*)` → `index.html` (fallback de SPA)
+- `/blog/:slug` → `spa.html` (el shell vacío; el cliente carga el artículo)
+- Todo lo demás → `404.html` con código 404. Ya no hay fallback de SPA.
+
+Express en producción (`server/static.ts`) aplica las mismas reglas.
 
 Ramas: `main` → producción · `staging` → preview.
 

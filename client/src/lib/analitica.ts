@@ -13,7 +13,8 @@ export type EventoAnalitica =
   | "download_dossier"
   | "click_mapa_ruta"
   | "click_menu"
-  | "salida_plataforma";
+  | "salida_plataforma"
+  | "error_404";
 
 export type DatosEvento = Record<string, string | number | boolean>;
 

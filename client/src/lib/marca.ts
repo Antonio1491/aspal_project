@@ -14,6 +14,12 @@ export const NOMBRE_MARCA = `${NOMBRE_CORTO} — ${NOMBRE_COMPLETO}`;
 // Es el `<title>` por defecto del sitio.
 export const TITULO_SITIO = `${NOMBRE_CORTO} · ${NOMBRE_COMPLETO}`;
 
+/**
+ * Dominio canónico. El apex (sin www) responde 307 hacia aquí, así que
+ * canonical, Open Graph y sitemap apuntan a este y no a una redirección.
+ */
+export const URL_SITIO = "https://www.asociacionesprofesionales.org";
+
 export const CONTACTO = {
   correo: "vinculacion@asociacionesprofesionales.org",
   telefono: "+52 999 163 4080",

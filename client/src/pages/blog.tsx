@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import Header from "@/components/layout/Header";
@@ -43,10 +42,6 @@ function BlogCardSkeleton({ index }: { index: number }) {
 }
 
 export default function Blog() {
-  useEffect(() => {
-    document.title = "Blog · ASPAL";
-  }, []);
-
   const {
     data: posts,
     isLoading,

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { RUTAS_ESTATICAS, esRutaConocida } from "./rutas";
+import { RUTAS_ESTATICAS, esRutaConocida, rutaCanonica } from "./rutas";
 
 describe("esRutaConocida", () => {
   it("conoce cada ruta estática", () => {
@@ -33,5 +33,18 @@ describe("esRutaConocida", () => {
       false,
     );
     expect(esRutaConocida("")).toBe(false);
+  });
+});
+
+describe("rutaCanonica", () => {
+  it("devuelve la forma en minúsculas de una ruta estática", () => {
+    expect(rutaCanonica("/Blog")).toBe("/blog");
+    expect(rutaCanonica("/PODCAST")).toBe("/podcast");
+  });
+
+  it("devuelve null si ya es canónica o no es estática", () => {
+    expect(rutaCanonica("/blog")).toBeNull();
+    expect(rutaCanonica("/Blog/Mi-Articulo")).toBeNull();
+    expect(rutaCanonica("/Nosotros")).toBeNull();
   });
 });
