@@ -1,318 +1,301 @@
-import { motion } from "framer-motion";
-import {
-  Facebook,
-  Twitter,
-  Linkedin,
-  Instagram,
-  Mail,
-  Phone,
-  MapPin,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
 import logoLight from "@assets/ASPAL-para fondo claro_1763675327795.png";
 import logoDark from "@assets/ASPAL-para fondo oscuro_1763675345456.png";
+import { Proximamente } from "@/components/layout/Proximamente";
+import { Button } from "@/components/ui/button";
+import {
+  NAVEGACION,
+  URL_REGISTRO,
+  type DestinoNav,
+  type EntradaNav,
+} from "@/lib/navegacion";
+import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+import {
+  ArrowUpRight,
+  Facebook,
+  Instagram,
+  Linkedin,
+  Mail,
+  MapPin,
+  Phone,
+  Twitter,
+  UserPlus,
+  type LucideIcon,
+} from "lucide-react";
+import { Link } from "wouter";
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
+const REDES = [
+  {
+    nombre: "Facebook",
+    icono: Facebook,
+    href: "https://www.facebook.com/asociacionesprofesionales",
+    testid: "button-social-facebook",
   },
+  {
+    nombre: "X",
+    icono: Twitter,
+    href: "https://x.com/ASPALATAM",
+    testid: "button-social-twitter",
+  },
+  {
+    nombre: "LinkedIn",
+    icono: Linkedin,
+    // Sin `?viewAsMember=true`: ese parámetro se cuela al copiar la URL desde
+    // una sesión iniciada y no pinta nada en un enlace público.
+    href: "https://www.linkedin.com/company/asociaciones-profesionales-aspal/",
+    testid: "button-social-linkedin",
+  },
+  {
+    nombre: "Instagram",
+    icono: Instagram,
+    href: "https://www.instagram.com/aspalatam/",
+    testid: "button-social-instagram",
+  },
+];
+
+const CORREO = "vinculacion@asociacionesprofesionales.org";
+const TELEFONO = "+52 999 163 4080";
+
+const contenedor = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
 };
 
-const itemVariants = {
+const elemento = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.5,
-      ease: [0.25, 0.4, 0.25, 1],
-    },
+    transition: { duration: 0.5, ease: [0.25, 0.4, 0.25, 1] },
   },
 };
 
-export default function Footer() {
-  const [email, setEmail] = useState("");
+/** Un dato de contacto que se puede accionar: escribir, llamar o ubicar. */
+function Contacto({
+  icono: Icono,
+  href,
+  children,
+  testid,
+}: {
+  icono: LucideIcon;
+  href?: string;
+  children: React.ReactNode;
+  testid: string;
+}) {
+  const contenido = (
+    <>
+      <Icono className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+      <span className="break-all">{children}</span>
+    </>
+  );
 
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Newsletter subscription:", email);
-    setEmail("");
-  };
+  if (!href) {
+    return (
+      <li
+        className="flex min-h-11 items-start gap-2 py-2 text-sm text-muted-foreground"
+        data-testid={testid}
+      >
+        {contenido}
+      </li>
+    );
+  }
 
   return (
-    <footer className="bg-muted/30 border-t border-border" data-testid="footer">
-      <div className="container mx-auto px-4 md:px-8 py-16">
+    <li>
+      <a
+        href={href}
+        className="flex min-h-11 items-start gap-2 py-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+        data-testid={testid}
+      >
+        {contenido}
+      </a>
+    </li>
+  );
+}
+
+/** Un destino del pie. Sin `href` se anuncia, pero no se enlaza. */
+function DestinoPie({ destino }: { destino: DestinoNav }) {
+  const clases =
+    "flex min-h-11 items-center gap-1.5 py-2 text-sm text-muted-foreground transition-colors hover:text-primary";
+
+  if (!destino.href) {
+    return (
+      <li>
+        <div
+          className={cn(clases, "opacity-70")}
+          aria-disabled="true"
+          data-testid={`footer-${destino.testid}`}
+        >
+          {destino.etiqueta}
+          <Proximamente />
+        </div>
+      </li>
+    );
+  }
+
+  return (
+    <li>
+      {destino.externo ? (
+        <a
+          href={destino.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={clases}
+          data-testid={`footer-${destino.testid}`}
+        >
+          {destino.etiqueta}
+          <ArrowUpRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+        </a>
+      ) : (
+        <Link
+          href={destino.href}
+          className={clases}
+          data-testid={`footer-${destino.testid}`}
+        >
+          {destino.etiqueta}
+        </Link>
+      )}
+    </li>
+  );
+}
+
+function ColumnaNav({ entrada }: { entrada: EntradaNav }) {
+  return (
+    <motion.div variants={elemento}>
+      <h3
+        className="font-semibold text-foreground"
+        data-testid={`footer-${entrada.testid}`}
+      >
+        {entrada.etiqueta}
+      </h3>
+      <ul className="mt-2">
+        {entrada.destinos?.map((destino) => (
+          <DestinoPie key={destino.testid} destino={destino} />
+        ))}
+      </ul>
+    </motion.div>
+  );
+}
+
+export default function Footer() {
+  // Las columnas de navegación salen de `navegacion.ts`, la misma fuente que
+  // pinta la cabecera. Antes el pie declaraba su propia taxonomía —Inicio,
+  // Servicios, Casos de éxito, Testimonios— que no coincidía con la del menú y
+  // cuyas once anclas no existían en ninguna página. Heredándola no puede
+  // volver a divergir ni a apuntar al vacío.
+  const columnas = NAVEGACION.filter((entrada) => entrada.destinos?.length);
+
+  return (
+    <footer className="border-t border-border bg-muted/30" data-testid="footer">
+      <h2 className="sr-only">Pie de página</h2>
+      <div className="container mx-auto px-4 py-16 md:px-8">
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12"
-          variants={containerVariants}
+          className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4"
+          variants={contenedor}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
         >
-          {/* Company info */}
-          <motion.div className="space-y-4" variants={itemVariants}>
+          {/* Marca */}
+          <motion.div variants={elemento}>
             <img
               src={logoLight}
               alt="Aspal"
-              className="h-8 w-auto mb-4 dark:hidden"
+              className="h-8 w-auto dark:hidden"
               data-testid="img-footer-logo-light"
             />
             <img
               src={logoDark}
               alt="Aspal"
-              className="h-8 w-auto mb-4 hidden dark:block"
+              className="hidden h-8 w-auto dark:block"
               data-testid="img-footer-logo-dark"
             />
-            <p className="text-sm text-muted-foreground">
-              Transformando organizaciones sin fines de lucro en comunidades digitales
-              prósperas.
+            <p className="mt-4 text-sm text-muted-foreground">
+              Conectamos a las asociaciones profesionales de América Latina: formación,
+              comunidad y recursos para quienes las dirigen.
             </p>
-            <div className="flex gap-3">
-              <Button
-                size="icon"
-                variant="ghost"
-                className="hover-elevate"
-                asChild
-                data-testid="button-social-facebook"
-              >
-                <a
-                  href="https://www.facebook.com/asociacionesprofesionales"
-                  target="_blank"
-                  rel="noopener noreferrer"
+            <div className="mt-4 flex gap-1">
+              {REDES.map((red) => (
+                <Button
+                  key={red.testid}
+                  size="icon"
+                  variant="ghost"
+                  className="h-11 w-11"
+                  asChild
+                  data-testid={red.testid}
                 >
-                  <Facebook className="w-5 h-5" />
-                </a>
-              </Button>
-              <Button
-                size="icon"
-                variant="ghost"
-                className="hover-elevate"
-                asChild
-                data-testid="button-social-twitter"
-              >
-                <a
-                  href="https://x.com/ASPALATAM"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Twitter className="w-5 h-5" />
-                </a>
-              </Button>
-              <Button
-                size="icon"
-                variant="ghost"
-                className="hover-elevate"
-                asChild
-                data-testid="button-social-linkedin"
-              >
-                <a
-                  href="https://www.linkedin.com/company/asociaciones-profesionales-aspal/?viewAsMember=true"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Linkedin className="w-5 h-5" />
-                </a>
-              </Button>
-              <Button
-                size="icon"
-                variant="ghost"
-                className="hover-elevate"
-                asChild
-                data-testid="button-social-instagram"
-              >
-                <a
-                  href="https://www.instagram.com/aspalatam/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Instagram className="w-5 h-5" />
-                </a>
-              </Button>
+                  <a
+                    href={red.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`ASPAL en ${red.nombre}`}
+                  >
+                    <red.icono className="h-5 w-5" aria-hidden="true" />
+                  </a>
+                </Button>
+              ))}
             </div>
           </motion.div>
 
-          {/* Quick links */}
-          <motion.div className="space-y-4" variants={itemVariants}>
-            <h4
-              className="font-semibold text-foreground"
-              data-testid="text-footer-nav-title"
-            >
-              Navegación
-            </h4>
-            <ul className="space-y-2">
-              <li>
-                <a
-                  href="#inicio"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  data-testid="link-nav-home"
-                >
-                  Inicio
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#servicios"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  data-testid="link-nav-services"
-                >
-                  Servicios
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#casos"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  data-testid="link-nav-cases"
-                >
-                  Casos de éxito
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#testimonios"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  data-testid="link-nav-testimonials"
-                >
-                  Testimonios
-                </a>
-              </li>
-            </ul>
-          </motion.div>
+          {columnas.map((entrada) => (
+            <ColumnaNav key={entrada.testid} entrada={entrada} />
+          ))}
 
-          {/* Services */}
-          <motion.div className="space-y-4" variants={itemVariants}>
-            <h4
-              className="font-semibold text-foreground"
-              data-testid="text-footer-services-title"
-            >
-              Servicios
-            </h4>
-            <ul className="space-y-2">
-              <li>
-                <a
-                  href="#membresias"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  data-testid="link-service-memberships"
-                >
-                  Gestión de Membresías
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#comunidad"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  data-testid="link-service-community"
-                >
-                  Comunidad en Línea
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#cursos"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  data-testid="link-service-courses"
-                >
-                  Certificaciones
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#marketing"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  data-testid="link-service-marketing"
-                >
-                  Marketing Digital
-                </a>
-              </li>
-            </ul>
-          </motion.div>
-
-          {/* Contact & Newsletter */}
-          <motion.div className="space-y-4" variants={itemVariants}>
-            <h4
+          {/* Contacto */}
+          <motion.div variants={elemento}>
+            <h3
               className="font-semibold text-foreground"
               data-testid="text-footer-contact-title"
             >
               Contacto
-            </h4>
-            <ul className="space-y-2">
-              <li className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Mail className="w-4 h-4" />
-                <span data-testid="text-contact-email">
-                  vinculacion@asociacionesprofesionales.org
-                </span>
-              </li>
-              <li className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Phone className="w-4 h-4" />
-                <span data-testid="text-contact-phone">+52 9991634080</span>
-              </li>
-              <li className="flex items-start gap-2 text-sm text-muted-foreground">
-                <MapPin className="w-4 h-4 mt-0.5" />
-                <span data-testid="text-contact-address">Mérida, Yucatán</span>
-              </li>
+            </h3>
+            <ul className="mt-2">
+              <Contacto
+                icono={Mail}
+                href={`mailto:${CORREO}`}
+                testid="text-contact-email"
+              >
+                {CORREO}
+              </Contacto>
+              <Contacto
+                icono={Phone}
+                href={`tel:${TELEFONO.replace(/\s/g, "")}`}
+                testid="text-contact-phone"
+              >
+                {TELEFONO}
+              </Contacto>
+              <Contacto icono={MapPin} testid="text-contact-address">
+                Mérida, Yucatán
+              </Contacto>
             </ul>
 
-            <form onSubmit={handleNewsletterSubmit} className="space-y-2 pt-2">
-              <p className="text-sm font-medium text-foreground">Newsletter</p>
-              <div className="flex gap-2">
-                <Input
-                  type="email"
-                  placeholder="Tu email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="text-sm h-9"
-                  required
-                  data-testid="input-newsletter-email"
-                />
-                <Button type="submit" size="sm" data-testid="button-newsletter-submit">
-                  Suscribir
-                </Button>
-              </div>
-            </form>
+            {/* El pie es el final del recorrido: quien llega hasta aquí leyendo
+                merece encontrar la conversión sin tener que volver arriba. */}
+            <Button variant="secondary" className="mt-4 min-h-11 w-full" asChild>
+              <a
+                href={URL_REGISTRO}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="button-footer-registro"
+              >
+                <UserPlus className="h-4 w-4" aria-hidden="true" />
+                Únete a ASPAL
+              </a>
+            </Button>
           </motion.div>
         </motion.div>
 
-        {/* Bottom bar */}
         <motion.div
-          className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4"
+          className="mt-12 border-t border-border pt-8"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           <p className="text-sm text-muted-foreground" data-testid="text-copyright">
-            © 2025 Asociaciones y Sociedades Profesionales de América Latina. Todos los
-            derechos reservados.
+            © {new Date().getFullYear()} Asociaciones y Sociedades Profesionales de
+            América Latina. Todos los derechos reservados.
           </p>
-          <div className="flex gap-6">
-            <a
-              href="#privacidad"
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
-              data-testid="link-privacy"
-            >
-              Privacidad
-            </a>
-            <a
-              href="#terminos"
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
-              data-testid="link-terms"
-            >
-              Términos
-            </a>
-            <a
-              href="#cookies"
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
-              data-testid="link-cookies"
-            >
-              Cookies
-            </a>
-          </div>
         </motion.div>
       </div>
     </footer>
