@@ -109,25 +109,27 @@ export const NAVEGACION: EntradaNav[] = [
     etiqueta: "Acerca de",
     testid: "menu-acerca-de",
     icono: Info,
-    // PENDIENTE (PR E): /nosotros, /que-hacemos y /nuestro-equipo.
     // PENDIENTE (Etapa 0): /contacto.
     destinos: [
       {
         etiqueta: "Nosotros",
         descripcion: "Quiénes somos y qué defendemos",
         icono: Building2,
+        href: "/nosotros",
         testid: "link-nosotros",
       },
       {
         etiqueta: "¿Qué hacemos?",
         descripcion: "Los cuatro pilares de ASPAL",
         icono: Layers,
+        href: "/que-hacemos",
         testid: "link-que-hacemos",
       },
       {
         etiqueta: "Nuestro equipo",
         descripcion: "Las personas detrás de ASPAL",
         icono: UsersRound,
+        href: "/nuestro-equipo",
         testid: "link-equipo",
       },
       {

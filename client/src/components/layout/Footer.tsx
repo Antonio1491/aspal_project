@@ -146,7 +146,10 @@ export default function Footer() {
       <h2 className="sr-only">Pie de página</h2>
 
       <div className="container mx-auto px-4 py-16 md:px-8">
-        <div className="mb-12 grid gap-6 border-b border-border pb-12 lg:grid-cols-2 lg:items-end">
+        <div
+          id="boletin"
+          className="mb-12 grid scroll-mt-32 gap-6 border-b border-border pb-12 lg:grid-cols-2 lg:items-end"
+        >
           <div>
             <h3
               className="text-xl font-semibold text-foreground"

@@ -73,6 +73,19 @@ Montserrat 400–800 (Google Fonts, `client/index.html`). Escala:
 - Pie: solo destinos vivos por columna; si un rubro no tiene ninguno, una sola
   marca «Próximamente». Sin animaciones de entrada.
 
+## Contenido institucional
+
+- El copy de Nosotros, ¿Qué hacemos? y Nuestro equipo vive en
+  `client/src/content/institucional/` y es literal del documento «Concepto
+  NOSOTROS». Cambiar un texto = editar ese módulo; las páginas no llevan copy.
+- `contenido.test.ts` rechaza textos vacíos, marcadores de relleno y enlaces a
+  rutas que no existen.
+- Datos pendientes (año de fundación D7, fotos, LinkedIn, Consejo, logo de
+  Parksys, Dossier) van como `PENDIENTE` en el módulo, nunca inventados.
+- Componentes de estas páginas: `components/institucional/` (SubnavSeccion,
+  PilarCard, PerfilCard, TarjetaCompromiso, RutaTimeline, MuroAliados).
+- Anclas: las secciones enlazables llevan `id` y `scroll-mt-32`; `ScrollRestoration` lleva al ancla cuando la URL trae `#`.
+
 ## Movimiento
 
 - Todo framer-motion respeta `MotionConfig reducedMotion="user"` (App.tsx).

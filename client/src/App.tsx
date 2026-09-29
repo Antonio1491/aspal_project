@@ -10,6 +10,9 @@ import { CabeceraRuta } from "@/components/layout/CabeceraRuta";
 import { ScrollRestoration } from "@/components/layout/ScrollRestoration";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
 import Plataforma from "@/pages/plataforma";
+import Nosotros from "@/pages/nosotros";
+import QueHacemos from "@/pages/que-hacemos";
+import NuestroEquipo from "@/pages/nuestro-equipo";
 import Unete from "@/pages/unete";
 import Eventos from "@/pages/eventos";
 import Blog from "@/pages/blog";
@@ -35,6 +38,9 @@ const PAGINAS: Record<RutaEstatica, FunctionComponent> = {
   "/podcast": Podcast,
   "/plataforma": Plataforma,
   "/unete": Unete,
+  "/nosotros": Nosotros,
+  "/que-hacemos": QueHacemos,
+  "/nuestro-equipo": NuestroEquipo,
   "/eventos": Eventos,
 };
 
