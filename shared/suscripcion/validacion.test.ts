@@ -83,6 +83,27 @@ describe("validarSuscripcion", () => {
       expect(validarSuscripcion(entrada).ok).toBe(false);
     }
   });
+
+  it("rechaza un correo más largo que 254 caracteres", () => {
+    const correoLargo = "a".repeat(300) + "@ejemplo.org";
+    const r = validarSuscripcion({ ...completa, correo: correoLargo });
+    expect(!r.ok && r.errores.correo).toBeTruthy();
+  });
+
+  it("rechaza caracteres de control en el correo", () => {
+    const correoConControl = "a@b.co\u0000x";
+    const r = validarSuscripcion({ ...completa, correo: correoConControl });
+    expect(!r.ok && r.errores.correo).toBeTruthy();
+  });
+
+  it("valida un correo con patrón de ReDoS en menos de 50 ms", () => {
+    const correoReDoS = "a@" + ".".repeat(50000) + "@";
+    const inicio = performance.now();
+    const r = validarSuscripcion({ ...completa, correo: correoReDoS });
+    const duracion = performance.now() - inicio;
+    expect(!r.ok && r.errores.correo).toBeTruthy();
+    expect(duracion).toBeLessThan(50);
+  });
 });
 
 describe("esTrampa", () => {

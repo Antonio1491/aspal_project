@@ -42,6 +42,10 @@ export function validarSuscripcion(entrada: unknown): ResultadoValidacion {
 
   const correo = typeof e.correo === "string" ? e.correo.trim().toLowerCase() : "";
   if (!correo) errores.correo = "Escribe tu correo.";
+  else if (correo.length > 254) errores.correo = "Ese correo no parece válido.";
+  // eslint-disable-next-line no-control-regex
+  else if (/[\x00-\x1f\x7f]/.test(correo))
+    errores.correo = "Ese correo no parece válido.";
   else if (!CORREO.test(correo)) errores.correo = "Ese correo no parece válido.";
 
   const nombre = texto(e.nombre, LARGO_MAXIMO.nombre);
