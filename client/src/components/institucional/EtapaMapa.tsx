@@ -1,3 +1,4 @@
+import { H2_BANDA } from "@/lib/clases";
 import { ETAPAS, type EtapaMapa as Etapa } from "@/content/institucional/mapa-ruta";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
@@ -23,10 +24,7 @@ export function EtapaMapa({
       <p className="text-[13px] font-semibold uppercase tracking-wider text-primary">
         Etapa {etapa.numero} de {ETAPAS.length}
       </p>
-      <h2
-        id={`${etapa.id}-titulo`}
-        className="mt-2 text-3xl font-bold text-foreground md:text-4xl"
-      >
+      <h2 id={`${etapa.id}-titulo`} className={`mt-2 ${H2_BANDA}`}>
         {etapa.nombre}
       </h2>
       <p className="mt-2 text-lg text-muted-foreground">{etapa.resumen}</p>

@@ -16,7 +16,8 @@
          (/attached_assets/…) devolvía 200 con Content-Type text/html: era el
          fallback del SPA sirviendo index.html donde el navegador esperaba PNG. -->
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/favicon.png" />
+    <!-- iOS pinta de negro la transparencia: el icono táctil lleva fondo blanco. -->
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <!-- Montserrat vive en el propio dominio (ver index.css). Se precarga el
          subconjunto latin, el que usa cualquier página en español: así llega
          a la par que el CSS y no después de descubrirlo en él. -->

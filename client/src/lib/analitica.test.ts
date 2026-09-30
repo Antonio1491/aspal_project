@@ -28,6 +28,24 @@ describe("registrarEvento", () => {
     expect(ventana.dataLayer).toEqual([{ event: "click_unete", origen: "header" }]);
   });
 
+  it("no registra nada en /componentes (catálogo interno)", () => {
+    const ventana: { dataLayer?: unknown[]; location: { pathname: string } } = {
+      location: { pathname: "/componentes" },
+    };
+    vi.stubGlobal("window", ventana);
+    registrarEvento("click_unete", { origen: "header" });
+    expect(ventana.dataLayer).toBeUndefined();
+  });
+
+  it("sí registra en otras rutas con location", () => {
+    const ventana: { dataLayer?: unknown[]; location: { pathname: string } } = {
+      location: { pathname: "/" },
+    };
+    vi.stubGlobal("window", ventana);
+    registrarEvento("click_unete");
+    expect(ventana.dataLayer).toEqual([{ event: "click_unete" }]);
+  });
+
   it("no falla sin window (tests y prerender)", () => {
     expect(() => registrarEvento("click_menu", { destino: "/blog" })).not.toThrow();
   });

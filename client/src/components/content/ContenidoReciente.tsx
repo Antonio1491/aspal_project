@@ -2,6 +2,7 @@ import BlogCard from "@/components/content/BlogCard";
 import { PodcastCard } from "@/components/content/PodcastCard";
 import { Banda } from "@/components/layout/Banda";
 import { useEnCliente } from "@/hooks/use-en-cliente";
+import { H2_BANDA } from "@/lib/clases";
 import { vistaReciente, type EstadoConsulta } from "@/lib/contenido-reciente";
 import type { TransformedPost } from "@shared/wordpress/types";
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
@@ -58,9 +59,7 @@ export function ContenidoReciente() {
   return (
     <Banda tono="suave" id="contenido-reciente">
       <div className="flex flex-wrap items-end justify-between gap-4">
-        <h2 className="text-3xl font-bold text-foreground md:text-4xl">
-          Contenido reciente
-        </h2>
+        <h2 className={H2_BANDA}>Contenido reciente</h2>
         <Link
           href="/blog"
           className="inline-flex min-h-11 items-center gap-1.5 font-medium text-primary underline underline-offset-4"

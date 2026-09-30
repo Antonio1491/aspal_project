@@ -22,6 +22,7 @@ import Blog from "@/pages/blog";
 import BlogPost from "@/pages/blog-post";
 import Podcast from "@/pages/podcast";
 import NotFound from "@/pages/not-found";
+import Componentes from "@/pages/componentes";
 import {
   RUTAS_DINAMICAS,
   RUTAS_ESTATICAS,
@@ -44,6 +45,7 @@ const PAGINAS: Record<RutaEstatica, FunctionComponent> = {
   "/que-hacemos": QueHacemos,
   "/nuestro-equipo": NuestroEquipo,
   "/eventos": Eventos,
+  "/componentes": Componentes,
 };
 
 const PAGINAS_DINAMICAS: Record<RutaDinamica, FunctionComponent> = {

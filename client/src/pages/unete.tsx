@@ -6,6 +6,7 @@ import Header from "@/components/layout/Header";
 import { HeroInstitucional } from "@/components/layout/HeroInstitucional";
 import { Button } from "@/components/ui/button";
 import { registrarEvento } from "@/lib/analitica";
+import { H2_BANDA } from "@/lib/clases";
 import { URL_REGISTRO } from "@/lib/navegacion";
 import { ArrowUpRight, BadgeCheck, Mail } from "lucide-react";
 
@@ -95,9 +96,7 @@ export default function Unete() {
         </Banda>
 
         <Banda>
-          <h2 className="text-3xl font-bold text-foreground md:text-4xl">
-            Qué recibes al unirte
-          </h2>
+          <h2 className={H2_BANDA}>Qué recibes al unirte</h2>
           <p
             className="mt-4 max-w-3xl text-lg text-muted-foreground"
             data-testid="text-unete-promesa"

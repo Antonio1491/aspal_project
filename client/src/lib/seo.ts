@@ -77,6 +77,12 @@ export const SEO: Record<RutaEstatica, MetaRuta> = {
       "Guía práctica sobre las etapas de gestión de una asociación o sociedad profesional: 7 etapas y 23 pasos, de la gobernanza a la mejora continua.",
     indexable: true,
   },
+  "/componentes": {
+    titulo: "Componentes y estilos · ASPAL",
+    descripcion:
+      "Catálogo interno de componentes, colores y tipografía del sitio de ASPAL, para quien desarrolla y diseña.",
+    indexable: false,
+  },
   "/que-hacemos": {
     titulo: "¿Qué hacemos? · ASPAL",
     descripcion:
