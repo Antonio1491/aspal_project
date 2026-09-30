@@ -6,7 +6,7 @@ import path from "path";
  * detectó los fallos de datos (tiempo de lectura inflado, extracto con "..."
  * fantasma, fecha sin zona, podcasts en la rejilla).
  *
- * Entorno `node`: no hay tests de componentes todavía. Ver la lista de
+ * Entorno `node`: sin tests de componentes; `server/` se prueba levantando Express en un puerto libre. Ver la lista de
  * revisión, punto 5, para lo que sigue siendo verificación manual.
  */
 export default defineConfig({
@@ -18,6 +18,6 @@ export default defineConfig({
   },
   test: {
     environment: "node",
-    include: ["shared/**/*.test.ts", "client/src/**/*.test.ts"],
+    include: ["shared/**/*.test.ts", "client/src/**/*.test.ts", "server/**/*.test.ts"],
   },
 });

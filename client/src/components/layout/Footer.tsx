@@ -1,74 +1,27 @@
-import logoLight from "@assets/ASPAL-para fondo claro_1763675327795.png";
-import logoDark from "@assets/ASPAL-para fondo oscuro_1763675345456.png";
+import logo from "@assets/aspal-logo-fondo-claro.webp";
+import { FormSuscripcion } from "@/components/forms/FormSuscripcion";
+import { AvisoPestanaNueva } from "@/components/layout/AvisoPestanaNueva";
 import { Proximamente } from "@/components/layout/Proximamente";
 import { Button } from "@/components/ui/button";
+import { registrarEvento } from "@/lib/analitica";
+import { CONTACTO, NOMBRE_MARCA, REDES } from "@/lib/marca";
 import {
+  ENTRADAS_PIE,
   NAVEGACION,
-  URL_REGISTRO,
+  destinosPie,
+  registrarClicDestino,
   type DestinoNav,
   type EntradaNav,
 } from "@/lib/navegacion";
-import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
 import {
   ArrowUpRight,
-  Facebook,
-  Instagram,
-  Linkedin,
   Mail,
   MapPin,
   Phone,
-  Twitter,
   UserPlus,
   type LucideIcon,
 } from "lucide-react";
 import { Link } from "wouter";
-
-const REDES = [
-  {
-    nombre: "Facebook",
-    icono: Facebook,
-    href: "https://www.facebook.com/asociacionesprofesionales",
-    testid: "button-social-facebook",
-  },
-  {
-    nombre: "X",
-    icono: Twitter,
-    href: "https://x.com/ASPALATAM",
-    testid: "button-social-twitter",
-  },
-  {
-    nombre: "LinkedIn",
-    icono: Linkedin,
-    // Sin `?viewAsMember=true`: ese parámetro se cuela al copiar la URL desde
-    // una sesión iniciada y no pinta nada en un enlace público.
-    href: "https://www.linkedin.com/company/asociaciones-profesionales-aspal/",
-    testid: "button-social-linkedin",
-  },
-  {
-    nombre: "Instagram",
-    icono: Instagram,
-    href: "https://www.instagram.com/aspalatam/",
-    testid: "button-social-instagram",
-  },
-];
-
-const CORREO = "vinculacion@asociacionesprofesionales.org";
-const TELEFONO = "+52 999 163 4080";
-
-const contenedor = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
-};
-
-const elemento = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: [0.25, 0.4, 0.25, 1] },
-  },
-};
 
 /** Un dato de contacto que se puede accionar: escribir, llamar o ubicar. */
 function Contacto({
@@ -85,53 +38,35 @@ function Contacto({
   const contenido = (
     <>
       <Icono className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-      <span className="break-all">{children}</span>
+      <span className="[overflow-wrap:anywhere]">{children}</span>
     </>
   );
-
-  if (!href) {
-    return (
-      <li
-        className="flex min-h-11 items-start gap-2 py-2 text-sm text-muted-foreground"
-        data-testid={testid}
-      >
-        {contenido}
-      </li>
-    );
-  }
+  const clases = "flex min-h-11 items-start gap-2 py-2 text-sm text-muted-foreground";
 
   return (
     <li>
-      <a
-        href={href}
-        className="flex min-h-11 items-start gap-2 py-2 text-sm text-muted-foreground transition-colors hover:text-primary"
-        data-testid={testid}
-      >
-        {contenido}
-      </a>
+      {href ? (
+        <a
+          href={href}
+          className={`${clases} transition-colors hover:text-primary`}
+          data-testid={testid}
+        >
+          {contenido}
+        </a>
+      ) : (
+        <div className={clases} data-testid={testid}>
+          {contenido}
+        </div>
+      )}
     </li>
   );
 }
 
-/** Un destino del pie. Sin `href` se anuncia, pero no se enlaza. */
+/** Un destino vivo del pie. */
 function DestinoPie({ destino }: { destino: DestinoNav }) {
   const clases =
     "flex min-h-11 items-center gap-1.5 py-2 text-sm text-muted-foreground transition-colors hover:text-primary";
-
-  if (!destino.href) {
-    return (
-      <li>
-        <div
-          className={cn(clases, "opacity-70")}
-          aria-disabled="true"
-          data-testid={`footer-${destino.testid}`}
-        >
-          {destino.etiqueta}
-          <Proximamente />
-        </div>
-      </li>
-    );
-  }
+  const alPulsar = () => registrarClicDestino(destino, "footer");
 
   return (
     <li>
@@ -141,15 +76,18 @@ function DestinoPie({ destino }: { destino: DestinoNav }) {
           target="_blank"
           rel="noopener noreferrer"
           className={clases}
+          onClick={alPulsar}
           data-testid={`footer-${destino.testid}`}
         >
           {destino.etiqueta}
           <ArrowUpRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          <AvisoPestanaNueva />
         </a>
       ) : (
         <Link
-          href={destino.href}
+          href={destino.href!}
           className={clases}
+          onClick={alPulsar}
           data-testid={`footer-${destino.testid}`}
         >
           {destino.etiqueta}
@@ -159,62 +97,96 @@ function DestinoPie({ destino }: { destino: DestinoNav }) {
   );
 }
 
-function ColumnaNav({ entrada }: { entrada: EntradaNav }) {
+/**
+ * Una columna del pie: los destinos vivos del rubro. Si todavía no tiene
+ * ninguno se enlaza a su propia página si la tiene (Eventos ya enlaza a
+ * /eventos); si tampoco (Acerca de, hasta el PR E2), se anuncia una sola vez
+ * como «Próximamente» en lugar de listar el catálogo pendiente: el pie
+ * resume, el catálogo completo es del menú.
+ */
+function ColumnaPie({ entrada }: { entrada: EntradaNav }) {
+  const destinos = destinosPie(entrada);
   return (
-    <motion.div variants={elemento}>
+    <div>
       <h3
         className="font-semibold text-foreground"
         data-testid={`footer-${entrada.testid}`}
       >
         {entrada.etiqueta}
       </h3>
-      <ul className="mt-2">
-        {entrada.destinos?.map((destino) => (
-          <DestinoPie key={destino.testid} destino={destino} />
-        ))}
-      </ul>
-    </motion.div>
+      {destinos.length > 0 ? (
+        <ul className="mt-2">
+          {destinos.map((destino) => (
+            <DestinoPie key={destino.testid} destino={destino} />
+          ))}
+        </ul>
+      ) : (
+        <p className="mt-3">
+          <Proximamente />
+        </p>
+      )}
+    </div>
   );
 }
 
-export default function Footer() {
-  // Las columnas de navegación salen de `navegacion.ts`, la misma fuente que
-  // pinta la cabecera. Antes el pie declaraba su propia taxonomía —Inicio,
-  // Servicios, Casos de éxito, Testimonios— que no coincidía con la del menú y
-  // cuyas once anclas no existían en ninguna página. Heredándola no puede
-  // volver a divergir ni a apuntar al vacío.
-  const columnas = NAVEGACION.filter((entrada) => entrada.destinos?.length);
+/**
+ * Pie institucional (§6.7 del plan de la Etapa 1): marca, cuatro columnas de
+ * navegación, contacto, y una franja noche con la barra legal.
+ *
+ * Sin framer-motion: el pie entraba con `whileInView` y opacidad 0, así que en
+ * el HTML prerenderizado (y para quien no ejecuta JavaScript) era invisible.
+ *
+ * `conBoletin`: las páginas que ya traen su propio formulario de suscripción
+ * lo desactivan para no repetir el mismo formulario justo encima del pie.
+ */
+export default function Footer({ conBoletin = true }: { conBoletin?: boolean }) {
+  const columnas = ENTRADAS_PIE.map((id) =>
+    NAVEGACION.find((e) => e.testid === id),
+  ).filter((entrada): entrada is EntradaNav => entrada !== undefined);
 
   return (
-    <footer className="border-t border-border bg-muted/30" data-testid="footer">
+    <footer className="border-t border-border bg-fondo-suave" data-testid="footer">
       <h2 className="sr-only">Pie de página</h2>
+
       <div className="container mx-auto px-4 py-16 md:px-8">
-        <motion.div
-          className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4"
-          variants={contenedor}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-        >
+        {conBoletin && (
+          <div
+            id="boletin"
+            className="mb-12 grid scroll-mt-32 gap-6 border-b border-border pb-12 lg:grid-cols-2 lg:items-end"
+          >
+            <div>
+              <h3
+                className="text-xl font-semibold text-foreground"
+                data-testid="text-footer-boletin"
+              >
+                Recibe el boletín de ASPAL
+              </h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Novedades del sector asociativo de América Latina, en tu correo.
+              </p>
+            </div>
+            <FormSuscripcion origen="footer" variante="compacto" />
+          </div>
+        )}
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           {/* Marca */}
-          <motion.div variants={elemento}>
+          <div className="sm:col-span-2 lg:col-span-3 xl:col-span-1">
             <img
-              src={logoLight}
-              alt="Aspal"
-              className="h-8 w-auto dark:hidden"
-              data-testid="img-footer-logo-light"
+              src={logo}
+              alt={NOMBRE_MARCA}
+              width={420}
+              height={120}
+              loading="lazy"
+              className="h-8 w-auto"
+              data-testid="img-footer-logo"
             />
-            <img
-              src={logoDark}
-              alt="Aspal"
-              className="hidden h-8 w-auto dark:block"
-              data-testid="img-footer-logo-dark"
-            />
-            <p className="mt-4 text-sm text-muted-foreground">
-              Conectamos a las asociaciones profesionales de América Latina: formación,
-              comunidad y recursos para quienes las dirigen.
+            <p
+              className="mt-4 text-sm text-muted-foreground"
+              data-testid="text-footer-descripcion"
+            >
+              La red en español del sector asociativo de América Latina.
             </p>
-            <div className="mt-4 flex gap-1">
+            <div className="mt-4 flex flex-wrap gap-1">
               {REDES.map((red) => (
                 <Button
                   key={red.testid}
@@ -228,21 +200,21 @@ export default function Footer() {
                     href={red.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`ASPAL en ${red.nombre}`}
+                    aria-label={`ASPAL en ${red.nombre} (se abre en otra pestaña)`}
                   >
                     <red.icono className="h-5 w-5" aria-hidden="true" />
                   </a>
                 </Button>
               ))}
             </div>
-          </motion.div>
+          </div>
 
           {columnas.map((entrada) => (
-            <ColumnaNav key={entrada.testid} entrada={entrada} />
+            <ColumnaPie key={entrada.testid} entrada={entrada} />
           ))}
 
           {/* Contacto */}
-          <motion.div variants={elemento}>
+          <div>
             <h3
               className="font-semibold text-foreground"
               data-testid="text-footer-contact-title"
@@ -252,51 +224,57 @@ export default function Footer() {
             <ul className="mt-2">
               <Contacto
                 icono={Mail}
-                href={`mailto:${CORREO}`}
+                href={`mailto:${CONTACTO.correo}`}
                 testid="text-contact-email"
               >
-                {CORREO}
+                {CONTACTO.correo}
               </Contacto>
               <Contacto
                 icono={Phone}
-                href={`tel:${TELEFONO.replace(/\s/g, "")}`}
+                href={`tel:${CONTACTO.telefono.replace(/\s/g, "")}`}
                 testid="text-contact-phone"
               >
-                {TELEFONO}
+                {CONTACTO.telefono}
               </Contacto>
               <Contacto icono={MapPin} testid="text-contact-address">
-                Mérida, Yucatán
+                {CONTACTO.ciudad}
               </Contacto>
             </ul>
-
-            {/* El pie es el final del recorrido: quien llega hasta aquí leyendo
-                merece encontrar la conversión sin tener que volver arriba. */}
+            {/* El pie es el final del recorrido: quien llega hasta aquí merece
+                encontrar la conversión sin volver arriba. */}
             <Button variant="secondary" className="mt-4 min-h-11 w-full" asChild>
-              <a
-                href={URL_REGISTRO}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/unete"
+                onClick={() => registrarEvento("click_unete", { origen: "footer" })}
                 data-testid="button-footer-registro"
               >
                 <UserPlus className="h-4 w-4" aria-hidden="true" />
                 Únete a ASPAL
-              </a>
+              </Link>
             </Button>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
+      </div>
 
-        <motion.div
-          className="mt-12 border-t border-border pt-8"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
-          <p className="text-sm text-muted-foreground" data-testid="text-copyright">
-            © {new Date().getFullYear()} Asociaciones y Sociedades Profesionales de
-            América Latina. Todos los derechos reservados.
+      {/* Franja noche: el azul del logotipo cierra la página (§4 del plan). */}
+      <div className="bg-noche text-noche-foreground">
+        <div className="container mx-auto flex flex-col gap-3 px-4 py-6 text-sm md:flex-row md:flex-wrap md:items-center md:justify-between md:px-8">
+          <p data-testid="text-copyright">
+            © {new Date().getFullYear()} {NOMBRE_MARCA}
           </p>
-        </motion.div>
+          {/* PENDIENTE (Etapa 0): /aviso-privacidad y /terminos. */}
+          <ul className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <li className="flex items-center gap-2" data-testid="footer-aviso-privacidad">
+              Aviso de privacidad <Proximamente />
+            </li>
+            <li className="flex items-center gap-2" data-testid="footer-terminos">
+              Términos <Proximamente />
+            </li>
+          </ul>
+          <p data-testid="text-footer-respaldo">
+            Con el respaldo de World Urban Parks y ANPR México
+          </p>
+        </div>
       </div>
     </footer>
   );

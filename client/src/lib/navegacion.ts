@@ -13,16 +13,39 @@
  * página: el clic no hacía absolutamente nada.
  */
 
+import { registrarEvento } from "./analitica";
 import {
+  Activity,
+  Award,
+  BadgeCheck,
   Briefcase,
   Building2,
   CalendarDays,
+  CircleHelp,
+  Contact,
+  FileSearch,
+  Gift,
+  Globe,
   GraduationCap,
+  Handshake,
+  Info,
+  Landmark,
+  Layers,
   Library,
+  Mail,
+  MapPin,
+  Megaphone,
   MessagesSquare,
   Mic,
   Newspaper,
+  Presentation,
+  Quote,
+  Route,
+  Trophy,
+  UserPlus,
   Users,
+  UsersRound,
+  Video,
   type LucideIcon,
 } from "lucide-react";
 
@@ -50,7 +73,18 @@ export interface DestinoNav {
   testid: string;
 }
 
-/** Una entrada de primer nivel: desplegable (con `destinos`) o enlace suelto. */
+/** Un grupo con título dentro de un mega-menú (Recursos: Aprende, Certifícate…). */
+export interface GrupoNav {
+  titulo: string;
+  testid: string;
+  destinos: DestinoNav[];
+}
+
+/**
+ * Una entrada de primer nivel. Despliega `destinos` (lista simple) o `grupos`
+ * (mega-menú), o es un enlace suelto con `href`. Sin nada de eso, es un rubro
+ * que todavía no existe y se anuncia como «Próximamente».
+ */
 export interface EntradaNav {
   etiqueta: string;
   testid: string;
@@ -58,41 +92,263 @@ export interface EntradaNav {
   href?: string;
   externo?: boolean;
   destinos?: DestinoNav[];
+  grupos?: GrupoNav[];
 }
 
+/**
+ * Arquitectura de la Etapa 1: la opción recomendada para la decisión D1 del
+ * plan (Acerca de · Recursos · Eventos · Membresía · Comunidad, más el botón
+ * Únete). Recursos es el catálogo completo; Eventos y Comunidad son atajos,
+ * repetidos a propósito, a los grupos Participa y Conecta.
+ *
+ * Cada destino sin página se queda sin `href` («Próximamente») hasta el PR que
+ * crea su ruta: el test de enlaces muertos lo exige.
+ */
 export const NAVEGACION: EntradaNav[] = [
   {
-    etiqueta: "Aprende",
-    testid: "menu-aprende",
-    icono: GraduationCap,
+    etiqueta: "Acerca de",
+    testid: "menu-acerca-de",
+    icono: Info,
+    // PENDIENTE (Etapa 0): /contacto.
     destinos: [
       {
-        etiqueta: "Blog",
-        descripcion: "Artículos y análisis del sector",
-        icono: Newspaper,
-        href: "/blog",
-        testid: "link-blog",
+        etiqueta: "Nosotros",
+        descripcion: "Quiénes somos y qué defendemos",
+        icono: Building2,
+        href: "/nosotros",
+        testid: "link-nosotros",
       },
       {
-        etiqueta: "Podcast",
-        descripcion: "Conversaciones con el sector",
-        icono: Mic,
-        href: "/podcast",
-        testid: "link-podcast",
+        etiqueta: "¿Qué hacemos?",
+        descripcion: "Los cuatro pilares de ASPAL",
+        icono: Layers,
+        href: "/que-hacemos",
+        testid: "link-que-hacemos",
       },
       {
-        etiqueta: "Cursos en Línea",
-        descripcion: "Capacitación para tu equipo",
-        icono: GraduationCap,
-        href: `${COMUNIDAD}/cursos/`,
+        etiqueta: "Nuestro equipo",
+        descripcion: "Las personas detrás de ASPAL",
+        icono: UsersRound,
+        href: "/nuestro-equipo",
+        testid: "link-equipo",
+      },
+      {
+        etiqueta: "Contacto",
+        descripcion: "Escríbenos o llámanos",
+        icono: Mail,
+        testid: "link-contacto",
+      },
+      {
+        etiqueta: "Consejo Directivo",
+        descripcion: "Quién gobierna ASPAL",
+        icono: Landmark,
+        testid: "link-consejo",
+      },
+      {
+        etiqueta: "Aliados y patrocinadores",
+        descripcion: "Organizaciones que nos respaldan",
+        icono: Handshake,
+        testid: "link-aliados",
+      },
+      {
+        etiqueta: "Iniciativas LATAM y Agenda",
+        descripcion: "Lo que impulsamos en la región",
+        icono: Globe,
+        testid: "link-iniciativas",
+      },
+      {
+        etiqueta: "Sala de prensa",
+        descripcion: "Noticias y materiales para medios",
+        icono: Megaphone,
+        testid: "link-prensa",
+      },
+      {
+        etiqueta: "Mensaje del Director General",
+        descripcion: "La visión de la dirección",
+        icono: Quote,
+        testid: "link-mensaje-dg",
+      },
+    ],
+  },
+  {
+    etiqueta: "Recursos",
+    testid: "menu-recursos",
+    icono: Library,
+    grupos: [
+      {
+        titulo: "Aprende",
+        testid: "grupo-aprende",
+        destinos: [
+          {
+            etiqueta: "Blog",
+            descripcion: "Artículos y análisis del sector",
+            icono: Newspaper,
+            href: "/blog",
+            testid: "link-blog",
+          },
+          {
+            etiqueta: "Podcast Conexión Profesional",
+            descripcion: "Conversaciones con el sector",
+            icono: Mic,
+            href: "/podcast",
+            testid: "link-podcast",
+          },
+          {
+            etiqueta: "Mapa de Ruta",
+            descripcion: "El camino de una asociación en siete etapas",
+            icono: Route,
+            href: "/mapa-de-ruta",
+            testid: "link-mapa-ruta",
+          },
+          {
+            etiqueta: "Estudios e investigaciones",
+            descripcion: "Datos del sector asociativo",
+            icono: FileSearch,
+            testid: "link-estudios",
+          },
+          {
+            etiqueta: "Biblioteca digital",
+            descripcion: "Documentos y recursos descargables",
+            icono: Library,
+            testid: "link-biblioteca",
+          },
+        ],
+      },
+      {
+        titulo: "Certifícate",
+        testid: "grupo-certificate",
+        destinos: [
+          {
+            etiqueta: "Cursos en línea",
+            descripcion: "Capacitación para tu equipo",
+            icono: GraduationCap,
+            href: `${COMUNIDAD}/cursos/`,
+            externo: true,
+            testid: "link-cursos",
+          },
+          {
+            etiqueta: "Bootcamps de directivos",
+            descripcion: "Formación intensiva para quien dirige",
+            icono: Presentation,
+            testid: "link-bootcamps",
+          },
+          {
+            etiqueta: "Certificación CGA",
+            descripcion: "Acreditación profesional del sector",
+            icono: Award,
+            testid: "link-cga",
+          },
+        ],
+      },
+      {
+        titulo: "Participa",
+        testid: "grupo-participa",
+        destinos: [
+          {
+            etiqueta: "Calendario de eventos",
+            descripcion: "Lo que viene en la agenda",
+            icono: CalendarDays,
+            testid: "link-calendario",
+          },
+          {
+            etiqueta: "Webinars mensuales",
+            descripcion: "Sesiones en vivo con expertos",
+            icono: Video,
+            testid: "link-webinars",
+          },
+          {
+            etiqueta: "Encuentro CDMX 2027",
+            descripcion: "El encuentro latinoamericano del sector",
+            icono: MapPin,
+            testid: "link-encuentro",
+          },
+          {
+            etiqueta: "Premios ASPAL",
+            descripcion: "Reconocimiento a las mejores prácticas",
+            icono: Trophy,
+            testid: "link-premios",
+          },
+        ],
+      },
+      {
+        titulo: "Conecta",
+        testid: "grupo-conecta",
+        destinos: [
+          {
+            etiqueta: "Comunidad",
+            descripcion: "El feed de la red ASPAL",
+            icono: MessagesSquare,
+            href: `${COMUNIDAD}/comunidad/`,
+            externo: true,
+            testid: "link-recursos-comunidad",
+          },
+          {
+            etiqueta: "Directorio de miembros",
+            descripcion: "Quién es quién en la red",
+            icono: Users,
+            href: `${COMUNIDAD}/miembros/`,
+            externo: true,
+            testid: "link-recursos-miembros",
+          },
+          {
+            etiqueta: "Directorio de la industria",
+            descripcion: "Proveedores y aliados del sector",
+            icono: Building2,
+            testid: "link-directorio-industria",
+          },
+          {
+            etiqueta: "Bolsa de trabajo",
+            descripcion: "Vacantes del sector asociativo",
+            icono: Briefcase,
+            testid: "link-bolsa",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    etiqueta: "Eventos",
+    testid: "menu-eventos",
+    icono: CalendarDays,
+    href: "/eventos",
+  },
+  {
+    etiqueta: "Membresía",
+    testid: "menu-membresia",
+    icono: BadgeCheck,
+    destinos: [
+      {
+        etiqueta: "Membresía básica",
+        descripcion: "Accede a la plataforma de comunidad",
+        icono: BadgeCheck,
+        href: URL_REGISTRO,
         externo: true,
-        testid: "link-cursos",
+        testid: "link-membresia-basica",
       },
       {
-        etiqueta: "Biblioteca Digital",
-        descripcion: "Documentos y recursos descargables",
-        icono: Library,
-        testid: "link-biblioteca",
+        etiqueta: "Únete gratis",
+        descripcion: "Suscríbete sin costo",
+        icono: UserPlus,
+        href: "/unete",
+        testid: "link-unete",
+      },
+      {
+        etiqueta: "Niveles y precios",
+        descripcion: "Compara las opciones de membresía",
+        icono: Layers,
+        testid: "link-niveles",
+      },
+      {
+        etiqueta: "Beneficios",
+        descripcion: "Lo que recibes como miembro",
+        icono: Gift,
+        testid: "link-beneficios",
+      },
+      {
+        etiqueta: "Preguntas frecuentes",
+        descripcion: "Resolvemos tus dudas",
+        icono: CircleHelp,
+        testid: "link-preguntas",
       },
     ],
   },
@@ -102,43 +358,102 @@ export const NAVEGACION: EntradaNav[] = [
     icono: Users,
     destinos: [
       {
-        etiqueta: "Comunidad",
-        descripcion: "El feed de la red ASPAL",
-        icono: MessagesSquare,
+        etiqueta: "Actividad de la red",
+        descripcion: "Lo último en la comunidad",
+        icono: Activity,
         href: `${COMUNIDAD}/comunidad/`,
         externo: true,
-        testid: "link-comunidad",
+        testid: "link-comunidad-actividad",
       },
       {
-        etiqueta: "Directorio de Miembros",
-        descripcion: "Quién es quién en la red",
-        icono: Users,
-        href: `${COMUNIDAD}/miembros/`,
-        externo: true,
-        testid: "link-directorio-miembros",
-      },
-      {
-        etiqueta: "Eventos y Grupos",
-        descripcion: "Agenda y grupos de trabajo",
-        icono: CalendarDays,
+        etiqueta: "Grupos",
+        descripcion: "Grupos de trabajo y de interés",
+        icono: UsersRound,
         href: `${COMUNIDAD}/grupos/`,
         externo: true,
-        testid: "link-eventos",
+        testid: "link-comunidad-grupos",
       },
       {
-        etiqueta: "Directorio de la Industria",
-        descripcion: "Proveedores y aliados del sector",
-        icono: Building2,
-        testid: "link-directorio-industria",
+        etiqueta: "Directorio de miembros",
+        descripcion: "Quién es quién en la red",
+        icono: Contact,
+        href: `${COMUNIDAD}/miembros/`,
+        externo: true,
+        testid: "link-comunidad-miembros",
+      },
+      {
+        etiqueta: "Foros por etapa del Mapa de Ruta",
+        descripcion: "Conversación por etapa",
+        icono: MessagesSquare,
+        testid: "link-foros",
       },
     ],
   },
-  {
-    etiqueta: "Bolsa de Trabajo",
-    testid: "menu-bolsa",
-    icono: Briefcase,
-  },
 ];
+
+/** Entradas que forman columna en el pie, en orden (§6.7 del plan). */
+export const ENTRADAS_PIE: readonly string[] = [
+  "menu-acerca-de",
+  "menu-recursos",
+  "menu-eventos",
+  "menu-membresia",
+];
+
+/** Todos los destinos de una entrada, con grupos aplanados, en orden de pintado. */
+export function destinosDe(entrada: EntradaNav): DestinoNav[] {
+  return entrada.grupos
+    ? entrada.grupos.flatMap((grupo) => grupo.destinos)
+    : (entrada.destinos ?? []);
+}
+
+/** Las listas que se pintan juntas: cada grupo, o la lista simple. */
+export function listasDe(entrada: EntradaNav): DestinoNav[][] {
+  if (entrada.grupos) return entrada.grupos.map((grupo) => grupo.destinos);
+  return entrada.destinos ? [entrada.destinos] : [];
+}
+
+export function esDesplegable(entrada: EntradaNav): boolean {
+  return destinosDe(entrada).length > 0;
+}
+
+/**
+ * En el pie solo van destinos vivos: el catálogo completo es del menú. Una
+ * entrada sin ninguno pero con `href` propio aparece como un único enlace.
+ */
+export function destinosPie(entrada: EntradaNav): DestinoNav[] {
+  const vivos = destinosDe(entrada).filter((destino) => Boolean(destino.href));
+  if (vivos.length > 0 || !entrada.href) return vivos;
+  // Sin destinos vivos pero con página propia (Eventos): la columna enlaza a ella.
+  return [
+    {
+      etiqueta: entrada.etiqueta,
+      descripcion: entrada.etiqueta,
+      icono: entrada.icono,
+      href: entrada.href,
+      externo: entrada.externo,
+      testid: `${entrada.testid}-enlace`,
+    },
+  ];
+}
+
+/**
+ * Analítica de un clic en un destino (RF-12): siempre `click_menu`, y además
+ * `salida_plataforma` si el destino sale del dominio.
+ */
+export function registrarClicDestino(
+  destino: DestinoNav,
+  origen: "menu" | "menu_movil" | "footer",
+): void {
+  if (!destino.href) return;
+  registrarEvento("click_menu", {
+    destino: destino.href,
+    etiqueta: destino.etiqueta,
+    origen,
+  });
+  if (destino.externo) {
+    registrarEvento("salida_plataforma", { destino: destino.href, origen });
+  }
+}
 
 /**
  * ¿Esta ruta interna es la que se está viendo?
@@ -156,10 +471,10 @@ export function esRutaActiva(href: string | undefined, ruta: string): boolean {
   return ruta === href || ruta.startsWith(`${href}/`);
 }
 
-/** Un desplegable se marca activo cuando lo está cualquiera de sus destinos. */
+/** Un rubro se marca activo si lo está su propio enlace o cualquiera de sus destinos. */
 export function esEntradaActiva(entrada: EntradaNav, ruta: string): boolean {
-  if (entrada.destinos) {
-    return entrada.destinos.some((destino) => esRutaActiva(destino.href, ruta));
-  }
-  return esRutaActiva(entrada.href, ruta);
+  return (
+    esRutaActiva(entrada.href, ruta) ||
+    destinosDe(entrada).some((destino) => esRutaActiva(destino.href, ruta))
+  );
 }

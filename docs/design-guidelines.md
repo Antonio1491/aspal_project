@@ -1,174 +1,110 @@
-# Diseño Moderno para Asociaciones Profesionales
+# Guía de diseño de ASPAL
 
-## Enfoque de Diseño
+Refleja lo que el código hace hoy. La versión anterior (Inter, morado,
+glassmorphism) describía un sitio que ya no existe.
 
-**Inspiración de Referencia:** Combinación de Stripe (minimalismo sofisticado) + Notion (claridad visual) + elementos institucionales con identidad propia.
+## Marca
 
-**Principios Clave:**
+- **Logotipo:** `client/src/assets/aspal-logo-fondo-claro.webp` sobre fondos
+  claros. Para `bg-noche`, la versión de fondo oscuro; hoy ninguna página la
+  usa y su original vive en `docs/marca/` (ver su README para exportarla).
+  Nunca el de fondo claro sobre fondo oscuro.
+- **Isotipo** (panal de 4 hexágonos): `Aspal-Icono_*.webp`. Es la silueta de
+  perfil cuando falta la foto.
+- **Motivo gráfico:** `HexagonNetwork` (`components/sections/CommunityGraphics.tsx`),
+  semitransparente, en el hero, en la banda «Únete a la casa común» y en la Ruta
+  2026–2030.
+- **Nombre visible:** `NOMBRE_MARCA` de `client/src/lib/marca.ts`. No se escribe a mano.
 
-- Modernidad institucional: Profesional pero dinámico
-- Jerarquía visual clara con espacios generosos
-- Microanimaciones sutiles que añaden vida sin distraer
-- Gradientes suaves en tonos morados institucionales
+## Color
 
----
+Tokens en `client/src/index.css` (`:root`). Solo modo claro.
+
+| Token                                     | Clase                               | Uso                                                                        |
+| ----------------------------------------- | ----------------------------------- | -------------------------------------------------------------------------- |
+| `--primary` pizarra `#233543`             | `bg-primary`, `text-primary`        | Títulos, botones de contorno, bandas institucionales                       |
+| `--secondary` miel `#F9CC62`              | `<Button variant="secondary">`      | Únete (el único botón lleno de la cabecera), acentos, marca de ruta activa |
+| `--brand-noche` `#112738` (azul del logo) | `bg-noche`, `text-noche-foreground` | Hero, banda CTA final, franja inferior del pie                             |
+| `--miel-texto` `#8A6414`                  | `text-miel-texto`                   | Overlines y etiquetas sobre fondo claro                                    |
+| `--fondo-suave` `#F7F8FA`                 | `bg-fondo-suave`                    | Bandas alternas                                                            |
+| `--accent` `#FEF5E1`                      | `bg-accent`                         | Tarjetas destacadas                                                        |
+| `--muted-foreground` `#576875`            | `text-muted-foreground`             | Texto secundario                                                           |
+
+**Nunca** texto miel sobre blanco (1.5:1). Todo par nuevo de texto y fondo se
+añade a `PARES` en `client/src/lib/tokens.test.ts`.
 
 ## Tipografía
 
-**Sistema de Fuentes (Google Fonts):**
+Montserrat 400–800, servida desde el propio dominio
+(`client/public/fuentes/montserrat-v31/`, fuente variable con licencia OFL;
+`@font-face` y respaldo con sus medidas en `client/src/index.css`). Para
+cambiar de versión, carpeta nueva (`montserrat-v32/`): se cachea un año como
+inmutable. Escala:
 
-- **Headlines:** Inter Bold/Extrabold (700-800) - Títulos principales y CTAs
-- **Subheadings:** Inter Semibold (600) - Subtítulos y features
-- **Body:** Inter Regular (400) - Texto descriptivo
-- **Accent:** Inter Medium (500) - Labels y metadata
+| Nivel    | Tamaño   | Clases                                                               |
+| -------- | -------- | -------------------------------------------------------------------- |
+| H1       | 48–64 px | `text-5xl lg:text-6xl font-bold`                                     |
+| H2       | 32–40 px | `text-3xl md:text-4xl font-bold`                                     |
+| H3       | 24 px    | `text-2xl font-semibold`                                             |
+| Cuerpo   | 18 px    | `text-lg` (el público tiene sesgo de edad alto)                      |
+| Overline | 13 px    | `text-[13px] font-semibold uppercase tracking-wider text-miel-texto` |
 
-**Jerarquía de Tamaños:**
+## Componentes y espaciado
 
-- Hero H1: text-5xl md:text-6xl lg:text-7xl
-- Section H2: text-4xl md:text-5xl
-- Feature H3: text-2xl md:text-3xl
-- Body: text-base md:text-lg
-- Small: text-sm
+Catálogo vivo con demos y código: `/componentes` (fuente:
+`client/src/catalogo/registro.ts`). Clases compartidas:
+`client/src/lib/clases.ts`.
 
----
+- Botones: primario `variant="secondary"` (miel, texto pizarra); secundario
+  `variant="outline"`; sobre `bg-noche`, contorno blanco. Objetivo táctil de 44 px mínimo (`min-h-11`).
+- Tarjetas: `rounded-2xl`, borde sutil y `hover-elevate`. Sin glassmorphism.
+- Bandas: `py-16 md:py-24`, contenedor `max-w-7xl mx-auto px-4 md:px-8`, ritmo
+  blanco → `bg-fondo-suave` → `bg-noche`.
+- Iconos: Lucide, de línea, en pizarra, siempre con `aria-hidden` y junto a su
+  texto. Pilares: Users (Comunidad), BookOpen (Conocimiento), Cpu (Tecnología), BarChart3 (Datos).
+- Secciones sin construir: `<Proximamente />`, nunca un enlace a ningún sitio.
 
-## Sistema de Espaciado
+## Navegación
 
-**Unidades Tailwind Principales:** 4, 8, 12, 16, 20, 24, 32
+- Fuente única: `client/src/lib/navegacion.ts`. Cabecera, panel móvil, pie y
+  404 leen de ahí; ningún componente declara enlaces propios.
+- Cinco rubros (Acerca de · Recursos · Eventos · Membresía · Comunidad) y el
+  botón Únete, el único botón lleno de la cabecera. Recursos es un mega-menú
+  de cuatro grupos (Aprende · Certifícate · Participa · Conecta).
+- Un destino sin página no lleva `href` y se muestra «Próximamente». Al crear
+  su página, se le pone `href` en el mismo PR (el test de enlaces muertos lo
+  exige). Dentro de cada lista, los vivos van arriba.
+- Externos: ↗, pestaña nueva, texto `sr-only` «(se abre en otra pestaña)» y
+  evento `salida_plataforma`.
+- Menú completo desde `xl` (1280 px): a 1024 no cabían los cinco rubros; por debajo, panel móvil con un acordeón por rubro y Únete fijo abajo.
+- Teclado en el mega-menú: flechas, Inicio y Fin (`lib/teclado.ts`); Radix da
+  Enter/Espacio para abrir y Escape para cerrar.
+- Pie: solo destinos vivos por columna; si un rubro no tiene ninguno, una sola
+  marca «Próximamente». Sin animaciones de entrada.
 
-**Secciones:**
+## Contenido institucional
 
-- Mobile: py-12 a py-16
-- Desktop: py-20 a py-32
-- Contenedores: max-w-7xl mx-auto px-4 md:px-8
+- El copy de Nosotros, ¿Qué hacemos? y Nuestro equipo vive en
+  `client/src/content/institucional/` y es literal del documento «Concepto
+  NOSOTROS». Cambiar un texto = editar ese módulo; las páginas no llevan copy.
+- `contenido.test.ts` rechaza textos vacíos, marcadores de relleno y enlaces a
+  rutas que no existen.
+- Datos pendientes (año de fundación D7, fotos, LinkedIn, Consejo, logo de
+  Parksys, Dossier) van como `PENDIENTE` en el módulo, nunca inventados.
+- Componentes de estas páginas: `components/institucional/` (SubnavSeccion,
+  PilarCard, PerfilCard, TarjetaCompromiso, RutaTimeline, MuroAliados).
+- Anclas: las secciones enlazables llevan `id` y `scroll-mt-32`; `ScrollRestoration` lleva al ancla cuando la URL trae `#`.
 
----
+## Movimiento
 
-## Estructura de Secciones
+- Todo framer-motion respeta `MotionConfig reducedMotion="user"` (App.tsx).
+- **En páginas nuevas se anima solo el desplazamiento (`y`), nunca la
+  opacidad del contenido:** el HTML prerenderizado mostraría texto invisible a
+  buscadores y a quien no ejecuta JavaScript.
+- Sin sliders automáticos ni animaciones infinitas en páginas institucionales.
 
-### 1. Hero Section (80vh min-height)
+## Fotografía
 
-**Diseño:** Hero dividido asimétricamente (60/40)
-
-- Lado izquierdo: Headline impactante + subheading + doble CTA (primario y secundario)
-- Lado derecho: Imagen hero con ilustración del dashboard/plataforma
-- Background: Gradiente sutil morado con mesh gradient animado
-- Elementos flotantes: Pequeños íconos de features con parallax suave
-
-**Imagen Hero:** Screenshot/mockup de la plataforma en acción, mostrando el dashboard con datos reales, fondo con gradiente morado institucional
-
-### 2. Problema/Solución Sections
-
-**Layout:** Alternancia izquierda-derecha (zigzag pattern)
-
-- Cada sección: Grid 2 columnas (md:grid-cols-2)
-- Lado contenido: Título + descripción + lista de beneficios con checkmarks
-- Lado visual: Ilustración existente con backdrop blur card
-- Cards de features: 3-4 columnas en subsecciones (grid-cols-1 md:grid-cols-2 lg:grid-cols-4)
-- Cada card: Ícono + título + descripción corta + hover lift effect
-
-### 3. Features Showcase (Membresías, Comunidad, Blog, Certificaciones, etc.)
-
-**Estructura Modular por Feature:**
-
-- Header centrado: Pregunta provocadora (actual) + respuesta (actual)
-- Grid de 4-6 cards (lg:grid-cols-3 para 6 items, lg:grid-cols-2 para 4 items)
-- Card design: Fondo semi-transparente con glassmorphism, borde sutil, ícono ilustrativo arriba, título bold, descripción concisa
-- Imagen visual del feature: Colocar ilustración actual con sombra soft y border radius moderno
-
-### 4. Casos de Éxito/Logos
-
-**Diseño:** Carrusel infinito automático con logos en grayscale
-
-- Logos organizados en 2 filas parallax (velocidades diferentes)
-- Efecto: opacity-50 hover:opacity-100 en cada logo
-- Background: Gradiente sutil top-to-bottom
-
-### 5. Testimonios
-
-**Layout:** Grid 3 columnas (lg:grid-cols-3)
-
-- Card testimonial: Foto redonda grande, quote, nombre, organización
-- Glassmorphism backdrop con borde gradiente morado
-- Altura consistente entre cards
-
-### 6. Servicios Incluidos (Final)
-
-**Diseño:** Grid 2-3 columnas con íconos grandes
-
-- Cada servicio: Ícono ilustrado + título + descripción expandida
-- Background alternado (odd/even) para crear ritmo visual
-
-### 7. CTA Final
-
-**Hero-style CTA:**
-
-- Centrado, background gradiente morado vibrante
-- Headline conciso + CTA grande + texto de apoyo (sin riesgo/prueba gratuita)
-- Formulario inline opcional para captura rápida
-
-### 8. Footer Enriquecido
-
-**Estructura 4 columnas:**
-
-- Logo + descripción breve + redes sociales
-- Navegación rápida (links principales)
-- Servicios (lista de soluciones)
-- Contacto + newsletter signup
-- Bottom bar: Copyright + términos + privacidad
-
----
-
-## Componentes UI
-
-**Buttons:**
-
-- Primario: bg-purple-600 hover:bg-purple-700, rounded-lg, px-8 py-4
-- Secundario: border-2 border-purple-600 hover:bg-purple-50, rounded-lg
-- Sobre imágenes: backdrop-blur-md bg-white/10 border border-white/20
-
-**Cards:**
-
-- Border radius: rounded-2xl
-- Shadow: shadow-lg hover:shadow-2xl transition
-- Glassmorphism: bg-white/80 backdrop-blur-md para elementos sobre fondos
-
-**Icons:**
-
-- Heroicons vía CDN
-- Tamaños: w-6 h-6 para inline, w-12 h-12 para features
-
----
-
-## Animaciones (Sutiles)
-
-**Scroll-triggered:**
-
-- Fade-in-up para cards y secciones (threshold: 0.1)
-- Stagger effect en grids (delay incremental 100ms)
-
-**Hover States:**
-
-- Cards: translateY(-4px) + shadow enhancement
-- Buttons: scale(1.02) + brightness adjustment
-
-**Hero:**
-
-- Mesh gradient animado suave (CSS animation, 20s loop)
-- Parallax en elementos flotantes (scroll-based, transform translate)
-
-**Restricción:** NO carruseles auto-play excepto logos. NO animaciones que distraigan del contenido.
-
----
-
-## Imágenes
-
-**Hero Image:** Mockup del dashboard de la plataforma sobre fondo gradiente morado, perspectiva isométrica moderna
-
-**Feature Images:** Mantener ilustraciones actuales (Recurso-XX-ASPAL) integradas con:
-
-- Border radius moderno (rounded-2xl)
-- Sombra suave (shadow-xl)
-- Posicionamiento estratégico alternando lados
-
-**Logos Clientes:** Convertir a grayscale por defecto, color en hover
+Rostros reales de directivos latinoamericanos en eventos; retratos del equipo
+con el mismo fondo y la misma luz. Sin fotos de stock ni mockups de dashboard
+(esos viven solo en `/plataforma`).

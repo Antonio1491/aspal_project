@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Check } from "lucide-react";
-import membershipIllustration from "@assets/recurso-13-membresias.png";
+import membershipIllustration from "@assets/recurso-13-membresias.webp";
 
 interface ProblemSectionProps {
   question: string;
@@ -10,13 +10,15 @@ interface ProblemSectionProps {
   benefits: string[];
   image: string;
   imageAlt: string;
+  /** Dimensiones reales de la imagen: reservan su hueco y evitan el salto de layout. */
+  anchoImagen?: number;
+  altoImagen?: number;
   reverse?: boolean;
 }
 
 const benefitVariants = {
-  hidden: { opacity: 0, x: -20 },
+  hidden: { x: -20 },
   visible: {
-    opacity: 1,
     x: 0,
     transition: {
       duration: 0.4,
@@ -32,6 +34,8 @@ export default function ProblemSection({
   benefits,
   image,
   imageAlt,
+  anchoImagen,
+  altoImagen,
   reverse = false,
 }: ProblemSectionProps) {
   return (
@@ -45,8 +49,8 @@ export default function ProblemSection({
             <motion.h2
               className="text-4xl md:text-5xl font-bold leading-tight"
               data-testid="text-question"
-              initial={{ opacity: 0, x: reverse ? 40 : -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ x: reverse ? 40 : -40 }}
+              whileInView={{ x: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
             >
@@ -55,8 +59,8 @@ export default function ProblemSection({
 
             <motion.div
               className="space-y-4"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 20 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
             >
@@ -107,8 +111,8 @@ export default function ProblemSection({
           {/* Image side */}
           <motion.div
             className={reverse ? "md:order-1" : ""}
-            initial={{ opacity: 0, y: 60 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 60 }}
+            whileInView={{ y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.25, 0.4, 0.25, 1] }}
           >
@@ -118,6 +122,10 @@ export default function ProblemSection({
                   <img
                     src={image}
                     alt={imageAlt}
+                    width={anchoImagen}
+                    height={altoImagen}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-auto rounded-xl"
                     data-testid="img-problem-illustration"
                   />
@@ -127,8 +135,8 @@ export default function ProblemSection({
               {/* Decorative elements */}
               <motion.div
                 className="absolute -z-10 -top-6 -right-6 w-full h-full bg-gradient-to-br from-primary/10 to-transparent rounded-2xl"
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ scale: 0.9 }}
+                whileInView={{ scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.3 }}
               />
@@ -154,6 +162,8 @@ export function MembershipProblemSection() {
       ]}
       image={membershipIllustration}
       imageAlt="Automatización de membresías"
+      anchoImagen={960}
+      altoImagen={998}
     />
   );
 }

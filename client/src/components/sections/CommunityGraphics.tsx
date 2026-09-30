@@ -98,7 +98,7 @@ export function FloatingDots({ className = "" }: { className?: string }) {
           cy={dot.y}
           r={dot.size}
           className="fill-secondary/40"
-          initial={{ opacity: 0, scale: 0 }}
+          initial={{ scale: 0 }}
           animate={{
             opacity: [0.4, 0.8, 0.4],
             scale: [0.8, 1.1, 0.8],
@@ -172,8 +172,8 @@ export function HexagonNetwork({ className = "" }: { className?: string }) {
         points={hexPoints(100, 100, 30)}
         className="fill-primary/10 stroke-primary/40"
         strokeWidth="2"
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
         transition={{ duration: 0.6 }}
       />
 
@@ -187,8 +187,8 @@ export function HexagonNetwork({ className = "" }: { className?: string }) {
             points={hexPoints(x, y, 20)}
             className="fill-secondary/10 stroke-secondary/40"
             strokeWidth="1.5"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }}
           />
         );
@@ -284,7 +284,7 @@ export function GrowthChart({ className = "" }: { className?: string }) {
     <svg viewBox="0 0 200 150" className={`w-full h-full ${className}`} fill="none">
       {/* Grid lines */}
       {[30, 60, 90, 120].map((y, i) => (
-        <motion.line
+        <line
           key={i}
           x1="20"
           y1={y}
@@ -292,19 +292,13 @@ export function GrowthChart({ className = "" }: { className?: string }) {
           y2={y}
           className="stroke-muted-foreground/10"
           strokeWidth="1"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: i * 0.1 }}
         />
       ))}
 
       {/* Growth area */}
-      <motion.path
+      <path
         d="M20 120 Q50 100 80 90 T140 50 T180 30 V120 H20 Z"
         className="fill-primary/10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
       />
 
       {/* Growth line */}
@@ -355,25 +349,17 @@ export function DecorativeBlob({
     <motion.svg
       viewBox="0 0 200 200"
       className={`w-full h-full ${className}`}
-      initial={{ scale: 0.8, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
+      initial={{ scale: 0.8 }}
+      animate={{ scale: 1 }}
       transition={{ duration: 1 }}
     >
-      <motion.path
+      {/* Forma fija. Animar el atributo `d` con fotogramas clave dejaba en
+          cada carga de /plataforma el error «<path> attribute d: Expected
+          moveto… "undefined"»; sin esa animación, desaparece. La entrada del
+          <svg> (escala de 0,8 a 1) queda como único movimiento. */}
+      <path
         d="M100 20 C150 20 180 50 180 100 C180 150 150 180 100 180 C50 180 20 150 20 100 C20 50 50 20 100 20"
         className={colorClass}
-        animate={{
-          d: [
-            "M100 20 C150 20 180 50 180 100 C180 150 150 180 100 180 C50 180 20 150 20 100 C20 50 50 20 100 20",
-            "M100 25 C145 15 185 55 175 105 C165 155 140 185 95 175 C45 165 15 140 25 95 C35 45 55 35 100 25",
-            "M100 20 C150 20 180 50 180 100 C180 150 150 180 100 180 C50 180 20 150 20 100 C20 50 50 20 100 20",
-          ],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
       />
     </motion.svg>
   );

@@ -25,8 +25,8 @@ export default function CTASection() {
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <motion.div
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 backdrop-blur-sm border border-primary/30"
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ scale: 0.8 }}
+            whileInView={{ scale: 1 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5, ease: [0.25, 0.4, 0.25, 1] }}
           >
@@ -37,8 +37,8 @@ export default function CTASection() {
           <motion.h2
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary leading-tight"
             data-testid="text-cta-title"
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 40 }}
+            whileInView={{ y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.7, delay: 0.1, ease: [0.25, 0.4, 0.25, 1] }}
           >
@@ -48,20 +48,20 @@ export default function CTASection() {
           <motion.p
             className="text-xl text-primary/80 max-w-2xl mx-auto"
             data-testid="text-cta-description"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 30 }}
+            whileInView={{ y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
           >
-            Únete a cientos de asociaciones que ya están creciendo con nuestra plataforma.
+            {/* PENDIENTE: aquí se afirmaba "cientos de asociaciones"; se retiró por no ser verificable (Etapa 1). Sin copy nuevo hasta que lo apruebe la Coordinación. */}
             Sin riesgos, sin compromisos.
           </motion.p>
 
           <motion.form
             onSubmit={handleSubmit}
             className="max-w-md mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 30 }}
+            whileInView={{ y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
           >
@@ -89,15 +89,9 @@ export default function CTASection() {
             </div>
           </motion.form>
 
-          <motion.p
-            className="text-sm text-primary/60"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-          >
-            Prueba gratuita por 14 días • No requiere tarjeta de crédito
-          </motion.p>
+          {/* PENDIENTE: aquí se afirmaba "Prueba gratuita por 14 días • No
+              requiere tarjeta de crédito"; se retiró por no ser verificable
+              (Etapa 1). Vuelve si la Coordinación confirma la oferta. */}
         </div>
       </div>
 

@@ -1,3 +1,4 @@
+import type { FunctionComponent } from "react";
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -5,21 +6,61 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { MotionConfig } from "framer-motion";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
+import { SaltarAlContenido } from "@/components/layout/SaltarAlContenido";
+import { CabeceraRuta } from "@/components/layout/CabeceraRuta";
 import { ScrollRestoration } from "@/components/layout/ScrollRestoration";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
-import Home from "@/pages/home";
+import Inicio from "@/pages/inicio";
+import Plataforma from "@/pages/plataforma";
+import Nosotros from "@/pages/nosotros";
+import MapaDeRuta from "@/pages/mapa-de-ruta";
+import QueHacemos from "@/pages/que-hacemos";
+import NuestroEquipo from "@/pages/nuestro-equipo";
+import Unete from "@/pages/unete";
+import Eventos from "@/pages/eventos";
 import Blog from "@/pages/blog";
 import BlogPost from "@/pages/blog-post";
 import Podcast from "@/pages/podcast";
 import NotFound from "@/pages/not-found";
+import Componentes from "@/pages/componentes";
+import {
+  RUTAS_DINAMICAS,
+  RUTAS_ESTATICAS,
+  type RutaDinamica,
+  type RutaEstatica,
+} from "@/lib/rutas";
+
+/**
+ * Una página por cada ruta de `rutas.ts`. El tipo `Record` hace que añadir una
+ * ruta sin su página (o una página sin su ruta) no compile.
+ */
+const PAGINAS: Record<RutaEstatica, FunctionComponent> = {
+  "/": Inicio,
+  "/blog": Blog,
+  "/podcast": Podcast,
+  "/plataforma": Plataforma,
+  "/unete": Unete,
+  "/nosotros": Nosotros,
+  "/mapa-de-ruta": MapaDeRuta,
+  "/que-hacemos": QueHacemos,
+  "/nuestro-equipo": NuestroEquipo,
+  "/eventos": Eventos,
+  "/componentes": Componentes,
+};
+
+const PAGINAS_DINAMICAS: Record<RutaDinamica, FunctionComponent> = {
+  "/blog/:slug": BlogPost,
+};
 
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/blog" component={Blog} />
-      <Route path="/blog/:slug" component={BlogPost} />
-      <Route path="/podcast" component={Podcast} />
+      {RUTAS_ESTATICAS.map((ruta) => (
+        <Route key={ruta} path={ruta} component={PAGINAS[ruta]} />
+      ))}
+      {RUTAS_DINAMICAS.map((ruta) => (
+        <Route key={ruta} path={ruta} component={PAGINAS_DINAMICAS[ruta]} />
+      ))}
       <Route component={NotFound} />
     </Switch>
   );
@@ -33,7 +74,9 @@ function App() {
           cubre. Parte del público lo tiene activado por motivos médicos. */}
       <MotionConfig reducedMotion="user">
         <TooltipProvider>
+          <SaltarAlContenido />
           <Toaster />
+          <CabeceraRuta />
           <ScrollRestoration />
           <ErrorBoundary>
             <Router />
