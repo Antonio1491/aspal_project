@@ -5,13 +5,14 @@ import { PodcastCard } from "@/components/content/PodcastCard";
 import { FormSuscripcion } from "@/components/forms/FormSuscripcion";
 import { CifraAnimada } from "@/components/institucional/CifraAnimada";
 import { EtapaMapa } from "@/components/institucional/EtapaMapa";
+import { Hashtag } from "@/components/institucional/Hashtag";
+import { ManifiestoNumerado } from "@/components/institucional/ManifiestoNumerado";
 import { IndiceEtapas } from "@/components/institucional/IndiceEtapas";
 import { MuroAliados } from "@/components/institucional/MuroAliados";
 import { PerfilCard } from "@/components/institucional/PerfilCard";
 import { PilarCard } from "@/components/institucional/PilarCard";
 import { RutaTimeline } from "@/components/institucional/RutaTimeline";
 import { SubnavSeccion } from "@/components/institucional/SubnavSeccion";
-import { TarjetaCompromiso } from "@/components/institucional/TarjetaCompromiso";
 import { VocesRed } from "@/components/institucional/VocesRed";
 import { Banda } from "@/components/layout/Banda";
 import { FotoHero, type EstiloFotoHero } from "@/components/layout/FotoHero";
@@ -129,14 +130,17 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
       `<HeroInstitucional ${atributo("overline", v.overline)}${v.overlineNormal ? " overlineNormal" : ""} ${atributo("titulo", v.titulo)}${v.visual ? " visual={<PatronPanal />}" : ""}>\n  <p>…</p>\n</HeroInstitucional>`,
   },
   "patron-panal": {
+    controles: [
+      { tipo: "interruptor", clave: "animado", etiqueta: "animado", inicial: false },
+    ],
     fondo: "noche",
-    nota: "Decorativo (aria-hidden) y estático: se prerenderiza igual sin JavaScript.",
-    render: () => (
+    nota: "Decorativo (aria-hidden). Con «animado», el racimo se arma al montar: activa y desactiva el interruptor para verlo de nuevo.",
+    render: (v) => (
       <div className="mx-auto max-w-md">
-        <PatronPanal />
+        <PatronPanal key={String(v.animado)} animado={Boolean(v.animado)} />
       </div>
     ),
-    codigo: () => `<PatronPanal className="…" />`,
+    codigo: (v) => `<PatronPanal${v.animado ? " animado" : ""} />`,
   },
   "foto-hero": {
     controles: [
@@ -222,23 +226,20 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
     codigo: (v) =>
       `<PilarCard pilar={PILARES.find((p) => p.id === ${JSON.stringify(texto(v.pilar))})!} variante="${texto(v.variante)}"${v.ilustracion ? " ilustracion" : ""}${v.numero ? ` numero={${Math.max(1, PILARES.findIndex((p) => p.id === v.pilar) + 1)}}` : ""} />`,
   },
-  "tarjeta-compromiso": {
-    controles: [
-      {
-        tipo: "texto",
-        clave: "titulo",
-        etiqueta: "titulo",
-        inicial: DEFENDEMOS[0].titulo,
-      },
-      { tipo: "texto", clave: "texto", etiqueta: "texto", inicial: DEFENDEMOS[0].texto },
-    ],
-    render: (v) => (
-      <div className="max-w-md">
-        <TarjetaCompromiso titulo={texto(v.titulo)} texto={texto(v.texto)} />
-      </div>
+  "manifiesto-numerado": {
+    render: () => <ManifiestoNumerado items={DEFENDEMOS} />,
+    codigo: () => `<ManifiestoNumerado items={DEFENDEMOS} />`,
+  },
+  hashtag: {
+    fondo: "noche",
+    nota: "Estrecha la ventana: salta entre palabras en vez de desbordar.",
+    render: () => (
+      <p className="text-3xl font-extrabold text-secondary md:text-5xl">
+        <Hashtag />
+      </p>
     ),
-    codigo: (v) =>
-      `<TarjetaCompromiso ${atributo("titulo", v.titulo)} ${atributo("texto", v.texto)} />`,
+    codigo: () =>
+      `<p className="text-3xl font-extrabold md:text-5xl">\n  <Hashtag />\n</p>`,
   },
   "ruta-timeline": {
     render: () => <RutaTimeline hitos={RUTA} />,

@@ -107,12 +107,12 @@ export const REGISTRO = [
     importar: 'import { PatronPanal } from "@/components/layout/PatronPanal";',
     categoria: "layout",
     descripcion:
-      "Panal de hexágonos de la marca (el isotipo repetido), con un racimo destacado en miel y bordes que se desvanecen. SVG estático y decorativo (aria-hidden).",
+      "Panal de hexágonos de la marca (el isotipo repetido), con un racimo destacado en miel y bordes que se desvanecen. SVG decorativo (aria-hidden). Con `animado`, el racimo se arma celda a celda al cargar (una vez por página: en el hero).",
     usarCuando:
       "Fondos noche que necesitan ancla visual sin foto: la columna `visual` del hero, detrás de una foto, bandas de cierre.",
     evitarPara:
       "Fondos claros (está pensado en miel sobre noche) o como relleno de todas las bandas: pierde fuerza.",
-    props: "className?: string",
+    props: "className?: string; animado?: boolean",
     estado: "en-uso",
     vista: "demo",
   },
@@ -260,27 +260,16 @@ export const REGISTRO = [
     vista: "demo",
   },
   {
-    id: "tarjeta-compromiso",
-    nombre: "TarjetaCompromiso",
-    archivo: "client/src/components/institucional/TarjetaCompromiso.tsx",
-    importar:
-      'import { TarjetaCompromiso } from "@/components/institucional/TarjetaCompromiso";',
-    categoria: "institucional",
-    descripcion: "Tarjeta simple de título + texto (Lo que defendemos).",
-    usarCuando: "Enunciados cortos de valores o compromisos en rejilla.",
-    props: "titulo: string; texto: string",
-    estado: "en-uso",
-    vista: "demo",
-  },
-  {
     id: "ruta-timeline",
     nombre: "RutaTimeline",
     archivo: "client/src/components/institucional/RutaTimeline.tsx",
     importar: 'import { RutaTimeline } from "@/components/institucional/RutaTimeline";',
     categoria: "institucional",
     descripcion:
-      "Escalera de hitos por año con <details> nativo: se abre con clic, toque o teclado.",
-    usarCuando: "Cualquier línea de tiempo con detalle desplegable.",
+      "Ruta por años como camino: insignia hexagonal con icono por hito, línea que los une desde xl (se traza al entrar en pantalla), todo el texto a la vista y «Estamos aquí» en el hito en curso.",
+    usarCuando: "Metas o hitos en el tiempo (Ruta ASPAL 2026–2030).",
+    evitarPara:
+      "Pasos de un proceso que llevan a otra página: para eso, IndiceEtapas (home).",
     props: "hitos: Hito[]",
     estado: "en-uso",
     vista: "demo",
@@ -363,6 +352,35 @@ export const REGISTRO = [
     evitarPara:
       "Cifras que no son un único entero (rangos, decimales: se muestran sin animar) o datos que el usuario compara al leer (tablas).",
     props: "valor: string; duracion?: number",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "manifiesto-numerado",
+    nombre: "ManifiestoNumerado",
+    archivo: "client/src/components/institucional/ManifiestoNumerado.tsx",
+    importar:
+      'import { ManifiestoNumerado } from "@/components/institucional/ManifiestoNumerado";',
+    categoria: "institucional",
+    descripcion:
+      "Enunciados de valores o compromisos como manifiesto: lista numerada (01, 02… en contorno miel) con título y texto, separados por una línea.",
+    usarCuando: "Lo que defendemos, principios, compromisos: pocos enunciados con texto.",
+    evitarPara: "Listas largas o de una línea: ahí basta una lista simple.",
+    props: "items: { titulo: string; texto: string }[]",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "hashtag",
+    nombre: "Hashtag",
+    archivo: "client/src/components/institucional/Hashtag.tsx",
+    importar: 'import { Hashtag } from "@/components/institucional/Hashtag";',
+    categoria: "institucional",
+    descripcion:
+      "El hashtag de la marca con <wbr> entre sus palabras: en una línea si cabe y, si no, salta entre palabras en vez de desbordar. Solo el texto.",
+    usarCuando:
+      "El hashtag a tamaño de titular (Nosotros). A 13 px (overlines) cabe siempre y basta {HASHTAG}.",
+    props: "texto?: string (por defecto HASHTAG)",
     estado: "en-uso",
     vista: "demo",
   },
@@ -523,7 +541,7 @@ export const REGISTRO = [
     categoria: "ui",
     descripcion: "Bloque que se abre y cierra (acordeones del panel móvil).",
     usarCuando:
-      "Grupos desplegables controlados. Para texto estático que se despliega, <details> nativo (ver RutaTimeline).",
+      "Grupos desplegables controlados. Para texto estático que se despliega, <details> nativo.",
     props: "open?; onOpenChange?; children",
     estado: "en-uso",
     vista: "demo",

@@ -28,7 +28,12 @@ import {
 } from "@/content/institucional/nosotros";
 import { PILARES } from "@/content/institucional/pilares";
 import { registrarEvento } from "@/lib/analitica";
-import { BOTON_CONTORNO_NOCHE, BOTON_MIEL_NOCHE, H2_BANDA } from "@/lib/clases";
+import {
+  BOTON_CONTORNO_NOCHE,
+  BOTON_MIEL_NOCHE,
+  H2_BANDA,
+  REJILLA_PILARES_PANAL,
+} from "@/lib/clases";
 import { NOMBRE_COMPLETO } from "@/lib/marca";
 import { ArrowRight } from "lucide-react";
 import { Link } from "wouter";
@@ -131,7 +136,7 @@ export default function Inicio() {
           {/* Panal escalonado: las insignias sobresalen 40 px por arriba (pt-10,
               gap-y-16) y desde lg las tarjetas pares bajan medio paso, como las
               celdas de un panal (lg:pb-12 reserva ese medio paso). */}
-          <div className="mt-8 grid gap-x-6 gap-y-16 pt-10 md:grid-cols-2 lg:grid-cols-4 lg:pb-12 lg:[&>*:nth-child(even)]:translate-y-12">
+          <div className={`mt-8 ${REJILLA_PILARES_PANAL}`}>
             {PILARES.map((pilar, i) => (
               <PilarCard
                 key={pilar.id}

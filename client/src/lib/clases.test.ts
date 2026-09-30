@@ -7,6 +7,7 @@ import {
   H2_BANDA,
   HEXAGONO_PUNTA,
   NUMERO_CONTORNO,
+  REJILLA_PILARES_PANAL,
 } from "./clases";
 
 const SRC = resolve(import.meta.dirname, "..");
@@ -25,6 +26,7 @@ describe("clases compartidas", () => {
     ["BOTON_CONTORNO_NOCHE", BOTON_CONTORNO_NOCHE],
     ["HEXAGONO_PUNTA", HEXAGONO_PUNTA],
     ["NUMERO_CONTORNO", NUMERO_CONTORNO],
+    ["REJILLA_PILARES_PANAL", REJILLA_PILARES_PANAL],
   ])("nadie copia %s en línea: se importa de lib/clases.ts", (_nombre, clases) => {
     const copias = tsx.filter((f) => readFileSync(f, "utf8").includes(`"${clases}"`));
     expect(copias).toEqual([]);

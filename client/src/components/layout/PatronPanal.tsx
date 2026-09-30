@@ -36,14 +36,25 @@ const CELDAS = Array.from({ length: FILAS * COLUMNAS }, (_, i) => {
 /** Racimo de cuatro celdas, como el isotipo: dos llenas en miel y dos en contorno. */
 const LLENAS = new Set(["2-2", "3-2"]);
 const CONTORNO_FUERTE = new Set(["2-3", "3-3", "4-2"]);
+/** Orden de llegada de las celdas del racimo con `animado`. */
+const ORDEN_RACIMO = ["2-2", "3-2", "2-3", "3-3", "4-2"];
 
 /**
- * Patrón de panal de la marca (el isotipo, repetido). Decorativo: `aria-hidden`
- * y sin animación, porque se prerenderiza y debe verse igual sin JavaScript.
- * Pensado para fondos noche; en el hero ocupa la columna visual mientras no
- * haya foto (`FOTO_HERO` en content/institucional/inicio.ts).
+ * Patrón de panal de la marca (el isotipo, repetido). Decorativo: `aria-hidden`.
+ * Pensado para fondos noche; en el hero de la home ocupa la columna visual
+ * mientras no haya foto (`FOTO_HERO` en content/institucional/inicio.ts).
+ *
+ * Con `animado`, las celdas del racimo se arman una tras otra al cargar (solo
+ * transform, CSS: el prerender ya las trae en su sitio y «reducir movimiento»
+ * las deja quietas). Una vez por página: en el hero, no en la banda final.
  */
-export function PatronPanal({ className }: { className?: string }) {
+export function PatronPanal({
+  className,
+  animado = false,
+}: {
+  className?: string;
+  animado?: boolean;
+}) {
   // Ids únicos por instancia: dos patrones en la misma página compartirían la
   // máscara. Sin «:», que dentro de url(#…) no todos los navegadores aceptan.
   const id = useId().replace(/:/g, "");
@@ -69,19 +80,33 @@ export function PatronPanal({ className }: { className?: string }) {
         </mask>
       </defs>
       <g mask={`url(#${id}-mascara)`} strokeWidth="2" strokeLinejoin="round">
-        {CELDAS.map(({ clave, x, y }) => (
-          <polygon
-            key={clave}
-            points={puntos(x, y, R - 3)}
-            className={
-              LLENAS.has(clave)
-                ? "fill-secondary stroke-secondary"
-                : CONTORNO_FUERTE.has(clave)
-                  ? "fill-none stroke-secondary/80"
-                  : "fill-none stroke-secondary/20"
-            }
-          />
-        ))}
+        {CELDAS.map(({ clave, x, y }) => {
+          const orden = animado ? ORDEN_RACIMO.indexOf(clave) : -1;
+          return (
+            <polygon
+              key={clave}
+              points={puntos(x, y, R - 3)}
+              className={cn(
+                LLENAS.has(clave)
+                  ? "fill-secondary stroke-secondary"
+                  : CONTORNO_FUERTE.has(clave)
+                    ? "fill-none stroke-secondary/80"
+                    : "fill-none stroke-secondary/20",
+                orden >= 0 && "animate-insignia motion-reduce:animate-none",
+              )}
+              style={
+                orden >= 0
+                  ? {
+                      // Cada celda crece desde su propio centro.
+                      transformBox: "fill-box",
+                      transformOrigin: "center",
+                      animationDelay: `${200 + orden * 140}ms`,
+                    }
+                  : undefined
+              }
+            />
+          );
+        })}
       </g>
     </svg>
   );

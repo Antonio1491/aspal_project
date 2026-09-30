@@ -109,7 +109,8 @@ Catálogo vivo con demos y código: `/componentes` (fuente:
 - Datos pendientes (año de fundación D7, fotos, LinkedIn, Consejo,
   Dossier) van como `PENDIENTE` en el módulo, nunca inventados.
 - Componentes de estas páginas: `components/institucional/` (SubnavSeccion,
-  PilarCard, PerfilCard, TarjetaCompromiso, RutaTimeline, MuroAliados).
+  PilarCard, PerfilCard, ManifiestoNumerado, RutaTimeline, MuroAliados,
+  Hashtag).
 - Anclas: las secciones enlazables llevan `id` y `scroll-mt-32`; `ScrollRestoration` lleva al ancla cuando la URL trae `#`.
 
 ## Movimiento
@@ -132,6 +133,14 @@ Catálogo vivo con demos y código: `/componentes` (fuente:
 - **Pilares en la home:** panal escalonado. La ilustración sale de una
   insignia hexagonal que rompe el borde de la tarjeta, número del pilar en
   contorno miel y, desde `lg`, las tarjetas pares bajan medio paso. Al entrar
+- **Nosotros** usa el mismo lenguaje: panal del isotipo que se arma en el hero
+  (`PatronPanal animado`, una vez por página) y estático en la banda final,
+  cifras que cuentan junto a «Quiénes somos», Misión y Visión en grande sobre
+  noche con «2030» como marca de agua, «Lo que defendemos» como manifiesto
+  numerado junto a la ilustración del megáfono, pilares en panal escalonado
+  (`REJILLA_PILARES_PANAL`) y la Ruta 2026–2030 como camino que se traza.
+- **El hashtag a tamaño de titular va con `<Hashtag />`**: es una sola palabra
+  de 25 letras y sin puntos de corte desborda en móvil.
   en pantalla, cada ilustración se asoma desde su insignia, en cascada
   (entrada única, no en hover).
 

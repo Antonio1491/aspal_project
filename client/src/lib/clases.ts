@@ -35,3 +35,11 @@ export const HEXAGONO_PUNTA =
  */
 export const NUMERO_CONTORNO =
   "select-none font-extrabold leading-none text-transparent [-webkit-text-stroke:2px_hsl(var(--secondary))] before:content-[attr(data-numero)] forced-colors:hidden";
+
+/**
+ * Rejilla de los 4 pilares en «panal escalonado» (con PilarCard ilustracion):
+ * deja 40 px arriba para la insignia que sobresale y, desde lg, baja medio
+ * paso las tarjetas pares.
+ */
+export const REJILLA_PILARES_PANAL =
+  "grid gap-x-6 gap-y-16 pt-10 md:grid-cols-2 lg:grid-cols-4 lg:pb-12 lg:[&>*:nth-child(even)]:translate-y-12";
