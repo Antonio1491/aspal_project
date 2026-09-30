@@ -102,21 +102,24 @@ export default function Inicio() {
                 className="flex flex-col lg:px-8 lg:first:pl-0 lg:last:pr-0"
                 data-testid={`cifra-${cifra.valor}`}
               >
-                <dt className="order-3 mt-2 text-lg text-muted-foreground">
+                <dt className="order-2 mt-2 text-lg text-muted-foreground">
                   {cifra.etiqueta}
                 </dt>
-                <div className="order-1 flex items-center gap-3" aria-hidden="true">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent">
-                    <cifra.icono className="h-6 w-6 text-primary" />
-                  </span>
-                  {cifra.meta && (
-                    <span className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold uppercase tracking-wider text-secondary-foreground">
-                      Meta 2030
+                {/* Icono y «Meta 2030» dentro del dd: un <dl> solo admite dt/dd. */}
+                <dd className="order-1">
+                  <div className="flex items-center gap-3" aria-hidden="true">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent">
+                      <cifra.icono className="h-6 w-6 text-primary" />
                     </span>
-                  )}
-                </div>
-                <dd className="order-2 mt-4 text-5xl font-extrabold text-primary">
-                  {cifra.valor}
+                    {cifra.meta && (
+                      <span className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold uppercase tracking-wider text-secondary-foreground">
+                        Meta 2030
+                      </span>
+                    )}
+                  </div>
+                  <span className="mt-4 block text-5xl font-extrabold text-primary">
+                    {cifra.valor}
+                  </span>
                 </dd>
               </div>
             ))}
@@ -182,19 +185,16 @@ export default function Inicio() {
             <div className="lg:col-span-7">
               <h2 className={H2_BANDA}>Próximos eventos</h2>
               <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
-                {TEXTO_EVENTOS} Déjanos tu correo y te avisamos en cuanto abramos
-                inscripciones.
+                {TEXTO_EVENTOS}
               </p>
-              <div className="mt-6 max-w-xl">
-                <FormSuscripcion origen="eventos" variante="compacto" />
-              </div>
-              <Link
-                href="/eventos"
-                className="mt-4 inline-flex min-h-11 items-center gap-1.5 font-medium text-primary underline underline-offset-4"
-                data-testid="button-home-eventos"
-              >
-                Ver la página de eventos
-              </Link>
+              {/* Botón, no formulario: la home ya tiene el del boletín en la banda
+                  final (§6.1) y dos formularios iguales a unas pantallas de
+                  distancia piden lo mismo dos veces. */}
+              <Button variant="outline" className="mt-6 min-h-11 px-6" asChild>
+                <Link href="/eventos" data-testid="button-home-eventos">
+                  Avísame cuando abran inscripciones
+                </Link>
+              </Button>
             </div>
           </div>
         </Banda>

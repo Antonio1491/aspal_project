@@ -6,6 +6,7 @@ import {
   Handshake,
   Landmark,
   Megaphone,
+  Route,
   Settings2,
   TrendingUp,
   Users,
@@ -75,12 +76,13 @@ export function IndiceEtapas({ origen }: { origen: "home" | "mapa" }) {
       className={cn(
         "relative grid grid-cols-2 gap-x-3 gap-y-8 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7",
         // Línea del camino, detrás de las insignias: solo cuando es una fila.
-        "xl:before:absolute xl:before:left-[7%] xl:before:right-[7%] xl:before:top-8 xl:before:h-0.5 xl:before:bg-secondary xl:before:content-['']",
+        // top-10 = p-2 del enlace (8 px) + media insignia (32 px).
+        "xl:before:absolute xl:before:left-[7%] xl:before:right-[7%] xl:before:top-10 xl:before:h-0.5 xl:before:bg-secondary xl:before:content-['']",
       )}
       data-testid="indice-etapas-home"
     >
       {ETAPAS.map((etapa) => {
-        const Icono = ICONOS[etapa.numero];
+        const Icono = ICONOS[etapa.numero] ?? Route;
         const primera = etapa.numero === 1;
         return (
           <li key={etapa.id} className="relative">

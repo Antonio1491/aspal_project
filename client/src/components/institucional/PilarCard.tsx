@@ -84,9 +84,10 @@ export function PilarCard({
       className={cn(
         "flex h-full flex-col rounded-2xl border border-border bg-background p-6 md:p-8",
         // En «resumen» toda la tarjeta lleva al detalle (el enlace se estira
-        // con after:inset-0): objetivo táctil grande y un solo tabulador.
+        // con after:inset-0): objetivo táctil grande y un solo tabulador. El anillo
+        // sale solo con teclado (has-[:focus-visible]) y, en alto contraste, como outline.
         resumen &&
-          "relative transition-colors focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 hover:border-primary",
+          "relative transition-colors hover:border-primary has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2 forced-colors:has-[:focus-visible]:outline forced-colors:has-[:focus-visible]:outline-2",
       )}
       data-testid={`pilar-${pilar.id}`}
     >

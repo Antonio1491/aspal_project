@@ -29,7 +29,8 @@ export default function BlogCard({ post, etiqueta }: BlogCardProps) {
       // Sin esto el nombre accesible del enlace es la concatenación de imagen,
       // tiempo, título, extracto y fecha: seis tarjetas producen seis párrafos
       // en la lista de enlaces de un lector de pantalla.
-      aria-label={`${post.title} (se abre en una pestaña nueva)`}
+      // La etiqueta visible («Blog», «Podcast») va también en el nombre accesible.
+      aria-label={`${etiqueta ? `${etiqueta}: ` : ""}${post.title} (se abre en una pestaña nueva)`}
       data-testid={`link-post-${post.id}`}
     >
       <motion.div
