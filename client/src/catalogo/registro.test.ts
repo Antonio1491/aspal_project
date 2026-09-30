@@ -15,7 +15,9 @@ function recorrer(dir: string): string[] {
   });
 }
 
-const enDisco = recorrer(join(SRC, "components"))
+const todosLosComponentes = recorrer(join(SRC, "components"));
+
+const enDisco = todosLosComponentes
   .filter((f) => f.endsWith(".tsx") && !f.endsWith(".test.tsx"))
   .map((f) => posix(relative(RAIZ, f)))
   .sort();
@@ -31,7 +33,15 @@ const fuentes = recorrer(SRC)
       f.ruta !== "client/src/pages/componentes.tsx",
   );
 
-/** Quién importa el archivo: por alias `@/components/<carpeta>/<Nombre>` o relativo. */
+/**
+ * Quién importa el archivo: por alias `@/components/<carpeta>/<Nombre>` o
+ * relativo. Límites del detector:
+ * - Las rutas relativas profundas (`../components/…`, `../../layout/X`) no se
+ *   detectan: el componente saldría «sin-uso» y el test fallaría en voz alta.
+ *   Usa el alias `@/`.
+ * - El uso no es transitivo: si A solo lo importa B y B no lo importa nadie,
+ *   A cuenta como «en-uso».
+ */
 function importadores(archivo: string): string[] {
   const nombre = basename(archivo, ".tsx");
   const carpeta = basename(dirname(archivo));
@@ -52,7 +62,44 @@ const CATEGORIAS_POR_CARPETA: Record<string, Categoria[]> = {
   sections: ["legado"],
 };
 
+/** Identificador que trae la línea `importar`: el default o el primero entre llaves. */
+function identificadorImportado(importar: string): string | undefined {
+  return (
+    importar.match(/^import\s+([A-Za-z_$][\w$]*)\s+from/)?.[1] ??
+    importar.match(/^import\s*\{\s*([A-Za-z_$][\w$]*)/)?.[1]
+  );
+}
+
+function exportaIdentificador(texto: string, nombre: string): boolean {
+  const n = nombre.replace(/\$/g, String.raw`\$`);
+  const declaracion = new RegExp(
+    String.raw`export\s+(?:default\s+)?(?:async\s+)?(?:function\*?|const|class)\s+${n}\b`,
+  );
+  if (declaracion.test(texto)) return true;
+  return [...texto.matchAll(/export\s*\{([^}]*)\}/g)].some((m) =>
+    m[1]
+      .split(",")
+      .map((x) =>
+        x
+          .trim()
+          .split(/\s+as\s+/)
+          .pop(),
+      )
+      .includes(nombre),
+  );
+}
+
 describe("registro del catálogo", () => {
+  it("solo hay .tsx y .test.tsx en client/src/components", () => {
+    const intrusos = todosLosComponentes
+      .filter((f) => !f.endsWith(".tsx"))
+      .map((f) => posix(relative(RAIZ, f)));
+    expect(
+      intrusos,
+      "los componentes van en .tsx; un helper va en client/src/lib/ o client/src/hooks/",
+    ).toEqual([]);
+  });
+
   it("tiene una entrada por cada componente de client/src/components, y nada más", () => {
     expect(REGISTRO.map((e) => e.archivo).sort()).toEqual(enDisco);
   });
@@ -66,6 +113,10 @@ describe("registro del catálogo", () => {
   it("clasifica cada componente según su carpeta", () => {
     for (const e of REGISTRO) {
       const carpeta = basename(dirname(e.archivo));
+      expect(
+        CATEGORIAS_POR_CARPETA,
+        "carpeta nueva: añádela a CATEGORIAS_POR_CARPETA y al tipo Categoria",
+      ).toHaveProperty(carpeta);
       expect(CATEGORIAS_POR_CARPETA[carpeta], e.archivo).toContain(e.categoria);
     }
   });
@@ -84,6 +135,21 @@ describe("registro del catálogo", () => {
     for (const e of REGISTRO) {
       const modulo = `@/components/${basename(dirname(e.archivo))}/${basename(e.archivo, ".tsx")}`;
       expect(e.importar, e.nombre).toContain(`"${modulo}"`);
+    }
+  });
+
+  it("el nombre que importa cada línea existe como export del archivo", () => {
+    for (const e of REGISTRO) {
+      // Toast se lanza desde el hook (`toast` en @/hooks/use-toast); el archivo
+      // del componente solo exporta las piezas que pinta el Toaster.
+      if (e.id === "toast") continue;
+      const nombre = identificadorImportado(e.importar);
+      expect(nombre, `${e.nombre}: no se entiende su línea importar`).toBeDefined();
+      const texto = readFileSync(join(RAIZ, e.archivo), "utf8");
+      expect(
+        exportaIdentificador(texto, nombre!),
+        `${e.nombre}: ${e.archivo} no exporta «${nombre}»`,
+      ).toBe(true);
     }
   });
 

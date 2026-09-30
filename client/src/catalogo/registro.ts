@@ -106,7 +106,7 @@ export const REGISTRO = [
       'import { AvisoPestanaNueva } from "@/components/layout/AvisoPestanaNueva";',
     categoria: "layout",
     descripcion:
-      "Texto solo para lectores de pantalla: «(se abre en una pestaña nueva)».",
+      "Texto solo para lectores de pantalla: « (se abre en otra pestaña)». El espacio inicial va dentro del span.",
     usarCuando: 'Dentro de todo enlace con target="_blank", junto al icono ↗.',
     props: "sin props",
     estado: "en-uso",
@@ -454,7 +454,7 @@ export const REGISTRO = [
     categoria: "ui",
     descripcion: "Ayuda breve al pasar o enfocar. TooltipProvider ya está en App.tsx.",
     usarCuando:
-      "Aclarar un icono. Nunca para información imprescindible (no llega en móvil).",
+      "Hoy solo se usa TooltipProvider (App.tsx); Tooltip queda disponible para aclarar un icono. Nunca para información imprescindible (no llega en móvil).",
     props: "Tooltip > TooltipTrigger asChild + TooltipContent",
     estado: "en-uso",
     vista: "demo",
@@ -510,6 +510,7 @@ export const REGISTRO = [
         "HeroSection",
         "default",
         "Hero de producto con captura del panel.",
+        "sin props",
       ],
       [
         "problem-section",
@@ -517,6 +518,7 @@ export const REGISTRO = [
         "ProblemSection",
         "default",
         "Bloque problema/solución con ilustración (y MembershipProblemSection).",
+        "question: string; solution: string; description: string; benefits: string[]; image: string; imageAlt: string; anchoImagen?: number; altoImagen?: number; reverse?: boolean",
       ],
       [
         "features-grid",
@@ -524,6 +526,7 @@ export const REGISTRO = [
         "FeaturesGrid",
         "default",
         "Rejilla de funcionalidades de producto.",
+        "title: string; subtitle: string; features: { icon; title; description }[]; columns?: 2 | 3 | 4",
       ],
       [
         "feature-card",
@@ -531,6 +534,7 @@ export const REGISTRO = [
         "FeatureCard",
         "default",
         "Tarjeta de una funcionalidad (la usa FeaturesGrid).",
+        "icon: LucideIcon; title: string; description: string; index?: number",
       ],
       [
         "logo-carousel",
@@ -538,6 +542,7 @@ export const REGISTRO = [
         "LogoCarousel",
         "default",
         "Carrusel de logos de clientes.",
+        "sin props",
       ],
       [
         "cta-section",
@@ -545,6 +550,7 @@ export const REGISTRO = [
         "CTASection",
         "default",
         "Llamada final a registrarse en la plataforma.",
+        "sin props",
       ],
       [
         "community-graphics",
@@ -552,11 +558,12 @@ export const REGISTRO = [
         "HexagonNetwork",
         "named",
         "Gráficos decorativos SVG (HexagonNetwork, DecorativeBlob…).",
+        'className?: string (HexagonNetwork y demás); DecorativeBlob: className?; variant?: "primary" | "secondary"',
       ],
     ] as const
-  ).map(([id, archivo, nombre, exportacion, descripcion]) => ({
+  ).map(([id, archivo, nombre, exportacion, descripcion, props]) => ({
     id,
-    nombre: archivo === "CommunityGraphics" ? "CommunityGraphics" : nombre,
+    nombre: archivo,
     archivo: `client/src/components/sections/${archivo}.tsx`,
     importar:
       exportacion === "default"
@@ -567,7 +574,7 @@ export const REGISTRO = [
     usarCuando: "Solo en /plataforma, hasta su reubicación en la Etapa 3.",
     evitarPara:
       "Páginas nuevas: usa Banda, HeroInstitucional y los componentes institucionales.",
-    props: "ver el archivo",
+    props,
     estado: "en-uso" as const,
     vista: "sin-vista" as const,
   })),
