@@ -5,10 +5,11 @@ glassmorphism) describía un sitio que ya no existe.
 
 ## Marca
 
-- **Logotipo:** `client/src/assets/ASPAL-para fondo claro_*.png` sobre fondos
-  claros; `ASPAL-para fondo oscuro_*.png` sobre `bg-noche`. Nunca el de fondo
-  claro sobre fondo oscuro.
-- **Isotipo** (panal de 4 hexágonos): `Aspal-Icono_*.png`. Es la silueta de
+- **Logotipo:** `client/src/assets/aspal-logo-fondo-claro.webp` sobre fondos
+  claros. Para `bg-noche`, la versión de fondo oscuro; hoy ninguna página la
+  usa y su original vive en `docs/marca/` (ver su README para exportarla).
+  Nunca el de fondo claro sobre fondo oscuro.
+- **Isotipo** (panal de 4 hexágonos): `Aspal-Icono_*.webp`. Es la silueta de
   perfil cuando falta la foto.
 - **Motivo gráfico:** `HexagonNetwork` (`components/sections/CommunityGraphics.tsx`),
   semitransparente, en el hero, en la banda «Únete a la casa común» y en la Ruta
@@ -34,7 +35,11 @@ añade a `PARES` en `client/src/lib/tokens.test.ts`.
 
 ## Tipografía
 
-Montserrat 400–800 (Google Fonts, `client/index.html`). Escala:
+Montserrat 400–800, servida desde el propio dominio
+(`client/public/fuentes/montserrat-v31/`, fuente variable con licencia OFL;
+`@font-face` y respaldo con sus medidas en `client/src/index.css`). Para
+cambiar de versión, carpeta nueva (`montserrat-v32/`): se cachea un año como
+inmutable. Escala:
 
 | Nivel    | Tamaño   | Clases                                                               |
 | -------- | -------- | -------------------------------------------------------------------- |

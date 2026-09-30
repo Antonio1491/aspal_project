@@ -1,4 +1,4 @@
-import logoLight from "@assets/ASPAL-para fondo claro_1763675327795.png";
+import logo from "@assets/aspal-logo-fondo-claro.webp";
 import { FormSuscripcion } from "@/components/forms/FormSuscripcion";
 import { AvisoPestanaNueva } from "@/components/layout/AvisoPestanaNueva";
 import { Proximamente } from "@/components/layout/Proximamente";
@@ -172,10 +172,11 @@ export default function Footer({ conBoletin = true }: { conBoletin?: boolean }) 
           {/* Marca */}
           <div className="sm:col-span-2 lg:col-span-3 xl:col-span-1">
             <img
-              src={logoLight}
+              src={logo}
               alt={NOMBRE_MARCA}
-              width={1500}
-              height={429}
+              width={420}
+              height={120}
+              loading="lazy"
               className="h-8 w-auto"
               data-testid="img-footer-logo"
             />
