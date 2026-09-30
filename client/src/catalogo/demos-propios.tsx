@@ -99,12 +99,12 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
   },
   proximamente: {
     render: () => (
-      <p className="flex items-center gap-2 text-lg">
+      <p className="flex flex-wrap items-center gap-2 text-lg">
         Estudios e investigaciones <Proximamente />
       </p>
     ),
     codigo: () =>
-      `<p className="flex items-center gap-2 text-lg">
+      `<p className="flex flex-wrap items-center gap-2 text-lg">
   Estudios e investigaciones <Proximamente />
 </p>`,
   },

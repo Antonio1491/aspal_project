@@ -38,7 +38,13 @@ export function CopiarCodigo({ codigo, testid }: { codigo: string; testid: strin
 
   return (
     <div className="relative">
-      <pre className="overflow-x-auto rounded-xl bg-noche p-4 pr-24 text-sm text-noche-foreground">
+      {/* Enfocable: si el código es más ancho que la pantalla, con teclado
+          solo se puede desplazar si el bloque recibe el foco (WCAG 2.1.1). */}
+      <pre
+        tabIndex={0}
+        aria-label="Código"
+        className="overflow-x-auto rounded-xl bg-noche p-4 pr-24 text-sm text-noche-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
+      >
         <code>{codigo}</code>
       </pre>
       <Button

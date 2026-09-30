@@ -17,7 +17,9 @@ export function FichaComponente({ entrada }: { entrada: EntradaCatalogo }) {
     <article
       id={entrada.id}
       aria-labelledby={`${entrada.id}-titulo`}
-      className="scroll-mt-32 rounded-2xl border border-border bg-background p-6"
+      // break-words: descripciones con palabras largas sin espacios
+      // («Header/Title/Description…») desbordaban la página a 375 px.
+      className="scroll-mt-32 break-words rounded-2xl border border-border bg-background p-6"
       data-testid={`ficha-${entrada.id}`}
     >
       <div className="flex flex-wrap items-center gap-2">
