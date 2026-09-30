@@ -54,7 +54,13 @@ export const CIFRAS: Cifra[] = [
  * `null`, el hero muestra el patrón de panal de la marca.
  * Ejemplo: `{ src: "/fotos/encuentro-2026.webp", alt: "Directivos de asociaciones en el Encuentro 2026, en Mérida" }`
  */
-export const FOTO_HERO: { src: string; alt: string } | null = null;
+// PENDIENTE: imagen provisional generada con IA, no es de un evento de ASPAL
+// (por eso el alt describe la escena sin nombrar ningún encuentro). Sustituir
+// por una foto real del primer encuentro o webinar presencial.
+export const FOTO_HERO: { src: string; alt: string } | null = {
+  src: "/fotos/hero-encuentro.webp",
+  alt: "Directivos de asociaciones conversando alrededor de una mesa en un taller de trabajo",
+};
 
 export interface Testimonio {
   cita: string;

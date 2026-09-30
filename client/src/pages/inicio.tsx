@@ -39,14 +39,24 @@ function VisualHero() {
   return (
     <div className="relative">
       <PatronPanal className="absolute -right-12 -top-12 w-4/5" />
-      <img
-        src={FOTO_HERO.src}
-        alt={FOTO_HERO.alt}
-        width={1600}
-        height={1200}
-        className="relative aspect-[4/3] w-full rounded-2xl object-cover shadow-xl"
-        data-testid="img-hero-foto"
-      />
+      {/* La columna visual solo se ve desde lg: con <picture>, por debajo el
+          navegador carga un GIF vacío en vez de la foto (un <img> oculto con
+          display:none se descargaría igual). Desde lg es el elemento LCP: se
+          pide con prioridad alta. `fetchpriority` en minúsculas porque React
+          18 no reconoce fetchPriority. */}
+      <picture>
+        <source media="(min-width: 1024px)" srcSet={FOTO_HERO.src} />
+        <img
+          src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+          alt={FOTO_HERO.alt}
+          width={1600}
+          height={1200}
+          decoding="async"
+          {...{ fetchpriority: "high" }}
+          className="relative aspect-[4/3] w-full rounded-2xl object-cover shadow-xl"
+          data-testid="img-hero-foto"
+        />
+      </picture>
     </div>
   );
 }
