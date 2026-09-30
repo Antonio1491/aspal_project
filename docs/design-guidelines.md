@@ -22,6 +22,11 @@ glassmorphism) describía un sitio que ya no existe.
 - **Fotos:** reales, de eventos y personas de la red. Ranuras preparadas en
   `content/institucional/inicio.ts` (`FOTO_HERO`, `TESTIMONIOS`); mientras
   estén vacías, la home no muestra huecos.
+  En el hero la foto va con `FotoHero` estilo «panal»: repartida en celdas del
+  isotipo, con una celda miel rayada. Su encuadre está ajustado a mano para la
+  foto actual (`ENCUADRE_PANAL`): una foto nueva exige reencuadrar para que
+  ninguna cara caiga en la separación entre celdas. Nunca una foto rectangular
+  sin tratar.
 - **Nombre visible:** `NOMBRE_MARCA` de `client/src/lib/marca.ts`. No se escribe a mano.
 
 ## Color

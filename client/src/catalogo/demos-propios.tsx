@@ -12,6 +12,7 @@ import { SubnavSeccion } from "@/components/institucional/SubnavSeccion";
 import { TarjetaCompromiso } from "@/components/institucional/TarjetaCompromiso";
 import { VocesRed } from "@/components/institucional/VocesRed";
 import { Banda } from "@/components/layout/Banda";
+import { FotoHero, type EstiloFotoHero } from "@/components/layout/FotoHero";
 import { HeroInstitucional } from "@/components/layout/HeroInstitucional";
 import { PatronPanal } from "@/components/layout/PatronPanal";
 import { Proximamente } from "@/components/layout/Proximamente";
@@ -134,6 +135,30 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
       </div>
     ),
     codigo: () => `<PatronPanal className="…" />`,
+  },
+  "foto-hero": {
+    controles: [
+      {
+        tipo: "opciones",
+        clave: "estilo",
+        etiqueta: "estilo",
+        opciones: ["hexagono", "panal", "sangrado"],
+        inicial: "hexagono",
+      },
+    ],
+    fondo: "noche",
+    nota: "Solo se ve desde 1024 px (la columna visual del hero). «sangrado» sale del marco a propósito: en el hero llega al borde de la ventana.",
+    render: (v) => (
+      <div className="mx-auto max-w-xl">
+        <FotoHero
+          src="/fotos/hero-encuentro.webp"
+          alt="Foto de ejemplo del catálogo"
+          estilo={texto(v.estilo) as EstiloFotoHero}
+        />
+      </div>
+    ),
+    codigo: (v) =>
+      `<FotoHero src={FOTO_HERO.src} alt={FOTO_HERO.alt} estilo="${texto(v.estilo)}" />`,
   },
   proximamente: {
     render: () => (

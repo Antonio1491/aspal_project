@@ -46,7 +46,9 @@ export function HeroInstitucional({
   );
 
   return (
-    <Banda tono="noche">
+    // overflow-x-clip: la foto «sangrado» sale hasta el borde de la ventana
+    // (100vw incluye la barra de scroll) y no debe crear scroll horizontal.
+    <Banda tono="noche" className="overflow-x-clip">
       {visual ? (
         <div className="grid items-center gap-10 lg:grid-cols-12">
           <div className="lg:col-span-7">{texto}</div>

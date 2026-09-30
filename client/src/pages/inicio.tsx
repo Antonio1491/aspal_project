@@ -10,6 +10,7 @@ import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import { HeroInstitucional } from "@/components/layout/HeroInstitucional";
 import { Button } from "@/components/ui/button";
+import { FotoHero, type EstiloFotoHero } from "@/components/layout/FotoHero";
 import { PatronPanal } from "@/components/layout/PatronPanal";
 import {
   CIFRAS,
@@ -30,35 +31,16 @@ import { BOTON_CONTORNO_NOCHE, BOTON_MIEL_NOCHE, H2_BANDA } from "@/lib/clases";
 import { NOMBRE_COMPLETO } from "@/lib/marca";
 import { Link } from "wouter";
 
+/** Tratamiento de la foto del hero (ver FotoHero). */
+const ESTILO_FOTO_HERO: EstiloFotoHero = "panal";
+
 /**
  * Columna visual del hero: la foto real de un encuentro cuando exista
- * (`FOTO_HERO`) con el panal detrás, o solo el panal de la marca mientras tanto.
+ * (`FOTO_HERO`), tratada con el hexágono de la marca, o solo el panal.
  */
 function VisualHero() {
   if (!FOTO_HERO) return <PatronPanal />;
-  return (
-    <div className="relative">
-      <PatronPanal className="absolute -right-12 -top-12 w-4/5" />
-      {/* La columna visual solo se ve desde lg: con <picture>, por debajo el
-          navegador carga un GIF vacío en vez de la foto (un <img> oculto con
-          display:none se descargaría igual). Desde lg es el elemento LCP: se
-          pide con prioridad alta. `fetchpriority` en minúsculas porque React
-          18 no reconoce fetchPriority. */}
-      <picture>
-        <source media="(min-width: 1024px)" srcSet={FOTO_HERO.src} />
-        <img
-          src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-          alt={FOTO_HERO.alt}
-          width={1600}
-          height={1200}
-          decoding="async"
-          {...{ fetchpriority: "high" }}
-          className="relative aspect-[4/3] w-full rounded-2xl object-cover shadow-xl"
-          data-testid="img-hero-foto"
-        />
-      </picture>
-    </div>
-  );
+  return <FotoHero src={FOTO_HERO.src} alt={FOTO_HERO.alt} estilo={ESTILO_FOTO_HERO} />;
 }
 
 /**

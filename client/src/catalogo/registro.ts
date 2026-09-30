@@ -117,6 +117,22 @@ export const REGISTRO = [
     vista: "demo",
   },
   {
+    id: "foto-hero",
+    nombre: "FotoHero",
+    archivo: "client/src/components/layout/FotoHero.tsx",
+    importar: 'import { FotoHero } from "@/components/layout/FotoHero";',
+    categoria: "layout",
+    descripcion:
+      "Foto del hero tratada con el hexágono de la marca: «hexagono» (recorte hexagonal con contorno miel desplazado y celda miel), «panal» (la foto repartida en celdas del isotipo) o «sangrado» (hasta el borde derecho con zigzag hexagonal). Solo descarga la foto desde lg.",
+    usarCuando:
+      "La columna `visual` de HeroInstitucional cuando hay foto (FOTO_HERO en content/institucional/inicio.ts).",
+    evitarPara:
+      "«panal» con una foto sin reencuadrar: su encuadre (x, y, width del <image>) está ajustado a mano para la foto actual.",
+    props: 'src: string; alt: string; estilo?: "hexagono" | "panal" | "sangrado"',
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
     id: "aviso-pestana-nueva",
     nombre: "AvisoPestanaNueva",
     archivo: "client/src/components/layout/AvisoPestanaNueva.tsx",
