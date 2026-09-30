@@ -353,10 +353,10 @@ export function DecorativeBlob({
       animate={{ scale: 1 }}
       transition={{ duration: 1 }}
     >
-      {/* Forma fija. Antes se animaba el atributo `d` entre tres trazados y
-          framer-motion escribía d="undefined" en algún fotograma: error en la
-          consola de /plataforma en cada carga. El pulso de escala del <svg>
-          basta como movimiento decorativo. */}
+      {/* Forma fija. Animar el atributo `d` con fotogramas clave dejaba en
+          cada carga de /plataforma el error «<path> attribute d: Expected
+          moveto… "undefined"»; sin esa animación, desaparece. La entrada del
+          <svg> (escala de 0,8 a 1) queda como único movimiento. */}
       <path
         d="M100 20 C150 20 180 50 180 100 C180 150 150 180 100 180 C50 180 20 150 20 100 C20 50 50 20 100 20"
         className={colorClass}

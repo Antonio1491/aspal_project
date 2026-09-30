@@ -89,7 +89,9 @@ export default function CTASection() {
             </div>
           </motion.form>
 
-          {/* PENDIENTE: aquí se afirmaba "Prueba gratuita por 14 días • No requiere tarjeta de crédito"; se retiró por no ser verificable (Etapa 1). Vuelve si la Coordinación confirma la oferta. */}
+          {/* PENDIENTE: aquí se afirmaba "Prueba gratuita por 14 días • No
+              requiere tarjeta de crédito"; se retiró por no ser verificable
+              (Etapa 1). Vuelve si la Coordinación confirma la oferta. */}
         </div>
       </div>
 

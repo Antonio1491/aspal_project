@@ -22,9 +22,11 @@ function estado(consulta: UseQueryResult<TransformedPost[]>): EstadoConsulta {
   };
 }
 
-// ¿Estamos ya en el cliente? En el servidor y durante la hidratación React usa
-// `enServidor` (false), así que el primer render coincide con el HTML
-// prerenderizado; después pasa a `enCliente` (true). Sin setState en un efecto.
+// ¿Estamos ya en el cliente? En el prerender React usa `enServidor` (false);
+// en el navegador, `enCliente` (true). Hoy `main.tsx` monta con createRoot y
+// sustituye el HTML prerenderizado; si algún día se pasa a hydrateRoot, React
+// usaría `enServidor` también al hidratar, así que el primer render seguiría
+// coincidiendo con el HTML. Sin setState en un efecto.
 const sinSuscripcion = () => () => {};
 const enCliente = () => true;
 const enServidor = () => false;
