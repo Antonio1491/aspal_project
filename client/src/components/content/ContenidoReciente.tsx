@@ -1,11 +1,11 @@
 import BlogCard from "@/components/content/BlogCard";
 import { PodcastCard } from "@/components/content/PodcastCard";
 import { Banda } from "@/components/layout/Banda";
+import { useEnCliente } from "@/hooks/use-en-cliente";
 import { vistaReciente, type EstadoConsulta } from "@/lib/contenido-reciente";
 import type { TransformedPost } from "@shared/wordpress/types";
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { ArrowRight } from "lucide-react";
-import { useSyncExternalStore } from "react";
 import { Link } from "wouter";
 
 async function cargar(url: string): Promise<TransformedPost[]> {
@@ -22,15 +22,6 @@ function estado(consulta: UseQueryResult<TransformedPost[]>): EstadoConsulta {
   };
 }
 
-// ¿Estamos ya en el cliente? En el prerender React usa `enServidor` (false);
-// en el navegador, `enCliente` (true). Hoy `main.tsx` monta con createRoot y
-// sustituye el HTML prerenderizado; si algún día se pasa a hydrateRoot, React
-// usaría `enServidor` también al hidratar, así que el primer render seguiría
-// coincidiendo con el HTML. Sin setState en un efecto.
-const sinSuscripcion = () => () => {};
-const enCliente = () => true;
-const enServidor = () => false;
-
 const REINTENTO = {
   retry: 2,
   retryDelay: (intento: number) => Math.min(1000 * 2 ** intento, 8000),
@@ -46,7 +37,7 @@ const REINTENTO = {
  * al montar, cuando las consultas ya están en marcha.
  */
 export function ContenidoReciente() {
-  const montado = useSyncExternalStore(sinSuscripcion, enCliente, enServidor);
+  const montado = useEnCliente();
 
   const articulos = useQuery<TransformedPost[]>({
     queryKey: ["/api/posts", { per_page: 3 }],
