@@ -27,6 +27,9 @@ declare global {
 export function registrarEvento(evento: EventoAnalitica, datos: DatosEvento = {}): void {
   // Sin `window` (tests en node, prerender) no hay nada que medir.
   if (typeof window === "undefined") return;
+  // /componentes es un catálogo interno: sus clics (demos, cabecera y pie de la
+  // página) ensuciarían GA4 como si vinieran de la home.
+  if (window.location?.pathname === "/componentes") return;
   window.dataLayer ??= [];
   window.dataLayer.push({ ...datos, event: evento });
 }
