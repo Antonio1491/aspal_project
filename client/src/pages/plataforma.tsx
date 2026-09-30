@@ -415,9 +415,6 @@ export default function Plataforma() {
         {/* Logo carousel */}
         <LogoCarousel />
 
-        {/* Testimonials - Hidden */}
-        {/* <TestimonialsSection /> */}
-
         {/* CTA */}
         <CTASection />
       </main>
