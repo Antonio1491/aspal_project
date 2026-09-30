@@ -89,9 +89,9 @@ export default function CTASection() {
             </div>
           </motion.form>
 
-          <p className="text-sm text-primary/60">
-            Prueba gratuita por 14 días • No requiere tarjeta de crédito
-          </p>
+          {/* PENDIENTE: aquí se afirmaba "Prueba gratuita por 14 días • No
+              requiere tarjeta de crédito"; se retiró por no ser verificable
+              (Etapa 1). Vuelve si la Coordinación confirma la oferta. */}
         </div>
       </div>
 
