@@ -2,6 +2,7 @@ import BlogCard from "@/components/content/BlogCard";
 import { ContenidoReciente } from "@/components/content/ContenidoReciente";
 import { PodcastCard } from "@/components/content/PodcastCard";
 import { FormSuscripcion } from "@/components/forms/FormSuscripcion";
+import { CifraAnimada } from "@/components/institucional/CifraAnimada";
 import { EtapaMapa } from "@/components/institucional/EtapaMapa";
 import { IndiceEtapas } from "@/components/institucional/IndiceEtapas";
 import { MuroAliados } from "@/components/institucional/MuroAliados";
@@ -193,18 +194,32 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
         etiqueta: "ilustracion",
         inicial: true,
       },
+      {
+        tipo: "interruptor",
+        clave: "numero",
+        etiqueta: "numero",
+        inicial: true,
+      },
     ],
-    render: (v) => (
-      <div className="max-w-sm">
-        <PilarCard
-          pilar={PILARES.find((p) => p.id === v.pilar) ?? PILARES[0]}
-          variante={texto(v.variante) as "resumen" | "detalle"}
-          ilustracion={Boolean(v.ilustracion)}
-        />
-      </div>
-    ),
+    render: (v) => {
+      const i = Math.max(
+        0,
+        PILARES.findIndex((p) => p.id === v.pilar),
+      );
+      return (
+        // pt-10: el hueco que necesita la insignia que sobresale.
+        <div className="max-w-sm pt-10">
+          <PilarCard
+            pilar={PILARES[i]}
+            variante={texto(v.variante) as "resumen" | "detalle"}
+            ilustracion={Boolean(v.ilustracion)}
+            numero={v.numero ? i + 1 : undefined}
+          />
+        </div>
+      );
+    },
     codigo: (v) =>
-      `<PilarCard pilar={PILARES.find((p) => p.id === ${JSON.stringify(texto(v.pilar))})!} variante="${texto(v.variante)}"${v.ilustracion ? " ilustracion" : ""} />`,
+      `<PilarCard pilar={PILARES.find((p) => p.id === ${JSON.stringify(texto(v.pilar))})!} variante="${texto(v.variante)}"${v.ilustracion ? " ilustracion" : ""}${v.numero ? ` numero={${Math.max(1, PILARES.findIndex((p) => p.id === v.pilar) + 1)}}` : ""} />`,
   },
   "tarjeta-compromiso": {
     controles: [
@@ -370,6 +385,25 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
     nota: "Usa la API real (/api/posts y /api/podcasts). Si falla, el bloque desaparece: es el comportamiento esperado.",
     render: () => <ContenidoReciente />,
     codigo: () => `<ContenidoReciente />`,
+  },
+  "cifra-animada": {
+    controles: [
+      {
+        tipo: "opciones",
+        clave: "valor",
+        etiqueta: "valor",
+        opciones: ["1,000", "15+", "7"],
+        inicial: "1,000",
+      },
+    ],
+    nota: "Cuenta una sola vez, al entrar en pantalla. Para verla de nuevo, recarga la página con el demo a la vista (o cambia el valor).",
+    render: (v) => (
+      <span className="text-5xl font-extrabold text-primary">
+        <CifraAnimada key={texto(v.valor)} valor={texto(v.valor)} />
+      </span>
+    ),
+    codigo: (v) =>
+      `<span className="text-5xl font-extrabold text-primary">\n  <CifraAnimada valor="${texto(v.valor)}" />\n</span>`,
   },
   "voces-red": {
     nota: "Testimonios de ejemplo del catálogo (no son reales). En la home, con TESTIMONIOS vacío la sección no se pinta.",

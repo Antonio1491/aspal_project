@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { useId } from "react";
+import type { CSSProperties } from "react";
 
 export type EstiloFotoHero = "hexagono" | "panal" | "sangrado";
 
@@ -15,19 +15,30 @@ const HEX_PLANO = "[clip-path:polygon(25%_0,75%_0,100%_50%,75%_100%,25%_100%,0_5
  * se ve por debajo). Desde lg es el elemento LCP: prioridad alta.
  * `fetchpriority` en minúsculas porque React 18 no reconoce fetchPriority.
  */
-function Foto({ src, alt, className }: { src: string; alt: string; className?: string }) {
+function Foto({
+  src,
+  alt,
+  className,
+  copia = false,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+  /** Otra capa de la misma foto (panal): decorativa, sin alt ni testid. */
+  copia?: boolean;
+}) {
   return (
     <picture>
       <source media="(min-width: 1024px)" srcSet={src} />
       <img
         src={VACIO}
-        alt={alt}
+        alt={copia ? "" : alt}
         width={1600}
         height={1200}
         decoding="async"
         {...{ fetchpriority: "high" }}
         className={cn("h-full w-full object-cover", className)}
-        data-testid="img-hero-foto"
+        data-testid={copia ? undefined : "img-hero-foto"}
       />
     </picture>
   );
@@ -57,12 +68,13 @@ const RADIO_PANAL = 100;
 const W_PANAL = RADIO_PANAL * 1.732;
 const PANAL = {
   radio: RADIO_PANAL - 5,
+  /** Centro de cada celda con foto y de dónde llega al ensamblarse. */
   celdasFoto: [
-    [W_PANAL / 2, 0],
-    [W_PANAL * 1.5, 0],
-    [W_PANAL, 150],
-    [W_PANAL * 2, 150],
-  ] as const,
+    { x: W_PANAL / 2, y: 0, dx: "-18px", dy: "-22px" },
+    { x: W_PANAL * 1.5, y: 0, dx: "22px", dy: "-18px" },
+    { x: W_PANAL, y: 150, dx: "0px", dy: "26px" },
+    { x: W_PANAL * 2, y: 150, dx: "26px", dy: "18px" },
+  ],
   celdaMiel: [0, 150] as const,
   minX: -W_PANAL / 2 - 4,
   minY: -104,
@@ -73,16 +85,23 @@ const PANAL = {
 /** Rectángulo de la foto, en las mismas unidades que PANAL (ver comentario abajo). */
 const ENCUADRE_PANAL = { x: -260, y: -225, ancho: 911, alto: 683 };
 
-/** Una celda de PANAL en unidades 0–1 de su caja, para clipPathUnits="objectBoundingBox". */
-function puntosNormalizados(x: number, y: number): string {
-  return puntos(x, y, PANAL.radio)
+/** Una celda de PANAL como clip-path CSS, en % de la caja del racimo. */
+function poligonoCelda(x: number, y: number): string {
+  const vertices = puntos(x, y, PANAL.radio)
     .split(" ")
     .map((par) => {
       const [px, py] = par.split(",").map(Number);
-      return `${((px - PANAL.minX) / PANAL.ancho).toFixed(4)},${((py - PANAL.minY) / PANAL.alto).toFixed(4)}`;
-    })
-    .join(" ");
+      return `${(((px - PANAL.minX) / PANAL.ancho) * 100).toFixed(2)}% ${(((py - PANAL.minY) / PANAL.alto) * 100).toFixed(2)}%`;
+    });
+  return `polygon(${vertices.join(",")})`;
 }
+
+/** Rayas del isotipo sobre la celda miel. */
+const RAYAS_MIEL = [
+  [-38, 128, -8, 98],
+  [-30, 168, 22, 116],
+  [-2, 186, 38, 146],
+] as const;
 
 /**
  * Foto del hero tratada con el lenguaje de la marca (el hexágono del isotipo),
@@ -91,7 +110,9 @@ function puntosNormalizados(x: number, y: number): string {
  * - `hexagono`: la foto en un gran hexágono, con un contorno miel desplazado
  *   detrás y una celda miel sólida que la muerde en la esquina.
  * - `panal`: la foto repartida en un racimo de celdas del panal separadas por
- *   el fondo, con una celda miel sólida (el isotipo, hecho foto).
+ *   el fondo, con una celda miel sólida (el isotipo, hecho foto). Al cargar,
+ *   las celdas llegan a su sitio en cascada y se dibujan las rayas (~1,2 s,
+ *   una vez; solo transform, apagado con «reducir movimiento»).
  * - `sangrado`: la foto llega al borde derecho de la pantalla con el borde
  *   izquierdo en zigzag hexagonal, fundida con el fondo noche.
  */
@@ -104,69 +125,78 @@ export function FotoHero({
   alt: string;
   estilo?: EstiloFotoHero;
 }) {
-  const id = useId().replace(/:/g, "");
-
   if (estilo === "panal") {
     const P = PANAL;
     const pct = (valor: number) => `${(valor * 100).toFixed(3)}%`;
+    // Encuadre a mano para esta foto: ampliada ~2,1× para que la distancia
+    // entre las dos caras principales sea la de dos celdas y cada cara quede
+    // centrada en una celda de arriba. Una foto nueva exige reajustar
+    // ENCUADRE_PANAL.
+    const encuadre = {
+      left: pct((ENCUADRE_PANAL.x - P.minX) / P.ancho),
+      top: pct((ENCUADRE_PANAL.y - P.minY) / P.alto),
+      width: pct(ENCUADRE_PANAL.ancho / P.ancho),
+      height: pct(ENCUADRE_PANAL.alto / P.alto),
+    };
     return (
       <div
         className="relative w-full"
         style={{ aspectRatio: `${P.ancho} / ${P.alto}` }}
         data-testid="foto-hero-panal"
       >
-        {/* Celdas de recorte en unidades de la caja (0–1): el clip-path se
-            aplica a un <picture> normal, así la foto sigue sin descargarse por
-            debajo de lg (con un <image> dentro de un SVG se bajaba siempre). */}
-        <svg
-          width="0"
-          height="0"
-          className="absolute"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <clipPath id={`${id}-celdas`} clipPathUnits="objectBoundingBox">
-            {P.celdasFoto.map(([x, y]) => (
-              <polygon key={`${x}-${y}`} points={puntosNormalizados(x, y)} />
-            ))}
-          </clipPath>
-        </svg>
-
         {/* Celda miel con las rayas del isotipo. */}
         <svg
           viewBox={`${P.minX} ${P.minY} ${P.ancho} ${P.alto}`}
-          className="absolute inset-0 h-full w-full"
+          className="absolute inset-0 h-full w-full overflow-visible"
           aria-hidden="true"
           focusable="false"
         >
-          <polygon
-            points={puntos(P.celdaMiel[0], P.celdaMiel[1], P.radio)}
-            className="fill-secondary"
-          />
-          <g className="stroke-noche" strokeWidth="14" strokeLinecap="round">
-            <line x1={-38} y1={128} x2={-8} y2={98} />
-            <line x1={-30} y1={168} x2={22} y2={116} />
-            <line x1={-2} y1={186} x2={38} y2={146} />
+          <g
+            className="animate-celda-miel motion-reduce:animate-none"
+            style={{ transformOrigin: `${P.celdaMiel[0]}px ${P.celdaMiel[1]}px` }}
+          >
+            <polygon
+              points={puntos(P.celdaMiel[0], P.celdaMiel[1], P.radio)}
+              className="fill-secondary"
+            />
+            <g className="stroke-noche" strokeWidth="14" strokeLinecap="round">
+              {RAYAS_MIEL.map(([x1, y1, x2, y2], i) => (
+                <line
+                  key={i}
+                  x1={x1}
+                  y1={y1}
+                  x2={x2}
+                  y2={y2}
+                  strokeDasharray="80"
+                  className="animate-raya motion-reduce:animate-none"
+                  style={{ animationDelay: `${800 + i * 120}ms` }}
+                />
+              ))}
+            </g>
           </g>
         </svg>
 
-        <div className="absolute inset-0" style={{ clipPath: `url(#${id}-celdas)` }}>
-          {/* Encuadre a mano para esta foto: ampliada ~2,1× para que la
-              distancia entre las dos caras principales sea la de dos celdas y
-              cada cara quede centrada en una celda de arriba. Una foto nueva
-              exige reajustar ENCUADRE_PANAL. */}
+        {/* Una capa por celda, cada una con su clip-path, para que lleguen por
+            separado. Es la misma foto (una sola descarga, y ninguna por debajo
+            de lg gracias al <picture>); solo la primera lleva el alt. */}
+        {P.celdasFoto.map(({ x, y, dx, dy }, i) => (
           <div
-            className="absolute"
-            style={{
-              left: pct((ENCUADRE_PANAL.x - P.minX) / P.ancho),
-              top: pct((ENCUADRE_PANAL.y - P.minY) / P.alto),
-              width: pct(ENCUADRE_PANAL.ancho / P.ancho),
-              height: pct(ENCUADRE_PANAL.alto / P.alto),
-            }}
+            key={`${x}-${y}`}
+            className="absolute inset-0 animate-ensamble motion-reduce:animate-none"
+            style={
+              {
+                clipPath: poligonoCelda(x, y),
+                "--dx": dx,
+                "--dy": dy,
+                animationDelay: `${i * 90}ms`,
+              } as CSSProperties
+            }
           >
-            <Foto src={src} alt={alt} />
+            <div className="absolute" style={encuadre}>
+              <Foto src={src} alt={alt} copia={i > 0} />
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     );
   }

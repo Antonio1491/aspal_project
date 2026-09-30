@@ -6,6 +6,7 @@ import { AvisoPestanaNueva } from "@/components/layout/AvisoPestanaNueva";
 import { Proximamente } from "@/components/layout/Proximamente";
 import type { EnlaceContenido, IdPilar, Pilar } from "@/content/institucional/pilares";
 import { registrarEvento } from "@/lib/analitica";
+import { HEXAGONO_PUNTA } from "@/lib/clases";
 import { cn } from "@/lib/utils";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Link } from "wouter";
@@ -64,16 +65,24 @@ function EnlacePilar({ enlace, testid }: { enlace: EnlaceContenido; testid: stri
  * Un pilar ASPAL. «resumen» (en Nosotros): nombre, subtítulo, compromiso y
  * enlace al detalle. «detalle» (en ¿Qué hacemos?): todo, más «cómo se traduce»
  * y los enlaces a lo que ya existe.
+ *
+ * Con `ilustracion` (home), la ilustración de la marca sale de una insignia
+ * hexagonal que rompe el borde superior de la tarjeta: el contenedor debe
+ * dejarle 40 px por encima (`pt-10`, y `gap-y-16` si se apilan). Con `numero`,
+ * el número del pilar en grande, en contorno miel y decorativo.
  */
 export function PilarCard({
   pilar,
   variante,
   ilustracion = false,
+  numero,
 }: {
   pilar: Pilar;
   variante: "resumen" | "detalle";
-  /** Ilustración de la marca arriba de la tarjeta, en lugar del icono (home). */
+  /** Ilustración de la marca en una insignia hexagonal, en lugar del icono (home). */
   ilustracion?: boolean;
+  /** Número del pilar (1–4), decorativo, arriba a la derecha. */
+  numero?: number;
 }) {
   const Icono = pilar.icono;
   const Titulo = variante === "detalle" ? "h2" : "h3";
@@ -82,17 +91,32 @@ export function PilarCard({
   return (
     <article
       className={cn(
-        "flex h-full flex-col rounded-2xl border border-border bg-background p-6 md:p-8",
+        "group relative flex h-full flex-col rounded-2xl border border-border bg-background p-6 md:p-8",
+        ilustracion && "pt-20 md:pt-20",
         // En «resumen» toda la tarjeta lleva al detalle (el enlace se estira
         // con after:inset-0): objetivo táctil grande y un solo tabulador. El anillo
         // sale solo con teclado (has-[:focus-visible]) y, en alto contraste, como outline.
         resumen &&
-          "relative transition-colors hover:border-primary has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2 forced-colors:has-[:focus-visible]:outline forced-colors:has-[:focus-visible]:outline-2",
+          "transition-colors hover:border-primary has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2 forced-colors:has-[:focus-visible]:outline forced-colors:has-[:focus-visible]:outline-2",
       )}
       data-testid={`pilar-${pilar.id}`}
     >
+      {numero !== undefined && (
+        // Solo contorno: sin relleno no compite con el título. En alto
+        // contraste el trazo desaparece y quedaría un número macizo: fuera.
+        <span
+          className="pointer-events-none absolute right-5 top-3 select-none text-7xl font-extrabold leading-none text-transparent [-webkit-text-stroke:2px_hsl(var(--secondary))] forced-colors:hidden"
+          aria-hidden="true"
+          data-testid={`numero-pilar-${pilar.id}`}
+        >
+          {String(numero).padStart(2, "0")}
+        </span>
+      )}
       {ilustracion ? (
-        <div className="-mx-6 -mt-6 mb-2 flex h-44 items-end justify-center overflow-hidden rounded-t-2xl bg-accent md:-mx-8 md:-mt-8">
+        <div className="absolute -top-10 left-6 h-32 w-28 md:left-8" aria-hidden="true">
+          <span
+            className={cn("absolute inset-x-0 bottom-0 h-28 bg-accent", HEXAGONO_PUNTA)}
+          />
           <img
             src={ILUSTRACIONES[pilar.id]}
             alt=""
@@ -100,7 +124,7 @@ export function PilarCard({
             height={520}
             loading="lazy"
             decoding="async"
-            className="h-40 w-auto"
+            className="absolute bottom-1 left-1/2 h-32 w-auto max-w-none -translate-x-1/2"
             data-testid={`img-pilar-${pilar.id}`}
           />
         </div>
@@ -134,7 +158,11 @@ export function PilarCard({
           data-testid={`pilar-${pilar.id}-detalle`}
         >
           Cómo se traduce
-          <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          {/* La flecha avanza al pasar el ratón por la tarjeta o al enfocarla. */}
+          <ArrowRight
+            className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1 group-has-[:focus-visible]:translate-x-1"
+            aria-hidden="true"
+          />
         </Link>
       )}
     </article>

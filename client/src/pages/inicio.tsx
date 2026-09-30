@@ -1,6 +1,7 @@
 import ilustracionEventos from "@assets/ilustraciones/eventos-webinar.webp";
 import { ContenidoReciente } from "@/components/content/ContenidoReciente";
 import { FormSuscripcion } from "@/components/forms/FormSuscripcion";
+import { CifraAnimada } from "@/components/institucional/CifraAnimada";
 import { IndiceEtapas } from "@/components/institucional/IndiceEtapas";
 import { MuroAliados } from "@/components/institucional/MuroAliados";
 import { PilarCard } from "@/components/institucional/PilarCard";
@@ -29,6 +30,7 @@ import { PILARES } from "@/content/institucional/pilares";
 import { registrarEvento } from "@/lib/analitica";
 import { BOTON_CONTORNO_NOCHE, BOTON_MIEL_NOCHE, H2_BANDA } from "@/lib/clases";
 import { NOMBRE_COMPLETO } from "@/lib/marca";
+import { ArrowRight } from "lucide-react";
 import { Link } from "wouter";
 
 /** Tratamiento de la foto del hero (ver FotoHero). */
@@ -64,12 +66,17 @@ export default function Inicio() {
             <Button variant="secondary" className={BOTON_MIEL_NOCHE} asChild>
               <Link
                 href="/mapa-de-ruta"
+                className="group"
                 onClick={() =>
                   registrarEvento("click_mapa_ruta", { origen: "home_hero" })
                 }
                 data-testid="button-home-mapa"
               >
                 Empieza por el Mapa de Ruta
+                <ArrowRight
+                  className="transition-transform duration-200 group-hover:translate-x-1 group-focus-visible:translate-x-1"
+                  aria-hidden="true"
+                />
               </Link>
             </Button>
             <Button variant="outline" className={BOTON_CONTORNO_NOCHE} asChild>
@@ -110,7 +117,7 @@ export default function Inicio() {
                     )}
                   </div>
                   <span className="mt-4 block text-5xl font-extrabold text-primary">
-                    {cifra.valor}
+                    <CifraAnimada valor={cifra.valor} />
                   </span>
                 </dd>
               </div>
@@ -121,9 +128,18 @@ export default function Inicio() {
         {/* 3. Los 4 pilares */}
         <Banda tono="suave">
           <h2 className={H2_BANDA}>Los 4 Pilares ASPAL</h2>
-          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {PILARES.map((pilar) => (
-              <PilarCard key={pilar.id} pilar={pilar} variante="resumen" ilustracion />
+          {/* Panal escalonado: las insignias sobresalen 40 px por arriba (pt-10,
+              gap-y-16) y desde lg las tarjetas pares bajan medio paso, como las
+              celdas de un panal (lg:pb-12 reserva ese medio paso). */}
+          <div className="mt-8 grid gap-x-6 gap-y-16 pt-10 md:grid-cols-2 lg:grid-cols-4 lg:pb-12 lg:[&>*:nth-child(even)]:translate-y-12">
+            {PILARES.map((pilar, i) => (
+              <PilarCard
+                key={pilar.id}
+                pilar={pilar}
+                variante="resumen"
+                ilustracion
+                numero={i + 1}
+              />
             ))}
           </div>
         </Banda>

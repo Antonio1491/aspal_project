@@ -1,6 +1,8 @@
 import { Banda } from "@/components/layout/Banda";
 import type { Testimonio } from "@/content/institucional/inicio";
 import { HASHTAG } from "@/content/institucional/nosotros";
+import { HEXAGONO_PUNTA } from "@/lib/clases";
+import { cn } from "@/lib/utils";
 import { Quote } from "lucide-react";
 
 function iniciales(nombre: string): string {
@@ -49,7 +51,10 @@ export function VocesRed({ testimonios }: { testimonios: Testimonio[] }) {
                   />
                 ) : (
                   <span
-                    className="flex h-16 w-14 shrink-0 items-center justify-center bg-secondary font-bold text-secondary-foreground [clip-path:polygon(50%_0,100%_25%,100%_75%,50%_100%,0_75%,0_25%)]"
+                    className={cn(
+                      "flex h-16 w-14 shrink-0 items-center justify-center bg-secondary font-bold text-secondary-foreground",
+                      HEXAGONO_PUNTA,
+                    )}
                     aria-hidden="true"
                   >
                     {iniciales(t.nombre)}

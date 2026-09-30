@@ -19,3 +19,7 @@ export const BOTON_MIEL_NOCHE =
  */
 export const BOTON_CONTORNO_NOCHE =
   "min-h-11 [border-color:white] bg-transparent px-6 text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche";
+
+/** Hexágono con vértice arriba, la forma del isotipo (insignias, iniciales). */
+export const HEXAGONO_PUNTA =
+  "[clip-path:polygon(50%_0,100%_25%,100%_75%,50%_100%,0_75%,0_25%)]";

@@ -115,6 +115,19 @@ Catálogo vivo con demos y código: `/componentes` (fuente:
   opacidad del contenido:** el HTML prerenderizado mostraría texto invisible a
   buscadores y a quien no ejecuta JavaScript.
 - Sin sliders automáticos ni animaciones infinitas en páginas institucionales.
+- **Entradas de la home** (una vez, solo transform, keyframes en
+  `tailwind.config.ts`): el panal del hero se ensambla al cargar
+  (`FotoHero`), las cifras cuentan hasta su valor (`CifraAnimada`) y el Mapa
+  de Ruta traza su línea y activa las insignias en secuencia
+  (`IndiceEtapas`). Las dos últimas esperan a entrar en pantalla con
+  `useAnimarAlVer` (`hooks/`), que en el prerender y con «reducir
+  movimiento» devuelve `estatico`: el HTML ya es el estado final.
+- **Micro-interacciones:** solo la flecha que avanza al pasar el ratón o
+  enfocar (botón del hero, «Cómo se traduce» de los pilares). Las tarjetas
+  no se elevan ni animan su ilustración.
+- **Pilares en la home:** panal escalonado. La ilustración sale de una
+  insignia hexagonal que rompe el borde de la tarjeta, número del pilar en
+  contorno miel y, desde `lg`, las tarjetas pares bajan medio paso.
 
 ## Fotografía
 

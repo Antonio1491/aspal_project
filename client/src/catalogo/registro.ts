@@ -123,11 +123,11 @@ export const REGISTRO = [
     importar: 'import { FotoHero } from "@/components/layout/FotoHero";',
     categoria: "layout",
     descripcion:
-      "Foto del hero tratada con el hexágono de la marca: «hexagono» (recorte hexagonal con contorno miel desplazado y celda miel), «panal» (la foto repartida en celdas del isotipo) o «sangrado» (hasta el borde derecho con zigzag hexagonal). Solo descarga la foto desde lg.",
+      "Foto del hero tratada con el hexágono de la marca: «hexagono» (recorte hexagonal con contorno miel desplazado y celda miel), «panal» (la foto repartida en celdas del isotipo, que se ensamblan en cascada al cargar) o «sangrado» (hasta el borde derecho con zigzag hexagonal). Solo descarga la foto desde lg.",
     usarCuando:
       "La columna `visual` de HeroInstitucional cuando hay foto (FOTO_HERO en content/institucional/inicio.ts).",
     evitarPara:
-      "«panal» con una foto sin reencuadrar: su encuadre (x, y, width del <image>) está ajustado a mano para la foto actual.",
+      "«panal» con una foto sin reencuadrar: su encuadre (ENCUADRE_PANAL) está ajustado a mano para la foto actual.",
     props: 'src: string; alt: string; estilo?: "hexagono" | "panal" | "sangrado"',
     estado: "en-uso",
     vista: "demo",
@@ -251,10 +251,11 @@ export const REGISTRO = [
     importar: 'import { PilarCard } from "@/components/institucional/PilarCard";',
     categoria: "institucional",
     descripcion:
-      "Tarjeta de uno de los 4 pilares. «resumen» (h3; toda la tarjeta lleva al detalle) o «detalle» (h2, cómo se traduce y enlaces). Con `ilustracion`, la ilustración de la marca arriba en vez del icono.",
+      "Tarjeta de uno de los 4 pilares. «resumen» (h3; toda la tarjeta lleva al detalle y su flecha avanza al pasar el ratón) o «detalle» (h2, cómo se traduce y enlaces). Con `ilustracion`, la ilustración de la marca sale de una insignia hexagonal que rompe el borde superior (el contenedor le deja 40 px: pt-10); con `numero`, el número en grande en contorno miel.",
     usarCuando:
       "Mostrar pilares: home, Nosotros, ¿Qué hacemos?. Datos en content/institucional/pilares.ts.",
-    props: 'pilar: Pilar; variante: "resumen" | "detalle"; ilustracion?: boolean',
+    props:
+      'pilar: Pilar; variante: "resumen" | "detalle"; ilustracion?: boolean; numero?: number',
     estado: "en-uso",
     vista: "demo",
   },
@@ -330,7 +331,7 @@ export const REGISTRO = [
     importar: 'import { IndiceEtapas } from "@/components/institucional/IndiceEtapas";',
     categoria: "institucional",
     descripcion:
-      "Las 7 etapas del Mapa de Ruta. «home»: paso a paso con insignia hexagonal e icono, línea que las une desde xl y «Empieza aquí» en la 1 (enlaza a /mapa-de-ruta#etapa-N). «mapa»: índice con resumen que salta al ancla.",
+      "Las 7 etapas del Mapa de Ruta. «home»: paso a paso con insignia hexagonal e icono, línea que las une desde xl y «Empieza aquí» en la 1 (enlaza a /mapa-de-ruta#etapa-N); al entrar en pantalla la línea se traza y las insignias se activan en secuencia. «mapa»: índice con resumen que salta al ancla.",
     usarCuando: "Enlazar a las etapas del Mapa de Ruta.",
     props: 'origen: "home" | "mapa"',
     estado: "en-uso",
@@ -346,6 +347,22 @@ export const REGISTRO = [
       "Una etapa del Mapa de Ruta: pasos, frase de cierre y enlaces a la anterior y la siguiente.",
     usarCuando: "Dentro de una Banda con id={etapa.id} en /mapa-de-ruta.",
     props: "etapa: EtapaMapa; anterior?: EtapaMapa; siguiente?: EtapaMapa",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "cifra-animada",
+    nombre: "CifraAnimada",
+    archivo: "client/src/components/institucional/CifraAnimada.tsx",
+    importar: 'import { CifraAnimada } from "@/components/institucional/CifraAnimada";',
+    categoria: "institucional",
+    descripcion:
+      "Cifra («15+», «1,000») que cuenta desde 0 hasta su valor la primera vez que entra en pantalla. Prerender y «reducir movimiento»: el valor final tal cual; el lector de pantalla solo lee el final.",
+    usarCuando:
+      "Cifras destacadas de una banda (CIFRAS de la home). Solo el número: el tamaño y el color los pone quien la envuelve.",
+    evitarPara:
+      "Cifras que no son un único entero (rangos, decimales: se muestran sin animar) o datos que el usuario compara al leer (tablas).",
+    props: "valor: string; duracion?: number",
     estado: "en-uso",
     vista: "demo",
   },
