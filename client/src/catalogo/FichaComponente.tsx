@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { CopiarCodigo } from "./CopiarCodigo";
 import { demoDe } from "./demos";
 import type { EntradaCatalogo } from "./tipos";
+import { VistaDemo } from "./VistaDemo";
 
 const VISTA: Record<EntradaCatalogo["vista"], string> = {
   demo: "",
@@ -56,7 +57,7 @@ export function FichaComponente({ entrada }: { entrada: EntradaCatalogo }) {
       )}
       {demo && (
         <div className="mt-6" data-testid={`demo-${entrada.id}`}>
-          {/* Task 4: <VistaDemo id demo /> */}
+          <VistaDemo id={entrada.id} demo={demo} />
         </div>
       )}
     </article>
