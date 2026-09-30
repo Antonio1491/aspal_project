@@ -152,7 +152,7 @@ export interface Aliado {
   nombre: string;
   descripcion: string;
   /** Clave del logo en MuroAliados. Sin logo, se muestra el nombre. */
-  logo?: "wup" | "anpr";
+  logo?: "wup" | "anpr" | "parksys";
 }
 
 export const ALIADOS_FUNDADORES: Aliado[] = [
@@ -169,10 +169,10 @@ export const ALIADOS_FUNDADORES: Aliado[] = [
     logo: "anpr",
   },
   {
-    // PENDIENTE: logo de Parksys en alta resolución (insumo de la semana 0).
     nombre: "Parksys",
     descripcion:
       "Plataforma tecnológica aliada, generadora de ingresos para ASPAL desde julio 2026.",
+    logo: "parksys",
   },
 ];
 

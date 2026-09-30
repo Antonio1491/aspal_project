@@ -106,8 +106,8 @@ Catálogo vivo con demos y código: `/componentes` (fuente:
   NOSOTROS». Cambiar un texto = editar ese módulo; las páginas no llevan copy.
 - `contenido.test.ts` rechaza textos vacíos, marcadores de relleno y enlaces a
   rutas que no existen.
-- Datos pendientes (año de fundación D7, fotos, LinkedIn, Consejo, logo de
-  Parksys, Dossier) van como `PENDIENTE` en el módulo, nunca inventados.
+- Datos pendientes (año de fundación D7, fotos, LinkedIn, Consejo,
+  Dossier) van como `PENDIENTE` en el módulo, nunca inventados.
 - Componentes de estas páginas: `components/institucional/` (SubnavSeccion,
   PilarCard, PerfilCard, TarjetaCompromiso, RutaTimeline, MuroAliados).
 - Anclas: las secciones enlazables llevan `id` y `scroll-mt-32`; `ScrollRestoration` lleva al ancla cuando la URL trae `#`.
