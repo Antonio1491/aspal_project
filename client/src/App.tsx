@@ -1,3 +1,4 @@
+import Componentes from "@/pages/componentes";
 import type { FunctionComponent } from "react";
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
@@ -44,6 +45,7 @@ const PAGINAS: Record<RutaEstatica, FunctionComponent> = {
   "/que-hacemos": QueHacemos,
   "/nuestro-equipo": NuestroEquipo,
   "/eventos": Eventos,
+  "/componentes": Componentes,
 };
 
 const PAGINAS_DINAMICAS: Record<RutaDinamica, FunctionComponent> = {

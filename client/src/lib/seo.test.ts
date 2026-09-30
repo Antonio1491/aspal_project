@@ -109,3 +109,13 @@ describe("sitemap y robots", () => {
     expect(robots).toContain(`Sitemap: ${URL_SITIO}/sitemap.xml`);
   });
 });
+
+describe("catálogo interno", () => {
+  it("publica /componentes sin indexar y fuera del sitemap", () => {
+    expect(SEO["/componentes"].indexable).toBe(false);
+    expect(generarSitemap()).not.toContain("/componentes");
+    expect(etiquetasHead("/componentes")).toContain(
+      '<meta name="robots" content="noindex" />',
+    );
+  });
+});
