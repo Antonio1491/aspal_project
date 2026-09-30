@@ -1,5 +1,4 @@
-import logoLight from "@assets/ASPAL-para fondo claro_1763675327795.png";
-import logoDark from "@assets/ASPAL-para fondo oscuro_1763675345456.png";
+import logo from "@assets/aspal-logo-fondo-claro.webp";
 import { Button } from "@/components/ui/button";
 import {
   Collapsible,
@@ -585,23 +584,18 @@ export default function Header() {
           {/* Logo */}
           <div className="flex flex-1 items-center">
             <Link href="/" className="flex shrink-0 items-center" data-testid="link-logo">
+              {/* Una sola imagen: el sitio no tiene modo oscuro y la variante
+                  `dark:` se descargaba en cada página sin mostrarse nunca. */}
               <img
-                src={logoLight}
+                src={logo}
                 alt="Aspal — ir al inicio"
+                width={420}
+                height={120}
                 className={cn(
-                  "w-auto transition-[height] duration-200 dark:hidden",
+                  "w-auto transition-[height] duration-200",
                   compacto ? "h-8" : "h-8 md:h-10",
                 )}
                 data-testid="img-logo-light"
-              />
-              <img
-                src={logoDark}
-                alt="Aspal — ir al inicio"
-                className={cn(
-                  "hidden w-auto transition-[height] duration-200 dark:block",
-                  compacto ? "h-8" : "h-8 md:h-10",
-                )}
-                data-testid="img-logo-dark"
               />
             </Link>
           </div>

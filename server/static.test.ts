@@ -5,7 +5,7 @@ import { connect, type AddressInfo } from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { serveStatic } from "./static";
+import { CACHE_INMUTABLE, serveStatic } from "./static";
 
 let servidor: Server;
 let base: string;
@@ -23,6 +23,8 @@ beforeAll(async () => {
   }
   mkdirSync(join(dist, "assets"));
   writeFileSync(join(dist, "assets", "app.js"), "console.log(1)");
+  mkdirSync(join(dist, "fuentes", "montserrat-v31"), { recursive: true });
+  writeFileSync(join(dist, "fuentes", "montserrat-v31", "latin.woff2"), "woff2");
   const app = express();
   serveStatic(app, dist);
   await new Promise<void>((listo) => {
@@ -135,5 +137,18 @@ describe("serveStatic", () => {
     // a /assets, sin fin. Un directorio no es una página: 404.
     expect((await pedir("/assets")).estado).toBe(404);
     expect((await pedir("/assets/app.js")).estado).toBe(200);
+  });
+
+  it("cachea un año los archivos con nombre versionado, y no las páginas", async () => {
+    // /assets lleva hash en el nombre y /fuentes la versión en la carpeta: si
+    // cambian, cambia la URL. Las páginas tienen que revalidarse siempre.
+    for (const ruta of ["/assets/app.js", "/fuentes/montserrat-v31/latin.woff2"]) {
+      const respuesta = await fetch(`${base}${ruta}`);
+      expect(respuesta.headers.get("cache-control"), ruta).toBe(CACHE_INMUTABLE);
+    }
+    for (const ruta of ["/", "/blog"]) {
+      const respuesta = await fetch(`${base}${ruta}`);
+      expect(respuesta.headers.get("cache-control"), ruta).not.toContain("immutable");
+    }
   });
 });

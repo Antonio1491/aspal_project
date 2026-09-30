@@ -17,11 +17,15 @@
          fallback del SPA sirviendo index.html donde el navegador esperaba PNG. -->
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/favicon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Montserrat vive en el propio dominio (ver index.css). Se precarga el
+         subconjunto latin, el que usa cualquier página en español: así llega
+         a la par que el CSS y no después de descubrirlo en él. -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href="/fuentes/montserrat-v31/latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
   </head>
   <body>

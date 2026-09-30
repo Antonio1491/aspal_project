@@ -13,6 +13,17 @@ import { RUTAS_DINAMICAS } from "../client/src/lib/rutas";
  * Antes cualquier dirección caía en `index.html` con 200: para un buscador, el
  * sitio tenía infinitas páginas iguales a la home.
  */
+/**
+ * Cabecera de caché para lo que tiene la versión en la URL: `/assets/*` lleva
+ * el hash del contenido en el nombre (Vite) y `/fuentes/<familia>-v<n>/*` la
+ * versión en la carpeta. Si el archivo cambia, cambia la URL, así que el
+ * navegador puede guardarlo un año sin volver a preguntar. `vercel.json`
+ * declara la misma (lo comprueba `vercel.test.ts`). Las páginas no: tienen que
+ * revalidarse para que un despliegue se vea al instante.
+ */
+export const CACHE_INMUTABLE = "public, max-age=31536000, immutable";
+const VERSIONADOS = /^(assets|fuentes)\//;
+
 export function serveStatic(
   app: Express,
   distPath = path.resolve(import.meta.dirname, "public"),
@@ -38,7 +49,19 @@ export function serveStatic(
   });
 
   // Sin redirect: si no, /assets -> 301 /assets/ y la barra final -> 308 /assets, en bucle.
-  app.use(express.static(distPath, { extensions: ["html"], redirect: false }));
+  app.use(
+    express.static(distPath, {
+      extensions: ["html"],
+      redirect: false,
+      setHeaders: (res, archivo) => {
+        if (
+          VERSIONADOS.test(path.relative(distPath, archivo).split(path.sep).join("/"))
+        ) {
+          res.setHeader("Cache-Control", CACHE_INMUTABLE);
+        }
+      },
+    }),
+  );
 
   for (const ruta of RUTAS_DINAMICAS) {
     app.get(ruta, (_req, res) => {
