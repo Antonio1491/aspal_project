@@ -1,10 +1,41 @@
 import { Button } from "@/components/ui/button";
-import { Check, Copy } from "lucide-react";
-import { useState } from "react";
+import { Check, Copy, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
-/** Bloque de código con botón de copiar. El aviso «Copiado» llega al lector de pantalla. */
+type EstadoCopia = "inactivo" | "copiado" | "fallo";
+
+const ETIQUETA: Record<EstadoCopia, string> = {
+  inactivo: "Copiar",
+  copiado: "Copiado",
+  fallo: "No se pudo copiar",
+};
+
+/**
+ * Bloque de código con botón de copiar. El resultado se anuncia al lector de
+ * pantalla. Sin portapapeles (http sin cifrar, permiso denegado) avisa del
+ * fallo en vez de decir «Copiado» sin haber copiado nada.
+ */
 export function CopiarCodigo({ codigo, testid }: { codigo: string; testid: string }) {
-  const [copiado, setCopiado] = useState(false);
+  const [estado, setEstado] = useState<EstadoCopia>("inactivo");
+  const temporizador = useRef(0);
+
+  useEffect(() => () => window.clearTimeout(temporizador.current), []);
+
+  async function copiar() {
+    let resultado: EstadoCopia = "copiado";
+    try {
+      if (!navigator.clipboard) throw new Error("Portapapeles no disponible");
+      await navigator.clipboard.writeText(codigo);
+    } catch {
+      resultado = "fallo";
+    }
+    setEstado(resultado);
+    window.clearTimeout(temporizador.current);
+    temporizador.current = window.setTimeout(() => setEstado("inactivo"), 1500);
+  }
+
+  const Icono = estado === "copiado" ? Check : estado === "fallo" ? X : Copy;
+
   return (
     <div className="relative">
       <pre className="overflow-x-auto rounded-xl bg-noche p-4 pr-24 text-sm text-noche-foreground">
@@ -15,16 +46,15 @@ export function CopiarCodigo({ codigo, testid }: { codigo: string; testid: strin
         variant="outline"
         size="sm"
         className="absolute right-2 top-2 min-h-9 bg-background"
-        onClick={async () => {
-          await navigator.clipboard?.writeText(codigo);
-          setCopiado(true);
-          window.setTimeout(() => setCopiado(false), 1500);
-        }}
+        onClick={copiar}
         data-testid={testid}
       >
-        {copiado ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
-        <span aria-live="polite">{copiado ? "Copiado" : "Copiar"}</span>
+        <Icono aria-hidden="true" />
+        {ETIQUETA[estado]}
       </Button>
+      <span className="sr-only" role="status" aria-live="polite">
+        {estado === "inactivo" ? "" : ETIQUETA[estado]}
+      </span>
     </div>
   );
 }
