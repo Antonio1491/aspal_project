@@ -2,17 +2,55 @@ import { useQuery } from "@tanstack/react-query";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { PodcastCard } from "@/components/content/PodcastCard";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Headphones } from "lucide-react";
 import type { TransformedPost } from "@shared/wordpress/types";
 
+const PULSO = "bg-muted animate-pulse motion-reduce:animate-none";
+
+/** Esqueleto con la silueta de `PodcastCard`: portada 16:9, insignia,
+ *  título, extracto y fecha. Antes eran bloques `h-96` grises. */
+function PodcastCardSkeleton({ index }: { index: number }) {
+  return (
+    <Card className="flex flex-col h-full overflow-hidden" data-testid={`skeleton-podcast-${index}`}>
+      <div className={`aspect-video w-full ${PULSO}`} />
+      <div className="flex-1 p-6">
+        <div className={`h-5 w-24 rounded-full ${PULSO}`} />
+        <div className={`mt-4 h-6 w-11/12 rounded ${PULSO}`} />
+        <div className={`mt-2 h-6 w-3/5 rounded ${PULSO}`} />
+        <div className="mt-4 space-y-2">
+          <div className={`h-4 w-full rounded ${PULSO}`} />
+          <div className={`h-4 w-full rounded ${PULSO}`} />
+          <div className={`h-4 w-4/5 rounded ${PULSO}`} />
+        </div>
+      </div>
+      <div className="p-6 pt-4 border-t border-border">
+        <div className={`h-4 w-32 rounded ${PULSO}`} />
+      </div>
+    </Card>
+  );
+}
+
 export default function PodcastPage() {
-  const { data: podcasts, isLoading } = useQuery<TransformedPost[]>({
+  const {
+    data: podcasts,
+    isLoading,
+    isError,
+    refetch,
+    isFetching,
+  } = useQuery<TransformedPost[]>({
     queryKey: ["/api/podcasts", { per_page: 6 }],
     queryFn: async () => {
       const response = await fetch("/api/podcasts?per_page=6");
-      if (!response.ok) throw new Error("Failed to fetch podcasts");
+      if (!response.ok)
+        throw new Error(`Error al cargar los episodios: ${response.status}`);
       return response.json();
     },
+    // Igual que en el blog: un fetch fallido no puede quedar cacheado como
+    // "no hay episodios" toda la sesión.
+    retry: 2,
+    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 8000),
   });
 
   return (
@@ -82,14 +120,33 @@ export default function PodcastPage() {
               Todos los Episodios
             </h2>
             {isLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                aria-busy="true"
+                aria-label="Cargando episodios"
+              >
                 {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div
-                    key={i}
-                    className="h-96 bg-muted animate-pulse rounded-2xl"
-                    data-testid={`skeleton-podcast-${i}`}
-                  ></div>
+                  <PodcastCardSkeleton key={i} index={i} />
                 ))}
+              </div>
+            ) : isError ? (
+              /* Distinto del vacío: antes un WordPress caído mostraba
+               "No hay episodios disponibles en este momento". */
+              <div className="text-center py-12" data-testid="state-podcasts-error">
+                <p className="text-lg font-semibold text-foreground">
+                  No hemos podido cargar los episodios
+                </p>
+                <p className="mt-2 text-muted-foreground">
+                  Puede ser un problema temporal de conexión.
+                </p>
+                <Button
+                  className="mt-6 min-h-[44px] px-6"
+                  onClick={() => refetch()}
+                  disabled={isFetching}
+                  data-testid="button-retry-podcasts"
+                >
+                  {isFetching ? "Reintentando…" : "Reintentar"}
+                </Button>
               </div>
             ) : podcasts && podcasts.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
