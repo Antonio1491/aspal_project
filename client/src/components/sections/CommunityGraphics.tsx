@@ -353,21 +353,13 @@ export function DecorativeBlob({
       animate={{ scale: 1 }}
       transition={{ duration: 1 }}
     >
-      <motion.path
+      {/* Forma fija. Antes se animaba el atributo `d` entre tres trazados y
+          framer-motion escribía d="undefined" en algún fotograma: error en la
+          consola de /plataforma en cada carga. El pulso de escala del <svg>
+          basta como movimiento decorativo. */}
+      <path
         d="M100 20 C150 20 180 50 180 100 C180 150 150 180 100 180 C50 180 20 150 20 100 C20 50 50 20 100 20"
         className={colorClass}
-        animate={{
-          d: [
-            "M100 20 C150 20 180 50 180 100 C180 150 150 180 100 180 C50 180 20 150 20 100 C20 50 50 20 100 20",
-            "M100 25 C145 15 185 55 175 105 C165 155 140 185 95 175 C45 165 15 140 25 95 C35 45 55 35 100 25",
-            "M100 20 C150 20 180 50 180 100 C180 150 150 180 100 180 C50 180 20 150 20 100 C20 50 50 20 100 20",
-          ],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
       />
     </motion.svg>
   );

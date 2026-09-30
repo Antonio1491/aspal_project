@@ -5,6 +5,7 @@ import { vistaReciente, type EstadoConsulta } from "@/lib/contenido-reciente";
 import type { TransformedPost } from "@shared/wordpress/types";
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { ArrowRight } from "lucide-react";
+import { useSyncExternalStore } from "react";
 import { Link } from "wouter";
 
 async function cargar(url: string): Promise<TransformedPost[]> {
@@ -21,6 +22,13 @@ function estado(consulta: UseQueryResult<TransformedPost[]>): EstadoConsulta {
   };
 }
 
+// ¿Estamos ya en el cliente? En el servidor y durante la hidratación React usa
+// `enServidor` (false), así que el primer render coincide con el HTML
+// prerenderizado; después pasa a `enCliente` (true). Sin setState en un efecto.
+const sinSuscripcion = () => () => {};
+const enCliente = () => true;
+const enServidor = () => false;
+
 const REINTENTO = {
   retry: 2,
   retryDelay: (intento: number) => Math.min(1000 * 2 ** intento, 8000),
@@ -28,11 +36,16 @@ const REINTENTO = {
 
 /**
  * Contenido reciente de la home (RF-13): 3 artículos y el último episodio.
- * Si la API falla, el bloque desaparece y el resto de la home sigue igual. En
- * el HTML prerenderizado sale el esqueleto: las consultas no corren en el
- * servidor.
+ * Si la API falla, el bloque desaparece y el resto de la home sigue igual.
+ *
+ * En el HTML prerenderizado (y para quien no ejecuta JavaScript) sale solo el
+ * título con el enlace al blog: las consultas no corren en el servidor, y un
+ * esqueleto ahí sería un «Cargando…» que nunca termina. El esqueleto aparece
+ * al montar, cuando las consultas ya están en marcha.
  */
 export function ContenidoReciente() {
+  const montado = useSyncExternalStore(sinSuscripcion, enCliente, enServidor);
+
   const articulos = useQuery<TransformedPost[]>({
     queryKey: ["/api/posts", { per_page: 3 }],
     queryFn: () => cargar("/api/posts?per_page=3"),
@@ -65,7 +78,7 @@ export function ContenidoReciente() {
         </Link>
       </div>
 
-      {vista === "cargando" ? (
+      {!montado ? null : vista === "cargando" ? (
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <p className="sr-only" role="status">
             Cargando contenido reciente…
