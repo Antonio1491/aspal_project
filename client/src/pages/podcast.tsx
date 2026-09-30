@@ -13,7 +13,10 @@ const PULSO = "bg-muted animate-pulse motion-reduce:animate-none";
  *  título, extracto y fecha. Antes eran bloques `h-96` grises. */
 function PodcastCardSkeleton({ index }: { index: number }) {
   return (
-    <Card className="flex flex-col h-full overflow-hidden" data-testid={`skeleton-podcast-${index}`}>
+    <Card
+      className="flex flex-col h-full overflow-hidden"
+      data-testid={`skeleton-podcast-${index}`}
+    >
       <div className={`aspect-video w-full ${PULSO}`} />
       <div className="flex-1 p-6">
         <div className={`h-5 w-24 rounded-full ${PULSO}`} />
