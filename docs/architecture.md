@@ -30,6 +30,11 @@ de solo lectura y sin estado.
 | `/componentes`  | Catálogo interno de componentes con demos y código (noindex, sin enlace en el menú)                                   |
 | `*`             | 404                                                                                                                   |
 
+**Catálogo (`/componentes`):** va en el bundle único (≈8–10 KB gzip, ~4–5 %).
+Cargarlo aparte exigiría Suspense + precarga antes de `hydrateRoot`; se revisa
+si supera ~20 KB gzip. El catálogo no registra analítica (guardia en
+`registrarEvento`).
+
 **Estado:** TanStack Query para estado de servidor; hooks de React para estado
 local. Hooks propios en `client/src/hooks/` (`use-mobile`, `use-toast`).
 

@@ -51,7 +51,9 @@ inmutable. Escala:
 
 ## Componentes y espaciado
 
-Catálogo vivo con demos y código: `/componentes` (fuente: `client/src/catalogo/registro.ts`). Clases compartidas: `client/src/lib/clases.ts`.
+Catálogo vivo con demos y código: `/componentes` (fuente:
+`client/src/catalogo/registro.ts`). Clases compartidas:
+`client/src/lib/clases.ts`.
 
 - Botones: primario `variant="secondary"` (miel, texto pizarra); secundario
   `variant="outline"`; sobre `bg-noche`, contorno blanco. Objetivo táctil de 44 px mínimo (`min-h-11`).

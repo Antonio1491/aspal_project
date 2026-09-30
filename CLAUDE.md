@@ -111,12 +111,16 @@ El catálogo está en `client/src/catalogo/registro.ts` y se ve en
 componente o una vista:
 
 1. Busca en `registro.ts` (`usarCuando`, `evitarPara`) uno que ya lo resuelva.
-   Reutilízalo; si le falta una variante, añádela al existente.
+   Reutilízalo; si le falta una variante, añádela al existente. Revisa también
+   `client/src/hooks/` y `client/src/lib/` antes de escribir un hook o un
+   helper.
 2. Estilos que se repiten: `client/src/lib/clases.ts`. No copies cadenas de
    clases (un test lo impide para las que ya están ahí).
 3. Si hace falta uno nuevo: créalo en la carpeta de su categoría, regístralo
    (`registro.test.ts` falla si no) y, si su `vista` es `"demo"`, añade su demo
-   en `client/src/catalogo/demos-*.tsx` (TypeScript lo exige).
+   en `client/src/catalogo/demos-*.tsx` (TypeScript lo exige). Una carpeta
+   nueva en `components/` exige añadirla a `CATEGORIAS_POR_CARPETA` (el test lo
+   pide). Solo `.tsx`.
 4. Un componente que deja de usarse se borra: el mismo test lo detecta.
 
 ## Verificar el trabajo
