@@ -27,6 +27,7 @@ de solo lectura y sin estado.
 | `/blog`         | Listado de artículos con filtro por categoría                                                                         |
 | `/blog/:slug`   | Artículo individual                                                                                                   |
 | `/podcast`      | Listado de episodios                                                                                                  |
+| `/componentes`  | Catálogo interno de componentes con demos y código (noindex, sin enlace en el menú)                                   |
 | `*`             | 404                                                                                                                   |
 
 **Estado:** TanStack Query para estado de servidor; hooks de React para estado

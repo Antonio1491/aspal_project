@@ -104,6 +104,21 @@ eliminaron 37 sin usar junto con sus dependencias. Si necesitas uno nuevo,
 añádelo con el CLI de shadcn (`components.json` ya está configurado) e instala
 su dependencia de Radix — no lo reintroduzcas a mano ni asumas que ya está.
 
+### Componentes: reutiliza antes de crear
+
+El catálogo está en `client/src/catalogo/registro.ts` y se ve en
+`/componentes` (pública, noindex, sin enlace en el menú). Antes de crear un
+componente o una vista:
+
+1. Busca en `registro.ts` (`usarCuando`, `evitarPara`) uno que ya lo resuelva.
+   Reutilízalo; si le falta una variante, añádela al existente.
+2. Estilos que se repiten: `client/src/lib/clases.ts`. No copies cadenas de
+   clases (un test lo impide para las que ya están ahí).
+3. Si hace falta uno nuevo: créalo en la carpeta de su categoría, regístralo
+   (`registro.test.ts` falla si no) y, si su `vista` es `"demo"`, añade su demo
+   en `client/src/catalogo/demos-*.tsx` (TypeScript lo exige).
+4. Un componente que deja de usarse se borra: el mismo test lo detecta.
+
 ## Verificar el trabajo
 
 Un cambio no está hecho hasta que se ve funcionando:
