@@ -79,10 +79,12 @@ export const REGISTRO = [
       'import { HeroInstitucional } from "@/components/layout/HeroInstitucional";',
     categoria: "layout",
     descripcion:
-      "Banda noche con overline miel y el único <h1> de la página. Sin animaciones: se prerenderiza.",
-    usarCuando: "La cabecera de cualquier página institucional nueva.",
+      "Banda noche con overline miel y el único <h1> de la página. Con `visual`, añade una columna a la derecha desde lg (foto o PatronPanal); en móvil no se pinta. Sin animaciones: se prerenderiza.",
+    usarCuando:
+      "La cabecera de cualquier página institucional nueva. `visual` para la home o páginas que necesiten ancla visual.",
     evitarPara: "Más de una vez por página (pinta el <h1>).",
-    props: "overline: string; overlineNormal?: boolean; titulo: string; children?",
+    props:
+      "overline: string; overlineNormal?: boolean; titulo: string; visual?: ReactNode; children?",
     estado: "en-uso",
     vista: "demo",
   },
@@ -94,6 +96,22 @@ export const REGISTRO = [
     categoria: "layout",
     descripcion: "Etiqueta «Próximamente» para un destino que aún no existe.",
     usarCuando: "Junto a un enlace o sección sin página todavía (menú, pilares, pie).",
+    props: "className?: string",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "patron-panal",
+    nombre: "PatronPanal",
+    archivo: "client/src/components/layout/PatronPanal.tsx",
+    importar: 'import { PatronPanal } from "@/components/layout/PatronPanal";',
+    categoria: "layout",
+    descripcion:
+      "Panal de hexágonos de la marca (el isotipo repetido), con un racimo destacado en miel y bordes que se desvanecen. SVG estático y decorativo (aria-hidden).",
+    usarCuando:
+      "Fondos noche que necesitan ancla visual sin foto: la columna `visual` del hero, detrás de una foto, bandas de cierre.",
+    evitarPara:
+      "Fondos claros (está pensado en miel sobre noche) o como relleno de todas las bandas: pierde fuerza.",
     props: "className?: string",
     estado: "en-uso",
     vista: "demo",
@@ -217,10 +235,10 @@ export const REGISTRO = [
     importar: 'import { PilarCard } from "@/components/institucional/PilarCard";',
     categoria: "institucional",
     descripcion:
-      "Tarjeta de uno de los 4 pilares. «resumen» (h3, enlace al detalle) o «detalle» (h2, cómo se traduce y enlaces).",
+      "Tarjeta de uno de los 4 pilares. «resumen» (h3; toda la tarjeta lleva al detalle) o «detalle» (h2, cómo se traduce y enlaces). Con `ilustracion`, la ilustración de la marca arriba en vez del icono.",
     usarCuando:
       "Mostrar pilares: home, Nosotros, ¿Qué hacemos?. Datos en content/institucional/pilares.ts.",
-    props: 'pilar: Pilar; variante: "resumen" | "detalle"',
+    props: 'pilar: Pilar; variante: "resumen" | "detalle"; ilustracion?: boolean',
     estado: "en-uso",
     vista: "demo",
   },
@@ -296,7 +314,7 @@ export const REGISTRO = [
     importar: 'import { IndiceEtapas } from "@/components/institucional/IndiceEtapas";',
     categoria: "institucional",
     descripcion:
-      "Las 7 etapas del Mapa de Ruta en lista ordenada: franja de la home (enlaza a /mapa-de-ruta#etapa-N) o índice de la página.",
+      "Las 7 etapas del Mapa de Ruta. «home»: paso a paso con insignia hexagonal e icono, línea que las une desde xl y «Empieza aquí» en la 1 (enlaza a /mapa-de-ruta#etapa-N). «mapa»: índice con resumen que salta al ancla.",
     usarCuando: "Enlazar a las etapas del Mapa de Ruta.",
     props: 'origen: "home" | "mapa"',
     estado: "en-uso",
@@ -315,6 +333,21 @@ export const REGISTRO = [
     estado: "en-uso",
     vista: "demo",
   },
+  {
+    id: "voces-red",
+    nombre: "VocesRed",
+    archivo: "client/src/components/institucional/VocesRed.tsx",
+    importar: 'import { VocesRed } from "@/components/institucional/VocesRed";',
+    categoria: "institucional",
+    descripcion:
+      "Banda noche de testimonios: cita, retrato 1:1 (o iniciales en hexágono), nombre, cargo, organización y país. Con la lista vacía no se pinta.",
+    usarCuando:
+      "Prueba social con personas reales. Los datos van en TESTIMONIOS de content/institucional/inicio.ts.",
+    evitarPara: "Citas inventadas o sin permiso de la persona.",
+    props: "testimonios: Testimonio[]",
+    estado: "en-uso",
+    vista: "demo",
+  },
 
   // ── Contenido de WordPress ─────────────────────────────────────────────
   {
@@ -324,10 +357,11 @@ export const REGISTRO = [
     importar: 'import BlogCard from "@/components/content/BlogCard";',
     categoria: "contenido",
     descripcion:
-      "Tarjeta de artículo: imagen (si la hay), título, extracto y fecha. Enlaza fuera (muro de MemberPress, D9).",
-    usarCuando: "Listar artículos de /api/posts.",
-    evitarPara: "Episodios de podcast: PodcastCard.",
-    props: "post: TransformedPost",
+      "Tarjeta de artículo o episodio: imagen (si la hay), etiqueta opcional («Blog», «Podcast»), título, extracto y fecha. Enlaza fuera (muro de MemberPress, D9).",
+    usarCuando:
+      "Listar artículos de /api/posts, o mezclar artículos y episodios en una misma fila con `etiqueta` (home).",
+    evitarPara: "La página /podcast, que usa PodcastCard con número de episodio.",
+    props: "post: TransformedPost; etiqueta?: string",
     estado: "en-uso",
     vista: "demo",
   },

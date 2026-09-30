@@ -10,10 +10,13 @@ import { PilarCard } from "@/components/institucional/PilarCard";
 import { RutaTimeline } from "@/components/institucional/RutaTimeline";
 import { SubnavSeccion } from "@/components/institucional/SubnavSeccion";
 import { TarjetaCompromiso } from "@/components/institucional/TarjetaCompromiso";
+import { VocesRed } from "@/components/institucional/VocesRed";
 import { Banda } from "@/components/layout/Banda";
 import { HeroInstitucional } from "@/components/layout/HeroInstitucional";
+import { PatronPanal } from "@/components/layout/PatronPanal";
 import { Proximamente } from "@/components/layout/Proximamente";
 import { PERFILES } from "@/content/institucional/equipo";
+import type { Testimonio } from "@/content/institucional/inicio";
 import { ETAPAS } from "@/content/institucional/mapa-ruta";
 import {
   ALIADOS_FUNDADORES,
@@ -43,6 +46,24 @@ const POST_EJEMPLO: TransformedPost = {
   author: "ASPAL",
   link: "https://comunidad.asociacionesprofesionales.org/",
 };
+
+/** Testimonios de ejemplo para la demo de VocesRed (rotulados como tales). */
+const TESTIMONIOS_EJEMPLO: Testimonio[] = [
+  {
+    cita: "Texto de ejemplo del catálogo: aquí va una cita real de menos de 30 palabras de un directivo de la red.",
+    nombre: "Nombre Apellido",
+    cargo: "Dirección ejecutiva",
+    organizacion: "Asociación de ejemplo",
+    pais: "México",
+  },
+  {
+    cita: "Segunda cita de ejemplo, para ver cómo se reparte la rejilla con dos o tres testimonios.",
+    nombre: "Otra Persona",
+    cargo: "Presidencia",
+    organizacion: "Colegio de ejemplo",
+    pais: "Colombia",
+  },
+];
 
 const texto = (v: string | boolean) => String(v);
 
@@ -83,19 +104,36 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
         etiqueta: "overlineNormal (sin mayúsculas)",
         inicial: false,
       },
+      {
+        tipo: "interruptor",
+        clave: "visual",
+        etiqueta: "visual (panal a la derecha, desde lg)",
+        inicial: false,
+      },
     ],
-    nota: "Pinta el <h1> de la página: úsalo una sola vez.",
+    nota: "Pinta el <h1> de la página: úsalo una sola vez. La columna visual solo aparece desde 1024 px.",
     render: (v) => (
       <HeroInstitucional
         overline={texto(v.overline)}
         overlineNormal={Boolean(v.overlineNormal)}
         titulo={texto(v.titulo)}
+        visual={v.visual ? <PatronPanal /> : undefined}
       >
         <p>Párrafo de apoyo del hero.</p>
       </HeroInstitucional>
     ),
     codigo: (v) =>
-      `<HeroInstitucional ${atributo("overline", v.overline)}${v.overlineNormal ? " overlineNormal" : ""} ${atributo("titulo", v.titulo)}>\n  <p>…</p>\n</HeroInstitucional>`,
+      `<HeroInstitucional ${atributo("overline", v.overline)}${v.overlineNormal ? " overlineNormal" : ""} ${atributo("titulo", v.titulo)}${v.visual ? " visual={<PatronPanal />}" : ""}>\n  <p>…</p>\n</HeroInstitucional>`,
+  },
+  "patron-panal": {
+    fondo: "noche",
+    nota: "Decorativo (aria-hidden) y estático: se prerenderiza igual sin JavaScript.",
+    render: () => (
+      <div className="mx-auto max-w-md">
+        <PatronPanal />
+      </div>
+    ),
+    codigo: () => `<PatronPanal className="…" />`,
   },
   proximamente: {
     render: () => (
@@ -124,17 +162,24 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
         opciones: ["resumen", "detalle"],
         inicial: "resumen",
       },
+      {
+        tipo: "interruptor",
+        clave: "ilustracion",
+        etiqueta: "ilustracion",
+        inicial: true,
+      },
     ],
     render: (v) => (
-      <div className="max-w-xl">
+      <div className="max-w-sm">
         <PilarCard
           pilar={PILARES.find((p) => p.id === v.pilar) ?? PILARES[0]}
           variante={texto(v.variante) as "resumen" | "detalle"}
+          ilustracion={Boolean(v.ilustracion)}
         />
       </div>
     ),
     codigo: (v) =>
-      `<PilarCard pilar={PILARES.find((p) => p.id === ${JSON.stringify(texto(v.pilar))})!} variante="${texto(v.variante)}" />`,
+      `<PilarCard pilar={PILARES.find((p) => p.id === ${JSON.stringify(texto(v.pilar))})!} variante="${texto(v.variante)}"${v.ilustracion ? " ilustracion" : ""} />`,
   },
   "tarjeta-compromiso": {
     controles: [
@@ -245,6 +290,13 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
         etiqueta: "con imagen destacada",
         inicial: true,
       },
+      {
+        tipo: "opciones",
+        clave: "tipo",
+        etiqueta: "etiqueta",
+        opciones: ["—", "Blog", "Podcast"],
+        inicial: "Blog",
+      },
     ],
     fondo: "suave",
     nota: "Datos de ejemplo. En la app, el post llega de /api/posts.",
@@ -255,10 +307,12 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
             ...POST_EJEMPLO,
             featuredImage: v.imagen ? POST_EJEMPLO.featuredImage : "",
           }}
+          etiqueta={v.tipo === "—" ? undefined : texto(v.tipo)}
         />
       </div>
     ),
-    codigo: () => `<BlogCard post={post} />`,
+    codigo: (v) =>
+      `<BlogCard post={post}${v.tipo === "—" ? "" : ` ${atributo("etiqueta", v.tipo)}`} />`,
   },
   "podcast-card": {
     controles: [
@@ -291,6 +345,11 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
     nota: "Usa la API real (/api/posts y /api/podcasts). Si falla, el bloque desaparece: es el comportamiento esperado.",
     render: () => <ContenidoReciente />,
     codigo: () => `<ContenidoReciente />`,
+  },
+  "voces-red": {
+    nota: "Testimonios de ejemplo del catálogo (no son reales). En la home, con TESTIMONIOS vacío la sección no se pinta.",
+    render: () => <VocesRed testimonios={TESTIMONIOS_EJEMPLO} />,
+    codigo: () => `<VocesRed testimonios={TESTIMONIOS} />`,
   },
   "form-suscripcion": {
     controles: [

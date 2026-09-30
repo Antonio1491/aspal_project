@@ -1,14 +1,22 @@
+import ilustracionEventos from "@assets/ilustraciones/eventos-webinar.webp";
 import { ContenidoReciente } from "@/components/content/ContenidoReciente";
 import { FormSuscripcion } from "@/components/forms/FormSuscripcion";
 import { IndiceEtapas } from "@/components/institucional/IndiceEtapas";
 import { MuroAliados } from "@/components/institucional/MuroAliados";
 import { PilarCard } from "@/components/institucional/PilarCard";
+import { VocesRed } from "@/components/institucional/VocesRed";
 import { Banda } from "@/components/layout/Banda";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import { HeroInstitucional } from "@/components/layout/HeroInstitucional";
 import { Button } from "@/components/ui/button";
-import { CIFRAS, TEXTO_EVENTOS } from "@/content/institucional/inicio";
+import { PatronPanal } from "@/components/layout/PatronPanal";
+import {
+  CIFRAS,
+  FOTO_HERO,
+  TESTIMONIOS,
+  TEXTO_EVENTOS,
+} from "@/content/institucional/inicio";
 import { MAPA_RUTA } from "@/content/institucional/mapa-ruta";
 import {
   ALIADOS_FUNDADORES,
@@ -23,9 +31,30 @@ import { NOMBRE_COMPLETO } from "@/lib/marca";
 import { Link } from "wouter";
 
 /**
- * Home institucional (§6.1): 8 bandas. El contenido de producto que ocupaba la
- * raíz vive en /plataforma desde el PR A.
- * PENDIENTE (insumo de la semana 0): foto real de un evento en el hero.
+ * Columna visual del hero: la foto real de un encuentro cuando exista
+ * (`FOTO_HERO`) con el panal detrás, o solo el panal de la marca mientras tanto.
+ */
+function VisualHero() {
+  if (!FOTO_HERO) return <PatronPanal />;
+  return (
+    <div className="relative">
+      <PatronPanal className="absolute -right-12 -top-12 w-4/5" />
+      <img
+        src={FOTO_HERO.src}
+        alt={FOTO_HERO.alt}
+        width={1600}
+        height={1200}
+        className="relative aspect-[4/3] w-full rounded-2xl object-cover shadow-xl"
+        data-testid="img-hero-foto"
+      />
+    </div>
+  );
+}
+
+/**
+ * Home institucional (§6.1). El contenido de producto que ocupaba la raíz vive
+ * en /plataforma desde el PR A. Las ranuras de la fase 2 (foto del hero, voces
+ * de la red) se llenan en content/institucional/inicio.ts.
  */
 export default function Inicio() {
   return (
@@ -33,7 +62,11 @@ export default function Inicio() {
       <Header />
       <main id="contenido" tabIndex={-1} className="flex-1 focus:outline-none">
         {/* 1. Hero */}
-        <HeroInstitucional overline={NOMBRE_COMPLETO} titulo={HERO_NOSOTROS.tagline}>
+        <HeroInstitucional
+          overline={NOMBRE_COMPLETO}
+          titulo={HERO_NOSOTROS.tagline}
+          visual={<VisualHero />}
+        >
           <p>{HERO_NOSOTROS.parrafo}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button variant="secondary" className={BOTON_MIEL_NOCHE} asChild>
@@ -62,17 +95,27 @@ export default function Inicio() {
         {/* 2. Cifras verificables */}
         <Banda>
           <h2 className="sr-only">ASPAL en cifras</h2>
-          <dl className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <dl className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-border">
             {CIFRAS.map((cifra) => (
               <div
                 key={cifra.valor}
-                className="flex flex-col"
+                className="flex flex-col lg:px-8 lg:first:pl-0 lg:last:pr-0"
                 data-testid={`cifra-${cifra.valor}`}
               >
-                <dt className="order-2 mt-2 text-lg text-muted-foreground">
+                <dt className="order-3 mt-2 text-lg text-muted-foreground">
                   {cifra.etiqueta}
                 </dt>
-                <dd className="order-1 text-5xl font-extrabold text-primary">
+                <div className="order-1 flex items-center gap-3" aria-hidden="true">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent">
+                    <cifra.icono className="h-6 w-6 text-primary" />
+                  </span>
+                  {cifra.meta && (
+                    <span className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold uppercase tracking-wider text-secondary-foreground">
+                      Meta 2030
+                    </span>
+                  )}
+                </div>
+                <dd className="order-2 mt-4 text-5xl font-extrabold text-primary">
                   {cifra.valor}
                 </dd>
               </div>
@@ -85,7 +128,7 @@ export default function Inicio() {
           <h2 className={H2_BANDA}>Los 4 Pilares ASPAL</h2>
           <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {PILARES.map((pilar) => (
-              <PilarCard key={pilar.id} pilar={pilar} variante="resumen" />
+              <PilarCard key={pilar.id} pilar={pilar} variante="resumen" ilustracion />
             ))}
           </div>
         </Banda>
@@ -115,18 +158,45 @@ export default function Inicio() {
           </Button>
         </Banda>
 
+        {/* Voces de la red: ranura de la fase 2, no se pinta sin testimonios */}
+        <VocesRed testimonios={TESTIMONIOS} />
+
         {/* 5. Contenido reciente (se oculta si la API falla) */}
         <ContenidoReciente />
 
         {/* 6. Próximo gran evento: D10 sin aprobar, alternativa de la §6.1 */}
         <Banda>
-          <h2 className={H2_BANDA}>Próximos eventos</h2>
-          <p className="mt-3 max-w-3xl text-lg text-muted-foreground">{TEXTO_EVENTOS}</p>
-          <Button variant="outline" className="mt-6 min-h-11 px-6" asChild>
-            <Link href="/eventos" data-testid="button-home-eventos">
-              Avísame cuando abran inscripciones
-            </Link>
-          </Button>
+          <div className="grid items-center gap-10 lg:grid-cols-12">
+            <div className="flex justify-center rounded-2xl bg-accent p-6 lg:col-span-5">
+              <img
+                src={ilustracionEventos}
+                alt=""
+                width={480}
+                height={546}
+                loading="lazy"
+                decoding="async"
+                className="h-56 w-auto md:h-72"
+                data-testid="img-home-eventos"
+              />
+            </div>
+            <div className="lg:col-span-7">
+              <h2 className={H2_BANDA}>Próximos eventos</h2>
+              <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
+                {TEXTO_EVENTOS} Déjanos tu correo y te avisamos en cuanto abramos
+                inscripciones.
+              </p>
+              <div className="mt-6 max-w-xl">
+                <FormSuscripcion origen="eventos" variante="compacto" />
+              </div>
+              <Link
+                href="/eventos"
+                className="mt-4 inline-flex min-h-11 items-center gap-1.5 font-medium text-primary underline underline-offset-4"
+                data-testid="button-home-eventos"
+              >
+                Ver la página de eventos
+              </Link>
+            </div>
+          </div>
         </Banda>
 
         {/* 7. Aliados fundadores */}

@@ -11,9 +11,17 @@ glassmorphism) describía un sitio que ya no existe.
   Nunca el de fondo claro sobre fondo oscuro.
 - **Isotipo** (panal de 4 hexágonos): `Aspal-Icono_*.webp`. Es la silueta de
   perfil cuando falta la foto.
-- **Motivo gráfico:** `HexagonNetwork` (`components/sections/CommunityGraphics.tsx`),
-  semitransparente, en el hero, en la banda «Únete a la casa común» y en la Ruta
-  2026–2030.
+- **Motivo gráfico:** el hexágono del isotipo. `PatronPanal`
+  (`components/layout/PatronPanal.tsx`), panal estático en miel sobre noche, en
+  la columna visual del hero de la home; insignias hexagonales en el paso a
+  paso del Mapa de Ruta y en las iniciales de «Voces de la red».
+- **Ilustraciones:** familia plana en miel y noche con manchas azul claro
+  (`client/src/assets/recurso-*.webp` y sus versiones ligeras de 480 px en
+  `assets/ilustraciones/`). Una por pilar y la del webinar en Eventos. No
+  mezclar con fotos dentro de la misma banda.
+- **Fotos:** reales, de eventos y personas de la red. Ranuras preparadas en
+  `content/institucional/inicio.ts` (`FOTO_HERO`, `TESTIMONIOS`); mientras
+  estén vacías, la home no muestra huecos.
 - **Nombre visible:** `NOMBRE_MARCA` de `client/src/lib/marca.ts`. No se escribe a mano.
 
 ## Color

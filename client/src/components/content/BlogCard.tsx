@@ -6,9 +6,12 @@ import type { TransformedPost } from "@shared/wordpress/types";
 
 interface BlogCardProps {
   post: TransformedPost;
+  /** Etiqueta de tipo sobre el título («Blog», «Podcast»). La usa la home para
+   *  mezclar artículos y episodios con la misma tarjeta. */
+  etiqueta?: string;
 }
 
-export default function BlogCard({ post }: BlogCardProps) {
+export default function BlogCard({ post, etiqueta }: BlogCardProps) {
   const publishedLabel = formatPublishedDate(post.publishedAt);
 
   // NOTA: el plan pedía que la tarjeta navegara a `/blog/${post.slug}`. Está
@@ -64,6 +67,14 @@ export default function BlogCard({ post }: BlogCardProps) {
           )}
 
           <div className="flex-1 flex flex-col p-6">
+            {etiqueta && (
+              <span
+                className="mb-3 inline-flex self-start rounded-full bg-accent px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-primary"
+                data-testid={`etiqueta-post-${post.id}`}
+              >
+                {etiqueta}
+              </span>
+            )}
             <h3
               className="text-lg md:text-xl font-bold text-foreground group-hover:text-primary group-focus-within:text-primary transition-colors line-clamp-2 mb-3"
               data-testid={`text-post-title-${post.id}`}

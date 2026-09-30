@@ -1,5 +1,4 @@
 import BlogCard from "@/components/content/BlogCard";
-import { PodcastCard } from "@/components/content/PodcastCard";
 import { Banda } from "@/components/layout/Banda";
 import { useEnCliente } from "@/hooks/use-en-cliente";
 import { H2_BANDA } from "@/lib/clases";
@@ -87,12 +86,14 @@ export function ContenidoReciente() {
         <ul className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {articulos.data?.map((post) => (
             <li key={post.id}>
-              <BlogCard post={post} />
+              <BlogCard post={post} etiqueta="Blog" />
             </li>
           ))}
           {episodio && (
             <li>
-              <PodcastCard podcast={episodio} />
+              {/* La misma tarjeta que los artículos, con su etiqueta: antes
+                  PodcastCard daba otro estilo en la misma fila. */}
+              <BlogCard post={episodio} etiqueta="Podcast" />
             </li>
           )}
         </ul>
