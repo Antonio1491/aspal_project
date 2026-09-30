@@ -249,7 +249,7 @@ export default function Nosotros() {
           <ul className={cn("mt-8", REJILLA_PILARES_PANAL)}>
             {PILARES.map((pilar, i) => (
               <li key={pilar.id}>
-                <PilarCard pilar={pilar} variante="resumen" ilustracion numero={i + 1} />
+                <PilarCard pilar={pilar} ilustracion numero={i + 1} />
               </li>
             ))}
           </ul>

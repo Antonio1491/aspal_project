@@ -3,6 +3,10 @@
  * reescribe aquí. Lo usan /nosotros (resumen) y /que-hacemos (detalle); el id
  * es el ancla de /que-hacemos (RF-08).
  */
+import pilarComunidad from "@assets/ilustraciones/pilar-comunidad.webp";
+import pilarConocimiento from "@assets/ilustraciones/pilar-conocimiento.webp";
+import pilarDatos from "@assets/ilustraciones/pilar-datos.webp";
+import pilarTecnologia from "@assets/ilustraciones/pilar-tecnologia.webp";
 import { COMUNIDAD } from "@/lib/navegacion";
 import { BarChart3, BookOpen, Cpu, Users, type LucideIcon } from "lucide-react";
 
@@ -22,6 +26,12 @@ export interface Pilar {
   compromiso: string;
   comoSeTraduce: string;
   icono: LucideIcon;
+  /**
+   * Ilustración de la marca (familia miel y noche), versión ligera de 480 × 520
+   * derivada de `recurso-*.webp`. Datos usa la lupa sobre perfiles: análisis y
+   * comparación. Decorativa: se pinta siempre con alt="".
+   */
+  ilustracion: string;
   enlaces: EnlaceContenido[];
 }
 
@@ -35,6 +45,7 @@ export const PILARES: Pilar[] = [
     comoSeTraduce:
       "Foros por etapa del Mapa de Ruta, directorio de miembros, red de mentoring, Encuentro Latinoamericano CDMX 2027.",
     icono: Users,
+    ilustracion: pilarComunidad,
     enlaces: [
       { etiqueta: "Comunidad ASPAL", href: `${COMUNIDAD}/comunidad/`, externo: true },
       {
@@ -53,6 +64,7 @@ export const PILARES: Pilar[] = [
     comoSeTraduce:
       "Podcast Conexión Profesional, Blog, Webinars mensuales, Biblioteca curada, Academia ASPAL y cursos certificados.",
     icono: BookOpen,
+    ilustracion: pilarConocimiento,
     enlaces: [
       { etiqueta: "Blog", href: "/blog" },
       { etiqueta: "Podcast Conexión Profesional", href: "/podcast" },
@@ -68,6 +80,7 @@ export const PILARES: Pilar[] = [
     comoSeTraduce:
       "Gestión de membresías, pasarela de pagos, email marketing, comunidad en línea, analítica — todo listo para operar.",
     icono: Cpu,
+    ilustracion: pilarTecnologia,
     enlaces: [{ etiqueta: "Conoce la plataforma", href: "/plataforma" }],
   },
   {
@@ -78,6 +91,7 @@ export const PILARES: Pilar[] = [
     comoSeTraduce:
       "Estudio Comparativo anual, Reporte del Estado del Sector LATAM, encuestas de retención y tendencias regionales.",
     icono: BarChart3,
+    ilustracion: pilarDatos,
     // PENDIENTE (Etapa 3): el Estudio Comparativo tiene su página.
     enlaces: [{ etiqueta: "Estudio Comparativo" }],
   },

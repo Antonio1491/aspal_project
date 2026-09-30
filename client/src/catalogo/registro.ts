@@ -251,11 +251,56 @@ export const REGISTRO = [
     importar: 'import { PilarCard } from "@/components/institucional/PilarCard";',
     categoria: "institucional",
     descripcion:
-      "Tarjeta de uno de los 4 pilares. «resumen» (h3; toda la tarjeta lleva al detalle y su flecha avanza al pasar el ratón) o «detalle» (h2, cómo se traduce y enlaces). Con `ilustracion`, la ilustración de la marca sale de una insignia hexagonal que rompe el borde superior y se asoma al entrar en pantalla (el contenedor le deja 40 px: pt-10); con `numero`, el número en grande en contorno miel.",
+      "Tarjeta de uno de los 4 pilares en resumen (h3): nombre, subtítulo y compromiso; toda la tarjeta lleva a su sección de ¿Qué hacemos? y su flecha avanza al pasar el ratón. Con `ilustracion`, la ilustración de la marca sale de una insignia hexagonal que rompe el borde superior y se asoma al entrar en pantalla (el contenedor le deja 40 px: pt-10); con `numero`, el número en grande en contorno miel.",
     usarCuando:
-      "Mostrar pilares: home, Nosotros, ¿Qué hacemos?. Datos en content/institucional/pilares.ts.",
-    props:
-      'pilar: Pilar; variante: "resumen" | "detalle"; ilustracion?: boolean; numero?: number',
+      "Resumir los pilares en otra página (home, Nosotros). Datos en content/institucional/pilares.ts.",
+    evitarPara: "El detalle de un pilar en ¿Qué hacemos?: para eso, SeccionPilar.",
+    props: "pilar: Pilar; ilustracion?: boolean; numero?: number",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "seccion-pilar",
+    nombre: "SeccionPilar",
+    archivo: "client/src/components/institucional/SeccionPilar.tsx",
+    importar: 'import { SeccionPilar } from "@/components/institucional/SeccionPilar";',
+    categoria: "institucional",
+    descripcion:
+      "Un pilar como sección editorial, con su ancla: ilustración en un hexágono grande que desborda por arriba y se asoma al entrar en pantalla, número en contorno miel, subtítulo como declaración, compromiso, «cómo se traduce» en recuadro y los accesos como píldoras («Próximamente» si aún no existen). Los pares van en banda suave con la ilustración a la derecha.",
+    usarCuando:
+      "El detalle de cada pilar en ¿Qué hacemos?. Ya es una Banda: no la envuelvas.",
+    evitarPara: "Resumir los pilares en otra página: para eso, PilarCard.",
+    props: "pilar: Pilar; numero: number; siguiente?: Pilar",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "indice-pilares",
+    nombre: "IndicePilares",
+    archivo: "client/src/components/institucional/IndicePilares.tsx",
+    importar: 'import { IndicePilares } from "@/components/institucional/IndicePilares";',
+    categoria: "institucional",
+    descripcion:
+      "Los 4 pilares de un vistazo (insignia con icono, «Pilar 01», nombre y subtítulo), cada uno con un salto a su SeccionPilar en la misma página.",
+    usarCuando: "Bajo el hero de ¿Qué hacemos?: índice de la página, también en móvil.",
+    evitarPara:
+      "Enlazar a los pilares desde otra página: PilarCard ya lleva a /que-hacemos#id.",
+    props: "sin props (lee PILARES)",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "panal-pilares",
+    nombre: "PanalPilares",
+    archivo: "client/src/components/institucional/PanalPilares.tsx",
+    importar: 'import { PanalPilares } from "@/components/institucional/PanalPilares";',
+    categoria: "institucional",
+    descripcion:
+      "Los 4 pilares como un racimo de 4 celdas del panal, cada una con su ilustración, sobre PatronPanal. Las celdas se arman una tras otra al cargar. Decorativo.",
+    usarCuando:
+      "Columna visual del hero de ¿Qué hacemos? (`visual` de HeroInstitucional).",
+    evitarPara: "Fondos sin relación con los pilares: para eso, PatronPanal.",
+    props: "sin props (lee PILARES)",
     estado: "en-uso",
     vista: "demo",
   },

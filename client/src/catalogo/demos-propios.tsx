@@ -8,10 +8,13 @@ import { EtapaMapa } from "@/components/institucional/EtapaMapa";
 import { Hashtag } from "@/components/institucional/Hashtag";
 import { ManifiestoNumerado } from "@/components/institucional/ManifiestoNumerado";
 import { IndiceEtapas } from "@/components/institucional/IndiceEtapas";
+import { IndicePilares } from "@/components/institucional/IndicePilares";
 import { MuroAliados } from "@/components/institucional/MuroAliados";
+import { PanalPilares } from "@/components/institucional/PanalPilares";
 import { PerfilCard } from "@/components/institucional/PerfilCard";
 import { PilarCard } from "@/components/institucional/PilarCard";
 import { RutaTimeline } from "@/components/institucional/RutaTimeline";
+import { SeccionPilar } from "@/components/institucional/SeccionPilar";
 import { SubnavSeccion } from "@/components/institucional/SubnavSeccion";
 import { VocesRed } from "@/components/institucional/VocesRed";
 import { Banda } from "@/components/layout/Banda";
@@ -187,13 +190,6 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
         inicial: "comunidad",
       },
       {
-        tipo: "opciones",
-        clave: "variante",
-        etiqueta: "variante",
-        opciones: ["resumen", "detalle"],
-        inicial: "resumen",
-      },
-      {
         tipo: "interruptor",
         clave: "ilustracion",
         etiqueta: "ilustracion",
@@ -216,7 +212,6 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
         <div className="max-w-sm pt-10">
           <PilarCard
             pilar={PILARES[i]}
-            variante={texto(v.variante) as "resumen" | "detalle"}
             ilustracion={Boolean(v.ilustracion)}
             numero={v.numero ? i + 1 : undefined}
           />
@@ -224,7 +219,49 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
       );
     },
     codigo: (v) =>
-      `<PilarCard pilar={PILARES.find((p) => p.id === ${JSON.stringify(texto(v.pilar))})!} variante="${texto(v.variante)}"${v.ilustracion ? " ilustracion" : ""}${v.numero ? ` numero={${Math.max(1, PILARES.findIndex((p) => p.id === v.pilar) + 1)}}` : ""} />`,
+      `<PilarCard pilar={PILARES.find((p) => p.id === ${JSON.stringify(texto(v.pilar))})!}${v.ilustracion ? " ilustracion" : ""}${v.numero ? ` numero={${Math.max(1, PILARES.findIndex((p) => p.id === v.pilar) + 1)}}` : ""} />`,
+  },
+  "seccion-pilar": {
+    controles: [
+      {
+        tipo: "opciones",
+        clave: "pilar",
+        etiqueta: "pilar",
+        opciones: PILARES.map((p) => p.id),
+        inicial: "comunidad",
+      },
+    ],
+    nota: "Es una Banda completa: el tono y el lado de la ilustración dependen de `numero` (pares en suave, ilustración a la derecha).",
+    render: (v) => {
+      const i = Math.max(
+        0,
+        PILARES.findIndex((p) => p.id === v.pilar),
+      );
+      return (
+        <SeccionPilar pilar={PILARES[i]} numero={i + 1} siguiente={PILARES[i + 1]} />
+      );
+    },
+    codigo: (v) => {
+      const i = Math.max(
+        0,
+        PILARES.findIndex((p) => p.id === v.pilar),
+      );
+      return `<SeccionPilar pilar={PILARES[${i}]} numero={${i + 1}}${i + 1 < PILARES.length ? ` siguiente={PILARES[${i + 1}]}` : ""} />`;
+    },
+  },
+  "indice-pilares": {
+    render: () => <IndicePilares />,
+    codigo: () => `<IndicePilares />`,
+  },
+  "panal-pilares": {
+    fondo: "noche",
+    nota: "Decorativo (aria-hidden). En el hero solo se pinta desde 1024 px.",
+    render: () => (
+      <div className="mx-auto max-w-sm">
+        <PanalPilares />
+      </div>
+    ),
+    codigo: () => `<PanalPilares />`,
   },
   "manifiesto-numerado": {
     render: () => <ManifiestoNumerado items={DEFENDEMOS} />,

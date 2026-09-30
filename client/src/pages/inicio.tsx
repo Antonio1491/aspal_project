@@ -138,13 +138,7 @@ export default function Inicio() {
               celdas de un panal (lg:pb-12 reserva ese medio paso). */}
           <div className={`mt-8 ${REJILLA_PILARES_PANAL}`}>
             {PILARES.map((pilar, i) => (
-              <PilarCard
-                key={pilar.id}
-                pilar={pilar}
-                variante="resumen"
-                ilustracion
-                numero={i + 1}
-              />
+              <PilarCard key={pilar.id} pilar={pilar} ilustracion numero={i + 1} />
             ))}
           </div>
         </Banda>
