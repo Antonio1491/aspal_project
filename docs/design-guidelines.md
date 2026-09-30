@@ -127,7 +127,9 @@ Catálogo vivo con demos y código: `/componentes` (fuente:
   no se elevan ni animan su ilustración.
 - **Pilares en la home:** panal escalonado. La ilustración sale de una
   insignia hexagonal que rompe el borde de la tarjeta, número del pilar en
-  contorno miel y, desde `lg`, las tarjetas pares bajan medio paso.
+  contorno miel y, desde `lg`, las tarjetas pares bajan medio paso. Al entrar
+  en pantalla, cada ilustración se asoma desde su insignia, en cascada
+  (entrada única, no en hover).
 
 ## Fotografía
 

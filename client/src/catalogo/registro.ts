@@ -251,7 +251,7 @@ export const REGISTRO = [
     importar: 'import { PilarCard } from "@/components/institucional/PilarCard";',
     categoria: "institucional",
     descripcion:
-      "Tarjeta de uno de los 4 pilares. «resumen» (h3; toda la tarjeta lleva al detalle y su flecha avanza al pasar el ratón) o «detalle» (h2, cómo se traduce y enlaces). Con `ilustracion`, la ilustración de la marca sale de una insignia hexagonal que rompe el borde superior (el contenedor le deja 40 px: pt-10); con `numero`, el número en grande en contorno miel.",
+      "Tarjeta de uno de los 4 pilares. «resumen» (h3; toda la tarjeta lleva al detalle y su flecha avanza al pasar el ratón) o «detalle» (h2, cómo se traduce y enlaces). Con `ilustracion`, la ilustración de la marca sale de una insignia hexagonal que rompe el borde superior y se asoma al entrar en pantalla (el contenedor le deja 40 px: pt-10); con `numero`, el número en grande en contorno miel.",
     usarCuando:
       "Mostrar pilares: home, Nosotros, ¿Qué hacemos?. Datos en content/institucional/pilares.ts.",
     props:

@@ -5,6 +5,7 @@ import pilarTecnologia from "@assets/ilustraciones/pilar-tecnologia.webp";
 import { AvisoPestanaNueva } from "@/components/layout/AvisoPestanaNueva";
 import { Proximamente } from "@/components/layout/Proximamente";
 import type { EnlaceContenido, IdPilar, Pilar } from "@/content/institucional/pilares";
+import { useAnimarAlVer } from "@/hooks/use-animar-al-ver";
 import { registrarEvento } from "@/lib/analitica";
 import { HEXAGONO_PUNTA } from "@/lib/clases";
 import { cn } from "@/lib/utils";
@@ -85,6 +86,8 @@ export function PilarCard({
   numero?: number;
 }) {
   const Icono = pilar.icono;
+  // Entrada de la ilustración (solo con `ilustracion`: sin ref queda estática).
+  const { ref: refInsignia, estado } = useAnimarAlVer<HTMLDivElement>();
   const Titulo = variante === "detalle" ? "h2" : "h3";
   const resumen = variante === "resumen";
 
@@ -113,20 +116,36 @@ export function PilarCard({
         </span>
       )}
       {ilustracion ? (
-        <div className="absolute -top-10 left-6 h-32 w-28 md:left-8" aria-hidden="true">
+        <div
+          ref={refInsignia}
+          className="absolute -top-10 left-6 h-32 w-28 md:left-8"
+          aria-hidden="true"
+        >
           <span
             className={cn("absolute inset-x-0 bottom-0 h-28 bg-accent", HEXAGONO_PUNTA)}
           />
-          <img
-            src={ILUSTRACIONES[pilar.id]}
-            alt=""
-            width={480}
-            height={520}
-            loading="lazy"
-            decoding="async"
-            className="absolute bottom-1 left-1/2 h-32 w-auto max-w-none -translate-x-1/2"
-            data-testid={`img-pilar-${pilar.id}`}
-          />
+          {/* La ilustración se asoma desde la insignia la primera vez que entra
+              en pantalla, en cascada según `numero`. Va en su propia capa: el
+              <img> ya usa transform para centrarse. */}
+          <span
+            className={cn(
+              "absolute inset-0 origin-bottom",
+              estado === "esperando" && "translate-y-6 scale-90",
+              estado === "activa" && "animate-asoma",
+            )}
+            style={{ animationDelay: `${((numero ?? 1) - 1) * 120}ms` }}
+          >
+            <img
+              src={ILUSTRACIONES[pilar.id]}
+              alt=""
+              width={480}
+              height={520}
+              loading="lazy"
+              decoding="async"
+              className="absolute bottom-1 left-1/2 h-32 w-auto max-w-none -translate-x-1/2"
+              data-testid={`img-pilar-${pilar.id}`}
+            />
+          </span>
         </div>
       ) : (
         <Icono className="h-8 w-8 text-primary" aria-hidden="true" />
