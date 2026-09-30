@@ -18,14 +18,9 @@ import {
 } from "@/content/institucional/nosotros";
 import { PILARES } from "@/content/institucional/pilares";
 import { registrarEvento } from "@/lib/analitica";
+import { BOTON_CONTORNO_NOCHE, BOTON_MIEL_NOCHE, H2_BANDA } from "@/lib/clases";
 import { NOMBRE_COMPLETO } from "@/lib/marca";
 import { Link } from "wouter";
-
-const h2 = "text-3xl font-bold text-foreground md:text-4xl";
-const BOTON_MIEL =
-  "min-h-11 px-6 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche";
-const BOTON_CONTORNO =
-  "min-h-11 [border-color:white] bg-transparent px-6 text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche";
 
 /**
  * Home institucional (§6.1): 8 bandas. El contenido de producto que ocupaba la
@@ -41,7 +36,7 @@ export default function Inicio() {
         <HeroInstitucional overline={NOMBRE_COMPLETO} titulo={HERO_NOSOTROS.tagline}>
           <p>{HERO_NOSOTROS.parrafo}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button variant="secondary" className={BOTON_MIEL} asChild>
+            <Button variant="secondary" className={BOTON_MIEL_NOCHE} asChild>
               <Link
                 href="/mapa-de-ruta"
                 onClick={() =>
@@ -52,7 +47,7 @@ export default function Inicio() {
                 Empieza por el Mapa de Ruta
               </Link>
             </Button>
-            <Button variant="outline" className={BOTON_CONTORNO} asChild>
+            <Button variant="outline" className={BOTON_CONTORNO_NOCHE} asChild>
               <Link
                 href="/unete"
                 onClick={() => registrarEvento("click_unete", { origen: "home" })}
@@ -87,7 +82,7 @@ export default function Inicio() {
 
         {/* 3. Los 4 pilares */}
         <Banda tono="suave">
-          <h2 className={h2}>Los 4 Pilares ASPAL</h2>
+          <h2 className={H2_BANDA}>Los 4 Pilares ASPAL</h2>
           <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {PILARES.map((pilar) => (
               <PilarCard key={pilar.id} pilar={pilar} variante="resumen" />
@@ -100,7 +95,7 @@ export default function Inicio() {
           <p className="text-[13px] font-semibold uppercase tracking-wider text-primary">
             Mapa de Ruta
           </p>
-          <h2 className={`mt-2 ${h2}`}>{MAPA_RUTA.titulo}</h2>
+          <h2 className={`mt-2 ${H2_BANDA}`}>{MAPA_RUTA.titulo}</h2>
           <p className="mt-3 max-w-3xl text-lg text-muted-foreground">
             {MAPA_RUTA.subtitulo}
           </p>
@@ -125,7 +120,7 @@ export default function Inicio() {
 
         {/* 6. Próximo gran evento: D10 sin aprobar, alternativa de la §6.1 */}
         <Banda>
-          <h2 className={h2}>Próximos eventos</h2>
+          <h2 className={H2_BANDA}>Próximos eventos</h2>
           <p className="mt-3 max-w-3xl text-lg text-muted-foreground">{TEXTO_EVENTOS}</p>
           <Button variant="outline" className="mt-6 min-h-11 px-6" asChild>
             <Link href="/eventos" data-testid="button-home-eventos">
@@ -136,7 +131,7 @@ export default function Inicio() {
 
         {/* 7. Aliados fundadores */}
         <Banda tono="suave">
-          <h2 className={`mb-8 ${h2}`}>Aliados fundadores</h2>
+          <h2 className={`mb-8 ${H2_BANDA}`}>Aliados fundadores</h2>
           <MuroAliados fundadores={ALIADOS_FUNDADORES} />
         </Banda>
 

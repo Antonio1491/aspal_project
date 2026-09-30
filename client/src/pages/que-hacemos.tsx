@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { CTA_FINAL, HASHTAG, QUIENES_SOMOS } from "@/content/institucional/nosotros";
 import { PILARES } from "@/content/institucional/pilares";
 import { registrarEvento } from "@/lib/analitica";
+import { BOTON_MIEL_NOCHE } from "@/lib/clases";
 import { Link } from "wouter";
 
 /**
@@ -45,11 +46,7 @@ export default function QueHacemos() {
           </p>
           <h2 className="mt-3 text-3xl font-bold md:text-4xl">Únete a la casa común</h2>
           <p className="mt-4 max-w-2xl text-lg text-white/85">{CTA_FINAL[1]}</p>
-          <Button
-            variant="secondary"
-            className="mt-8 min-h-11 px-6 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche"
-            asChild
-          >
+          <Button variant="secondary" className={`mt-8 ${BOTON_MIEL_NOCHE}`} asChild>
             <Link
               href="/unete"
               onClick={() => registrarEvento("click_unete", { origen: "que_hacemos" })}

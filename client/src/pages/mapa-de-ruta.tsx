@@ -8,14 +8,10 @@ import { HeroInstitucional } from "@/components/layout/HeroInstitucional";
 import { Button } from "@/components/ui/button";
 import { ETAPAS, MAPA_RUTA } from "@/content/institucional/mapa-ruta";
 import { registrarEvento } from "@/lib/analitica";
+import { BOTON_CONTORNO_NOCHE, BOTON_MIEL_NOCHE, H2_BANDA } from "@/lib/clases";
 import { COMUNIDAD } from "@/lib/navegacion";
 import { ArrowUpRight, Download } from "lucide-react";
 import { Link } from "wouter";
-
-const BOTON_MIEL =
-  "min-h-11 px-6 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche";
-const BOTON_CONTORNO =
-  "min-h-11 [border-color:white] bg-transparent px-6 text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-noche";
 
 /**
  * Mapa de Ruta (§6.5): las 7 etapas de la guía oficial en un paso a paso
@@ -32,12 +28,12 @@ export default function MapaDeRuta() {
           <p>{MAPA_RUTA.subtitulo}</p>
           <p className="mt-4">{MAPA_RUTA.comoUsar}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button variant="secondary" className={BOTON_MIEL} asChild>
+            <Button variant="secondary" className={BOTON_MIEL_NOCHE} asChild>
               <a href="#etapa-1" data-testid="button-mapa-empezar">
                 Empieza por la Etapa 1
               </a>
             </Button>
-            <Button variant="outline" className={BOTON_CONTORNO} asChild>
+            <Button variant="outline" className={BOTON_CONTORNO_NOCHE} asChild>
               <a
                 href={MAPA_RUTA.pdf.href}
                 target="_blank"
@@ -56,9 +52,7 @@ export default function MapaDeRuta() {
         </HeroInstitucional>
 
         <Banda tono="suave">
-          <h2 className="text-3xl font-bold text-foreground md:text-4xl">
-            Las {ETAPAS.length} etapas
-          </h2>
+          <h2 className={H2_BANDA}>Las {ETAPAS.length} etapas</h2>
           <p className="mt-3 max-w-3xl text-lg text-muted-foreground">
             {MAPA_RUTA.recorrer}
           </p>
@@ -84,7 +78,7 @@ export default function MapaDeRuta() {
             <p className="mt-4 text-lg text-white/85">{MAPA_RUTA.impulsa.texto}</p>
             <p className="mt-3 text-lg text-white/85">{MAPA_RUTA.checkList}</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button variant="secondary" className={BOTON_MIEL} asChild>
+              <Button variant="secondary" className={BOTON_MIEL_NOCHE} asChild>
                 <Link
                   href="/unete"
                   onClick={() => registrarEvento("click_unete", { origen: "mapa_ruta" })}
@@ -93,7 +87,7 @@ export default function MapaDeRuta() {
                   Únete a la comunidad
                 </Link>
               </Button>
-              <Button variant="outline" className={BOTON_CONTORNO} asChild>
+              <Button variant="outline" className={BOTON_CONTORNO_NOCHE} asChild>
                 <a
                   href={COMUNIDAD}
                   target="_blank"

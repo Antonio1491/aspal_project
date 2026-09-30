@@ -24,17 +24,17 @@ function BlogCardSkeleton({ index }: { index: number }) {
       className="h-full flex flex-col overflow-hidden bg-card border-border/50"
       data-testid={`skeleton-post-${index}`}
     >
-      <div className="h-52 bg-muted animate-pulse" />
+      <div className="h-52 bg-muted animate-pulse motion-reduce:animate-none" />
       <div className="flex-1 flex flex-col p-6">
-        <div className="h-6 w-11/12 rounded bg-muted animate-pulse" />
-        <div className="mt-2 h-6 w-3/5 rounded bg-muted animate-pulse" />
+        <div className="h-6 w-11/12 rounded bg-muted animate-pulse motion-reduce:animate-none" />
+        <div className="mt-2 h-6 w-3/5 rounded bg-muted animate-pulse motion-reduce:animate-none" />
         <div className="mt-4 space-y-2 flex-1">
-          <div className="h-4 w-full rounded bg-muted animate-pulse" />
-          <div className="h-4 w-full rounded bg-muted animate-pulse" />
-          <div className="h-4 w-4/5 rounded bg-muted animate-pulse" />
+          <div className="h-4 w-full rounded bg-muted animate-pulse motion-reduce:animate-none" />
+          <div className="h-4 w-full rounded bg-muted animate-pulse motion-reduce:animate-none" />
+          <div className="h-4 w-4/5 rounded bg-muted animate-pulse motion-reduce:animate-none" />
         </div>
         <div className="mt-4 pt-4 border-t border-border/50">
-          <div className="h-4 w-32 rounded bg-muted animate-pulse" />
+          <div className="h-4 w-32 rounded bg-muted animate-pulse motion-reduce:animate-none" />
         </div>
       </div>
     </Card>

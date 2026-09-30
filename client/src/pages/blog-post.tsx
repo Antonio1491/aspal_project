@@ -114,14 +114,14 @@ export default function BlogPost() {
         <main id="contenido" tabIndex={-1} className="focus:outline-none">
           <div className="container mx-auto px-4 md:px-8 py-16">
             <div className="max-w-[65ch] mx-auto space-y-8" aria-busy="true">
-              <div className="h-8 w-32 bg-muted animate-pulse rounded" />
-              <div className="h-12 bg-muted animate-pulse rounded" />
-              <div className="h-12 w-3/4 bg-muted animate-pulse rounded" />
-              <div className="h-64 bg-muted animate-pulse rounded-2xl" />
+              <div className="h-8 w-32 bg-muted animate-pulse motion-reduce:animate-none rounded" />
+              <div className="h-12 bg-muted animate-pulse motion-reduce:animate-none rounded" />
+              <div className="h-12 w-3/4 bg-muted animate-pulse motion-reduce:animate-none rounded" />
+              <div className="h-64 bg-muted animate-pulse motion-reduce:animate-none rounded-2xl" />
               <div className="space-y-4">
-                <div className="h-4 bg-muted animate-pulse rounded w-full" />
-                <div className="h-4 bg-muted animate-pulse rounded w-5/6" />
-                <div className="h-4 bg-muted animate-pulse rounded w-4/6" />
+                <div className="h-4 bg-muted animate-pulse motion-reduce:animate-none rounded w-full" />
+                <div className="h-4 bg-muted animate-pulse motion-reduce:animate-none rounded w-5/6" />
+                <div className="h-4 bg-muted animate-pulse motion-reduce:animate-none rounded w-4/6" />
               </div>
             </div>
           </div>
