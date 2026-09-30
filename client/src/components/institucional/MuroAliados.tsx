@@ -22,6 +22,10 @@ const LOGOS: Record<
  * Muro de aliados (Bloque 9). En la Etapa 1 solo los fundadores; las demás
  * categorías se anuncian «conforme se firmen convenios» (§6.2). Rejilla
  * estática: sin carrusel automático (accesibilidad).
+ *
+ * Logos en gris para que ninguno pese más que otro; al pasar el ratón por la
+ * tarjeta recuperan su color (hoy solo Parksys lo tiene: los archivos de WUP y
+ * ANPR ya son grises).
  */
 export function MuroAliados({
   fundadores,
@@ -39,7 +43,7 @@ export function MuroAliados({
         {fundadores.map((aliado) => (
           <li
             key={aliado.nombre}
-            className="flex h-full flex-col rounded-2xl border border-border bg-background p-6"
+            className="group flex h-full flex-col rounded-2xl border border-border bg-background p-6"
             data-testid={`aliado-${aliado.nombre.toLowerCase().replace(/\s+/g, "-")}`}
           >
             <div className="flex h-24 items-center">
@@ -49,7 +53,7 @@ export function MuroAliados({
                   alt={aliado.nombre}
                   width={LOGOS[aliado.logo].ancho}
                   height={LOGOS[aliado.logo].alto}
-                  className="max-h-20 w-auto"
+                  className="max-h-20 w-auto opacity-70 grayscale transition-[filter,opacity] duration-300 group-hover:opacity-100 group-hover:grayscale-0"
                   loading="lazy"
                 />
               ) : (
