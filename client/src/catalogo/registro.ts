@@ -384,6 +384,22 @@ export const REGISTRO = [
 
   // ── Contenido de WordPress ─────────────────────────────────────────────
   {
+    id: "franja-podcast",
+    nombre: "FranjaPodcast",
+    archivo: "client/src/components/content/FranjaPodcast.tsx",
+    importar: 'import { FranjaPodcast } from "@/components/content/FranjaPodcast";',
+    categoria: "contenido",
+    descripcion:
+      "Un episodio como franja noche con aspecto de reproductor: portada en hexágono, onda de audio en miel (dibujo fijo) y «Escuchar». Toda la franja enlaza al episodio en WordPress, en otra pestaña.",
+    usarCuando:
+      "Destacar un episodio concreto (el último, uno recomendado) dentro de una banda.",
+    evitarPara:
+      "Listados de episodios (PodcastCard) o reproducir audio en la página: no tiene reproductor.",
+    props: "episodio: TransformedPost",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
     id: "blog-card",
     nombre: "BlogCard",
     archivo: "client/src/components/content/BlogCard.tsx",
@@ -392,7 +408,7 @@ export const REGISTRO = [
     descripcion:
       "Tarjeta de artículo o episodio: imagen (si la hay), etiqueta opcional («Blog», «Podcast»), título, extracto y fecha. Enlaza fuera (muro de MemberPress, D9).",
     usarCuando:
-      "Listar artículos de /api/posts, o mezclar artículos y episodios en una misma fila con `etiqueta` (home).",
+      "Listar artículos de /api/posts, o mezclar artículos y episodios en una misma fila con `etiqueta`.",
     evitarPara: "La página /podcast, que usa PodcastCard con número de episodio.",
     props: "post: TransformedPost; etiqueta?: string",
     estado: "en-uso",
@@ -419,7 +435,7 @@ export const REGISTRO = [
       'import { ContenidoReciente } from "@/components/content/ContenidoReciente";',
     categoria: "contenido",
     descripcion:
-      "Banda con 3 artículos y el último episodio. Si la API falla, desaparece (RF-13).",
+      "Banda de la home como portada de revista: el artículo más reciente en grande, los dos siguientes en lista numerada y el último episodio en FranjaPodcast. Sin fechas a la vista. Si la API falla, desaparece (RF-13); si falla una sola consulta, pinta la otra.",
     usarCuando: "Traer contenido reciente a una página institucional.",
     props: "sin props",
     estado: "en-uso",

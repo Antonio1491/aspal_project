@@ -7,7 +7,7 @@ import { Proximamente } from "@/components/layout/Proximamente";
 import type { EnlaceContenido, IdPilar, Pilar } from "@/content/institucional/pilares";
 import { useAnimarAlVer } from "@/hooks/use-animar-al-ver";
 import { registrarEvento } from "@/lib/analitica";
-import { HEXAGONO_PUNTA } from "@/lib/clases";
+import { HEXAGONO_PUNTA, NUMERO_CONTORNO } from "@/lib/clases";
 import { cn } from "@/lib/utils";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Link } from "wouter";
@@ -105,15 +105,15 @@ export function PilarCard({
       data-testid={`pilar-${pilar.id}`}
     >
       {numero !== undefined && (
-        // Solo contorno: sin relleno no compite con el título. En alto
-        // contraste el trazo desaparece y quedaría un número macizo: fuera.
         <span
-          className="pointer-events-none absolute right-5 top-3 select-none text-7xl font-extrabold leading-none text-transparent [-webkit-text-stroke:2px_hsl(var(--secondary))] forced-colors:hidden"
+          className={cn(
+            NUMERO_CONTORNO,
+            "pointer-events-none absolute right-5 top-3 text-7xl",
+          )}
+          data-numero={String(numero).padStart(2, "0")}
           aria-hidden="true"
           data-testid={`numero-pilar-${pilar.id}`}
-        >
-          {String(numero).padStart(2, "0")}
-        </span>
+        />
       )}
       {ilustracion ? (
         <div

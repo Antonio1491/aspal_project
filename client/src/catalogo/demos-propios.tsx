@@ -1,5 +1,6 @@
 import BlogCard from "@/components/content/BlogCard";
 import { ContenidoReciente } from "@/components/content/ContenidoReciente";
+import { FranjaPodcast } from "@/components/content/FranjaPodcast";
 import { PodcastCard } from "@/components/content/PodcastCard";
 import { FormSuscripcion } from "@/components/forms/FormSuscripcion";
 import { CifraAnimada } from "@/components/institucional/CifraAnimada";
@@ -321,6 +322,15 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
       const siguiente = i < ETAPAS.length - 1 ? ` siguiente={ETAPAS[${i + 1}]}` : "";
       return `<EtapaMapa etapa={ETAPAS[${i}]}${anterior}${siguiente} />`;
     },
+  },
+  "franja-podcast": {
+    nota: "Episodio de ejemplo (no es real). En la home recibe el último de /api/podcasts.",
+    render: () => (
+      <FranjaPodcast
+        episodio={{ ...POST_EJEMPLO, title: "Episodio de ejemplo del catálogo" }}
+      />
+    ),
+    codigo: () => `<FranjaPodcast episodio={episodio} />`,
   },
   "blog-card": {
     controles: [

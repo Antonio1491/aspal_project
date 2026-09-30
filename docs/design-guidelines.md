@@ -76,6 +76,10 @@ Catálogo vivo con demos y código: `/componentes` (fuente:
 - Iconos: Lucide, de línea, en pizarra, siempre con `aria-hidden` y junto a su
   texto. Pilares: Users (Comunidad), BookOpen (Conocimiento), Cpu (Tecnología), BarChart3 (Datos).
 - Secciones sin construir: `<Proximamente />`, nunca un enlace a ningún sitio.
+- Contenido reciente de la home: portada de revista (artículo protagonista,
+  dos más en lista numerada con `NUMERO_CONTORNO` y el último episodio en
+  `FranjaPodcast`). Sin fechas a la vista: el contenido más nuevo puede tener
+  meses y la fecha ya está en /blog y en cada artículo.
 
 ## Navegación
 
