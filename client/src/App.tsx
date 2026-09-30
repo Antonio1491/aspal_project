@@ -1,4 +1,3 @@
-import Componentes from "@/pages/componentes";
 import type { FunctionComponent } from "react";
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
@@ -23,6 +22,7 @@ import Blog from "@/pages/blog";
 import BlogPost from "@/pages/blog-post";
 import Podcast from "@/pages/podcast";
 import NotFound from "@/pages/not-found";
+import Componentes from "@/pages/componentes";
 import {
   RUTAS_DINAMICAS,
   RUTAS_ESTATICAS,

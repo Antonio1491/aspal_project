@@ -47,18 +47,19 @@ export const DEMOS_UI: Record<IdDemoUi, Demo> = {
       },
       { tipo: "interruptor", clave: "disabled", etiqueta: "disabled", inicial: false },
     ],
+    nota: "En el sitio, todo botón lleva min-h-11 (objetivo táctil de 44 px).",
     render: (v) => (
       <Button
         variant={String(v.variant) as VarianteBoton}
         size={String(v.size) as TamanoBoton}
         disabled={Boolean(v.disabled)}
-        className="min-h-11 px-6"
+        className="px-6"
       >
         {String(v.texto)}
       </Button>
     ),
     codigo: (v) =>
-      `<Button variant="${String(v.variant)}"${v.size !== "default" ? ` size="${String(v.size)}"` : ""}${v.disabled ? " disabled" : ""} className="min-h-11 px-6">\n  ${String(v.texto)}\n</Button>`,
+      `<Button variant="${String(v.variant)}"${v.size !== "default" ? ` size="${String(v.size)}"` : ""}${v.disabled ? " disabled" : ""} className="px-6">\n  ${String(v.texto)}\n</Button>`,
   },
   badge: {
     controles: [

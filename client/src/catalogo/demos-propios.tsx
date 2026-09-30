@@ -46,6 +46,10 @@ const POST_EJEMPLO: TransformedPost = {
 
 const texto = (v: string | boolean) => String(v);
 
+/** Atributo JSX con el valor escapado: una comilla en el texto no rompe el código. */
+const atributo = (nombre: string, valor: string | boolean) =>
+  `${nombre}={${JSON.stringify(texto(valor))}}`;
+
 export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
   banda: {
     controles: [
@@ -91,7 +95,7 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
       </HeroInstitucional>
     ),
     codigo: (v) =>
-      `<HeroInstitucional overline="${texto(v.overline)}"${v.overlineNormal ? " overlineNormal" : ""} titulo="${texto(v.titulo)}">\n  <p>…</p>\n</HeroInstitucional>`,
+      `<HeroInstitucional ${atributo("overline", v.overline)}${v.overlineNormal ? " overlineNormal" : ""} ${atributo("titulo", v.titulo)}>\n  <p>…</p>\n</HeroInstitucional>`,
   },
   proximamente: {
     render: () => (
@@ -99,7 +103,10 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
         Estudios e investigaciones <Proximamente />
       </p>
     ),
-    codigo: () => `<span>Estudios e investigaciones</span> <Proximamente />`,
+    codigo: () =>
+      `<p className="flex items-center gap-2 text-lg">
+  Estudios e investigaciones <Proximamente />
+</p>`,
   },
   "pilar-card": {
     controles: [
@@ -127,7 +134,7 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
       </div>
     ),
     codigo: (v) =>
-      `<PilarCard pilar={PILARES.find((p) => p.id === "${texto(v.pilar)}")!} variante="${texto(v.variante)}" />`,
+      `<PilarCard pilar={PILARES.find((p) => p.id === ${JSON.stringify(texto(v.pilar))})!} variante="${texto(v.variante)}" />`,
   },
   "tarjeta-compromiso": {
     controles: [
@@ -144,7 +151,8 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
         <TarjetaCompromiso titulo={texto(v.titulo)} texto={texto(v.texto)} />
       </div>
     ),
-    codigo: (v) => `<TarjetaCompromiso titulo="${texto(v.titulo)}" texto="…" />`,
+    codigo: (v) =>
+      `<TarjetaCompromiso ${atributo("titulo", v.titulo)} ${atributo("texto", v.texto)} />`,
   },
   "ruta-timeline": {
     render: () => <RutaTimeline hitos={RUTA} />,
@@ -166,7 +174,7 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
       </div>
     ),
     codigo: (v) =>
-      `<PerfilCard perfil={PERFILES.find((p) => p.nombre === "${texto(v.perfil)}")!} />`,
+      `<PerfilCard perfil={PERFILES.find((p) => p.nombre === ${JSON.stringify(texto(v.perfil))})!} />`,
   },
   "muro-aliados": {
     controles: [
@@ -221,8 +229,13 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
         <EtapaMapa etapa={ETAPAS[i]} anterior={ETAPAS[i - 1]} siguiente={ETAPAS[i + 1]} />
       );
     },
-    codigo: (v) =>
-      `<EtapaMapa etapa={ETAPAS[${Number(v.etapa) - 1}]} anterior={ETAPAS[${Number(v.etapa) - 2}]} siguiente={ETAPAS[${Number(v.etapa)}]} />`,
+    codigo: (v) => {
+      const i = Number(v.etapa) - 1;
+      // Sin `anterior` en la primera etapa ni `siguiente` en la última.
+      const anterior = i > 0 ? ` anterior={ETAPAS[${i - 1}]}` : "";
+      const siguiente = i < ETAPAS.length - 1 ? ` siguiente={ETAPAS[${i + 1}]}` : "";
+      return `<EtapaMapa etapa={ETAPAS[${i}]}${anterior}${siguiente} />`;
+    },
   },
   "blog-card": {
     controles: [

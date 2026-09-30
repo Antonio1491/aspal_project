@@ -25,7 +25,7 @@ function CampoControl({
 }) {
   const id = useId();
   const clases =
-    "min-h-11 w-full rounded-md border border-input bg-background px-3 text-base";
+    "min-h-11 w-full rounded-md border border-input bg-background px-3 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
   return (
     <div className="flex flex-col gap-1">
       <label htmlFor={id} className="text-sm font-semibold text-foreground">
@@ -57,7 +57,7 @@ function CampoControl({
         <input
           id={id}
           type="checkbox"
-          className="h-6 w-6"
+          className="h-6 w-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           checked={Boolean(valor)}
           onChange={(e) => alCambiar(e.target.checked)}
         />
