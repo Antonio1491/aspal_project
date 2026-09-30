@@ -155,7 +155,12 @@ Vercel, según `vercel.json`:
   (referencias rotas, huérfanos y el límite de 250 KB por imagen) y luego son
   dos builds de Vite (cliente y `--ssr`) más
   `scripts/prerender.mjs`, que escribe un HTML por ruta estática, `404.html`,
-  `spa.html`, `sitemap.xml` y `robots.txt`.
+  `spa.html`, `sitemap.xml` y `robots.txt`. En el navegador, `main.tsx`
+  hidrata (`hydrateRoot`) las páginas prerenderizadas y monta desde cero
+  (`createRoot`) el `spa.html` vacío. Lo que solo existe en el cliente
+  (estados de carga, la dirección pedida en el 404) se pinta después de
+  hidratar (`useEnCliente` o un efecto), para que el primer render coincida
+  con el HTML.
 - `sharp` es dependencia solo de desarrollo: la usa `scripts/imagenes.mjs`
   (conversión única a WebP), no el build.
 - `outputDirectory`: `dist/public`
