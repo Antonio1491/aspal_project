@@ -35,6 +35,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, ChevronDown, Menu, UserPlus, X } from "lucide-react";
 import {
   useEffect,
+  useId,
   useRef,
   useState,
   type KeyboardEvent as EventoTecladoReact,
@@ -344,6 +345,8 @@ function PanelMovil({
 }) {
   const [montado, setMontado] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
+  const cerrarRef = useRef<HTMLButtonElement>(null);
+  const idTitulo = useId();
 
   useEffect(() => setMontado(true), []);
 
@@ -361,6 +364,10 @@ function PanelMovil({
   useEffect(() => {
     if (!abierto) return;
     const enfocadoAntes = document.activeElement as HTMLElement | null;
+    // Al abrir, el foco entra al panel. Si se quedara en el botón que lo
+    // abrió, Tab recorrería la página de detrás: la trampa solo actúa en los
+    // bordes del panel.
+    cerrarRef.current?.focus();
 
     const alPulsar = (evento: KeyboardEvent) => {
       if (evento.key === "Escape") {
@@ -402,6 +409,11 @@ function PanelMovil({
         <motion.div
           ref={panelRef}
           id="menu-movil"
+          // Es un modal (tapa la pantalla, atrapa el foco, Escape cierra):
+          // así lo anuncia el lector de pantalla y deja de leer lo de detrás.
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={idTitulo}
           className="fixed inset-0 z-[100] flex flex-col bg-background xl:hidden"
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -409,8 +421,11 @@ function PanelMovil({
           transition={{ duration: 0.2 }}
         >
           <div className="flex h-16 shrink-0 items-center justify-between border-b border-border px-4">
-            <span className="text-sm font-semibold text-foreground">Menú</span>
+            <h2 id={idTitulo} className="text-sm font-semibold text-foreground">
+              Menú
+            </h2>
             <Button
+              ref={cerrarRef}
               variant="ghost"
               size="icon"
               onClick={onCerrar}
@@ -593,7 +608,11 @@ export default function Header() {
 
           {/* Navegación de escritorio, ópticamente centrada entre los laterales.
               Desde `xl` (1280 px): con cinco rubros y la marca Próximamente, a 1024 no
-              cabían. */}
+              cabían.
+              axe marca `aria-hidden-focus` con el mega-menú abierto: es el
+              «focus proxy» interno de Radix (un span oculto con tabindex=0 que
+              lleva el foco del botón al panel). Es de la librería, no de este
+              código; se revisó en la pasada de axe de la Etapa 1. */}
           <NavigationMenu className="hidden xl:flex" aria-label="Principal">
             <NavigationMenuList>
               {NAVEGACION.map((entrada) => (
