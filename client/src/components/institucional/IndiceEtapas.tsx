@@ -123,7 +123,7 @@ export function IndiceEtapas({ origen }: { origen: "home" | "mapa" }) {
               <span className="mt-3 text-sm font-semibold uppercase tracking-wider text-primary">
                 Etapa {etapa.numero}
               </span>
-              <span className="mt-1 hyphens-auto break-words text-base font-bold text-foreground group-hover:underline group-hover:underline-offset-4">
+              <span className="mt-1 hyphens-auto break-words text-base font-bold text-foreground">
                 {etapa.nombre}
               </span>
               {primera && (

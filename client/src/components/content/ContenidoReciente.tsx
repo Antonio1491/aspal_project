@@ -76,7 +76,7 @@ function ArticuloPortada({ post }: { post: TransformedPost }) {
         <span className="text-[13px] font-semibold uppercase tracking-wider text-miel-texto">
           Artículo destacado
         </span>
-        <h3 className="mt-2 text-3xl font-bold leading-tight text-foreground group-hover:underline group-hover:underline-offset-4 md:text-4xl">
+        <h3 className="mt-2 text-3xl font-bold leading-tight text-foreground md:text-4xl">
           {post.title}
         </h3>
         {post.excerpt && (
@@ -121,7 +121,7 @@ function ArticuloLista({ post, numero }: { post: TransformedPost; numero: number
             className="aspect-video w-full max-w-xs rounded-xl object-cover"
           />
         )}
-        <h3 className="mt-3 text-xl font-bold leading-snug text-foreground group-hover:underline group-hover:underline-offset-4">
+        <h3 className="mt-3 text-xl font-bold leading-snug text-foreground">
           {post.title}
         </h3>
         {post.excerpt && (
