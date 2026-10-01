@@ -3,78 +3,19 @@ import { useAnimarAlVer } from "@/hooks/use-animar-al-ver";
 import { registrarEvento } from "@/lib/analitica";
 import { HEXAGONO_PUNTA } from "@/lib/clases";
 import { cn } from "@/lib/utils";
-import {
-  Compass,
-  Handshake,
-  Landmark,
-  Megaphone,
-  Route,
-  Settings2,
-  TrendingUp,
-  Users,
-  type LucideIcon,
-} from "lucide-react";
 import { Link } from "wouter";
 
-const CLASES_ENLACE =
-  "flex h-full min-h-11 flex-col rounded-2xl border border-border bg-background transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
-
 /**
- * Icono por etapa en la franja de la home. PENDIENTE (fase 2 de la edición de
- * la home): la guía oficial del Mapa de Ruta tiene su propio icono en hexágono
- * por etapa; cuando se extraigan del PDF como SVG, sustituyen a estos.
- */
-const ICONOS: Record<number, LucideIcon> = {
-  1: Landmark,
-  2: Compass,
-  3: Settings2,
-  4: Megaphone,
-  5: Users,
-  6: Handshake,
-  7: TrendingUp,
-};
-
-/**
- * Las 7 etapas del Mapa de Ruta como lista ordenada. En la home es un paso a
- * paso: insignia hexagonal con icono y una línea que une las etapas (desde
- * `xl`, cuando caben en una fila); cada una lleva a su etapa en /mapa-de-ruta.
- * En la propia página es el índice: salta al ancla y añade el resumen.
+ * Las 7 etapas del Mapa de Ruta como paso a paso, en la home: insignia
+ * hexagonal con icono y una línea que une las etapas (desde `xl`, cuando caben
+ * en una fila); cada una lleva a su etapa en /mapa-de-ruta.
  *
- * En la home, la primera vez que entra en pantalla la línea se traza de la
- * etapa 1 a la 7 y las insignias se activan en secuencia (useAnimarAlVer:
- * solo transform, nada en el prerender ni con «reducir movimiento»).
+ * La primera vez que entra en pantalla la línea se traza de la etapa 1 a la 7
+ * y las insignias se activan en secuencia (useAnimarAlVer: solo transform,
+ * nada en el prerender ni con «reducir movimiento»).
  */
-export function IndiceEtapas({ origen }: { origen: "home" | "mapa" }) {
+export function IndiceEtapas() {
   const { ref, estado } = useAnimarAlVer<HTMLOListElement>();
-
-  if (origen === "mapa") {
-    return (
-      <ol
-        className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
-        data-testid="indice-etapas-mapa"
-      >
-        {ETAPAS.map((etapa) => (
-          <li key={etapa.id}>
-            <a
-              href={`#${etapa.id}`}
-              className={cn(CLASES_ENLACE, "p-4")}
-              data-testid={`etapa-mapa-${etapa.numero}`}
-            >
-              <span className="text-sm font-semibold uppercase tracking-wider text-primary">
-                Etapa {etapa.numero}
-              </span>
-              <span className="mt-1 hyphens-auto break-words text-base font-bold text-foreground">
-                {etapa.nombre}
-              </span>
-              <span className="mt-1 hyphens-auto break-words text-sm text-muted-foreground">
-                {etapa.resumen}
-              </span>
-            </a>
-          </li>
-        ))}
-      </ol>
-    );
-  }
 
   return (
     <ol
@@ -91,7 +32,7 @@ export function IndiceEtapas({ origen }: { origen: "home" | "mapa" }) {
       data-testid="indice-etapas-home"
     >
       {ETAPAS.map((etapa, i) => {
-        const Icono = ICONOS[etapa.numero] ?? Route;
+        const Icono = etapa.icono;
         const primera = etapa.numero === 1;
         return (
           <li key={etapa.id} className="relative">

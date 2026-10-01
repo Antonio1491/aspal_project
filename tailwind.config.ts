@@ -122,6 +122,10 @@ export default {
           from: { transform: "scaleX(0)" },
           to: { transform: "scaleX(1)" },
         },
+        "trazo-y": {
+          from: { transform: "scaleY(0)" },
+          to: { transform: "scaleY(1)" },
+        },
         asoma: {
           "0%": { transform: "translateY(1.5rem) scale(.9)" },
           "65%": { transform: "translateY(-.375rem) scale(1.03)" },
@@ -140,6 +144,7 @@ export default {
         "celda-miel": "celda-miel 700ms 350ms cubic-bezier(.2,.9,.3,1.2) both",
         raya: "raya 400ms ease-out both",
         trazo: "trazo 1400ms cubic-bezier(.4,0,.2,1) both",
+        "trazo-y": "trazo-y 1200ms cubic-bezier(.4,0,.2,1) both",
         asoma: "asoma 700ms cubic-bezier(.2,.9,.3,1.2) both",
         insignia: "insignia 500ms cubic-bezier(.2,.9,.3,1.3) both",
       },

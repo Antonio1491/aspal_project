@@ -153,7 +153,7 @@ export default function Inicio() {
             {MAPA_RUTA.subtitulo}
           </p>
           <div className="mt-8">
-            <IndiceEtapas origen="home" />
+            <IndiceEtapas />
           </div>
           <Button className="mt-8 min-h-11 px-6" asChild>
             <Link

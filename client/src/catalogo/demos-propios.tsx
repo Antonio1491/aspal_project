@@ -4,18 +4,21 @@ import { FranjaPodcast } from "@/components/content/FranjaPodcast";
 import { PodcastCard } from "@/components/content/PodcastCard";
 import { FormSuscripcion } from "@/components/forms/FormSuscripcion";
 import { CifraAnimada } from "@/components/institucional/CifraAnimada";
-import { EtapaMapa } from "@/components/institucional/EtapaMapa";
 import { Hashtag } from "@/components/institucional/Hashtag";
 import { ManifiestoNumerado } from "@/components/institucional/ManifiestoNumerado";
 import { IndiceEtapas } from "@/components/institucional/IndiceEtapas";
+import { IndiceMapa } from "@/components/institucional/IndiceMapa";
 import { IndicePilares } from "@/components/institucional/IndicePilares";
 import { MuroAliados } from "@/components/institucional/MuroAliados";
+import { NavEtapas } from "@/components/institucional/NavEtapas";
+import { PanalEtapas } from "@/components/institucional/PanalEtapas";
 import { PanalPilares } from "@/components/institucional/PanalPilares";
 import { PerfilCard } from "@/components/institucional/PerfilCard";
 import { PilarCard } from "@/components/institucional/PilarCard";
 import { RacimoEquipo } from "@/components/institucional/RacimoEquipo";
 import { RetratoHex } from "@/components/institucional/RetratoHex";
 import { RutaTimeline } from "@/components/institucional/RutaTimeline";
+import { SeccionEtapa } from "@/components/institucional/SeccionEtapa";
 import { SeccionPilar } from "@/components/institucional/SeccionPilar";
 import { SubnavSeccion } from "@/components/institucional/SubnavSeccion";
 import { VocesRed } from "@/components/institucional/VocesRed";
@@ -362,19 +365,10 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
     codigo: () => `<Header />\n<SubnavSeccion />`,
   },
   "indice-etapas": {
-    controles: [
-      {
-        tipo: "opciones",
-        clave: "origen",
-        etiqueta: "origen",
-        opciones: ["home", "mapa"],
-        inicial: "home",
-      },
-    ],
-    render: (v) => <IndiceEtapas origen={texto(v.origen) as "home" | "mapa"} />,
-    codigo: (v) => `<IndiceEtapas origen="${texto(v.origen)}" />`,
+    render: () => <IndiceEtapas />,
+    codigo: () => `<IndiceEtapas />`,
   },
-  "etapa-mapa": {
+  "seccion-etapa": {
     controles: [
       {
         tipo: "opciones",
@@ -384,10 +378,15 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
         inicial: "1",
       },
     ],
+    nota: "Es una Banda completa: las pares van en suave. La columna de la etapa se fija al hacer scroll desde 1024 px.",
     render: (v) => {
       const i = Number(v.etapa) - 1;
       return (
-        <EtapaMapa etapa={ETAPAS[i]} anterior={ETAPAS[i - 1]} siguiente={ETAPAS[i + 1]} />
+        <SeccionEtapa
+          etapa={ETAPAS[i]}
+          anterior={ETAPAS[i - 1]}
+          siguiente={ETAPAS[i + 1]}
+        />
       );
     },
     codigo: (v) => {
@@ -395,8 +394,30 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
       // Sin `anterior` en la primera etapa ni `siguiente` en la última.
       const anterior = i > 0 ? ` anterior={ETAPAS[${i - 1}]}` : "";
       const siguiente = i < ETAPAS.length - 1 ? ` siguiente={ETAPAS[${i + 1}]}` : "";
-      return `<EtapaMapa etapa={ETAPAS[${i}]}${anterior}${siguiente} />`;
+      return `<SeccionEtapa etapa={ETAPAS[${i}]}${anterior}${siguiente} />`;
     },
+  },
+  "indice-mapa": {
+    render: () => <IndiceMapa />,
+    codigo: () => `<IndiceMapa />`,
+  },
+  "nav-etapas": {
+    nota: "Aquí no hay etapas en la página: ninguna se resalta. En /mapa-de-ruta se fija bajo la cabecera y sigue la etapa a media pantalla.",
+    render: () => <NavEtapas />,
+    codigo: () => `<div>
+  <NavEtapas />
+  {/* SeccionEtapa × 7 */}
+</div>`,
+  },
+  "panal-etapas": {
+    fondo: "noche",
+    nota: "En el hero solo se pinta desde 1024 px. Cada celda salta a su etapa (#etapa-N).",
+    render: () => (
+      <div className="mx-auto max-w-md p-6">
+        <PanalEtapas />
+      </div>
+    ),
+    codigo: () => `<PanalEtapas />`,
   },
   "franja-podcast": {
     nota: "Episodio de ejemplo (no es real). En la home recibe el último de /api/podcasts.",
