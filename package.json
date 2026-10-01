@@ -9,7 +9,7 @@
     "url": "https://github.com/Antonio1491/aspal_project.git"
   },
   "engines": {
-    "node": ">=20"
+    "node": "22.x"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsx server/index.ts",

@@ -17,8 +17,8 @@
  * si quedan más sin cambiar la forma de la respuesta.
  */
 import type { Express, Request, Response } from "express";
-import { fetchPodcasts, fetchPostBySlug, fetchPosts } from "./client";
-import { CABECERA_TOTAL } from "./types";
+import { fetchPodcasts, fetchPostBySlug, fetchPosts } from "./client.js";
+import { CABECERA_TOTAL } from "./types.js";
 
 /** Entero de la query dentro de [min, max]; si no es un número, `porDefecto`. */
 function enteroAcotado(valor: unknown, porDefecto: number, min: number, max: number) {

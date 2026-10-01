@@ -10,7 +10,7 @@ import {
   type OrigenSuscripcion,
   type ResultadoValidacion,
   type SuscripcionValida,
-} from "./tipos";
+} from "./tipos.js";
 
 /** Suficiente para descartar erratas evidentes; la verdad la da la doble confirmación. */
 const CORREO = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;

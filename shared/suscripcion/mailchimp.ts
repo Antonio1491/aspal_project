@@ -15,7 +15,7 @@
  * CARGO (ver docs/architecture.md).
  */
 import { createHash } from "node:crypto";
-import type { SuscripcionValida } from "./tipos";
+import type { SuscripcionValida } from "./tipos.js";
 
 /** Cada llamada tiene 4 s (peor caso 8 s, dentro de los 10 s de Vercel). */
 const TIEMPO_MAXIMO_MS = 4000;

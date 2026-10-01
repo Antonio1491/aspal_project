@@ -1,4 +1,4 @@
-import type { TransformedPost, WPPost } from "./types";
+import type { TransformedPost, WPPost } from "./types.js";
 
 /** Palabras por minuto para la estimación de lectura. Rango habitual de
  *  lectura adulta en pantalla. */

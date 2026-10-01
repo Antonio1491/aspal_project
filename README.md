@@ -34,7 +34,7 @@ sitio es público, de solo lectura y sin estado.
 
 ## Arranque rápido
 
-Requiere **Node 20** (ver `.nvmrc`).
+Requiere **Node 22** (ver `.nvmrc`).
 
 ```bash
 git clone https://github.com/Antonio1491/aspal_project.git

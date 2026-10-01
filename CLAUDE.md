@@ -65,7 +65,8 @@ typecheckear.
 ## Entorno de desarrollo
 
 - **Windows.** El shell por defecto es PowerShell; hay Git Bash disponible.
-- **Node 20** (`.nvmrc`).
+- **Node 22** (`.nvmrc` y `engines` de `package.json`, fijado a `22.x`). Vercel desactivó Node 20 el 1 de octubre de 2026; con `>=20` el deploy cambiaba de versión solo.
+- **Los imports relativos de `shared/` y `api/` llevan extensión `.js`** (`from "./types.js"`). Vercel no empaqueta la función: transpila archivo a archivo y Node ESM exige la extensión; sin ella la función cae con `ERR_MODULE_NOT_FOUND`. tsc, Vite, tsx y esbuild resuelven `.js` → `.ts` sin problema.
 - `reusePort` está desactivado en Windows a propósito (`server/index.ts`):
   `SO_REUSEPORT` no existe ahí y `listen()` lanza `ENOTSUP`. No lo "arregles".
 - **El puerto 5000 suele estar ocupado por otro proyecto de esta máquina.**

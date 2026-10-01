@@ -72,7 +72,7 @@ inexistente.
 
 | Capa                    | Tecnología                                               |
 | ----------------------- | -------------------------------------------------------- |
-| Runtime                 | Node.js 20 (`.nvmrc`)                                    |
+| Runtime                 | Node.js 22 (`.nvmrc`, `engines` fijado a `22.x`)         |
 | Servidor                | Express 4: proxy sobre WordPress y servidor de estáticos |
 | Producción              | Función serverless de Vercel (`api/index.ts`)            |
 | Ejecución en desarrollo | tsx                                                      |

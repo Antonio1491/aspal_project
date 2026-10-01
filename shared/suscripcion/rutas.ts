@@ -5,8 +5,8 @@
  * WordPress. No guarda nada y no escribe datos personales en los logs.
  */
 import type { Express, Request, Response } from "express";
-import { SuscripcionNoConfigurada, suscribir } from "./mailchimp";
-import { esTrampa, validarSuscripcion } from "./validacion";
+import { SuscripcionNoConfigurada, suscribir } from "./mailchimp.js";
+import { esTrampa, validarSuscripcion } from "./validacion.js";
 
 export function registrarRutasSuscripcion(app: Express): void {
   app.post("/api/suscripcion", async (req: Request, res: Response) => {

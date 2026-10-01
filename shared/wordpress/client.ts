@@ -10,8 +10,8 @@
  * distinguir "WordPress está caído" de "no hay artículos publicados": con la
  * política anterior ambos llegaban como el mismo array vacío.
  */
-import { transformPost } from "./transform";
-import type { TransformedPost, WPPost } from "./types";
+import { transformPost } from "./transform.js";
+import type { TransformedPost, WPPost } from "./types.js";
 
 const WP_API_BASE =
   process.env.WP_API_BASE ??

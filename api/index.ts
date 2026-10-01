@@ -4,8 +4,8 @@
  * servidor de desarrollo.
  */
 import express, { type NextFunction, type Request, type Response } from "express";
-import { registerApiRoutes } from "../shared/wordpress/routes";
-import { registrarRutasSuscripcion } from "../shared/suscripcion/rutas";
+import { registerApiRoutes } from "../shared/wordpress/routes.js";
+import { registrarRutasSuscripcion } from "../shared/suscripcion/rutas.js";
 
 const app = express();
 
