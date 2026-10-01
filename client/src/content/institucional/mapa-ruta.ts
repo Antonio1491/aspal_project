@@ -8,6 +8,16 @@
  * descarga. Solo se corrigieron erratas mecánicas; están listadas en el plan
  * del PR F (decisión F8). Lo usan /mapa-de-ruta y la franja de la home.
  */
+import {
+  Compass,
+  Handshake,
+  Landmark,
+  Megaphone,
+  Settings2,
+  TrendingUp,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
 
 export interface PasoMapa {
   /** Numeración continua de la guía, del 1 al 23. */
@@ -24,6 +34,12 @@ export interface EtapaMapa {
   /** Ancla de /mapa-de-ruta: `etapa-N`. */
   id: string;
   nombre: string;
+  /**
+   * Icono de la etapa (insignias, flor del hero, índice). PENDIENTE: la guía
+   * oficial tiene su propio icono en hexágono por etapa; cuando se extraigan
+   * del PDF como SVG, sustituyen a estos.
+   */
+  icono: LucideIcon;
   /** Línea del índice de etapas de la guía. */
   resumen: string;
   pasos: PasoMapa[];
@@ -53,6 +69,7 @@ export const ETAPAS: EtapaMapa[] = [
   {
     numero: 1,
     id: "etapa-1",
+    icono: Landmark,
     nombre: "Gestión",
     resumen: "Liderazgo, estructura, misión / visión y gobernanza",
     pasos: [
@@ -95,6 +112,7 @@ export const ETAPAS: EtapaMapa[] = [
   {
     numero: 2,
     id: "etapa-2",
+    icono: Compass,
     nombre: "Estrategia y Planeación",
     resumen: "Planeación estratégica, plan y modelo de negocios y certificación",
     pasos: [
@@ -137,6 +155,7 @@ export const ETAPAS: EtapaMapa[] = [
   {
     numero: 3,
     id: "etapa-3",
+    icono: Settings2,
     nombre: "Operaciones y Administración",
     resumen: "Finanzas, recursos humanos, legal, riesgo, inclusión y diversidad",
     pasos: [
@@ -179,6 +198,7 @@ export const ETAPAS: EtapaMapa[] = [
   {
     numero: 4,
     id: "etapa-4",
+    icono: Megaphone,
     nombre: "Mkt, T.I. y Comunicación",
     resumen: "Marca, digitalización, publicidad, comunicación y relaciones públicas",
     pasos: [
@@ -215,6 +235,7 @@ export const ETAPAS: EtapaMapa[] = [
   {
     numero: 5,
     id: "etapa-5",
+    icono: Users,
     nombre: "Membresía y Programas",
     resumen:
       "Prospección, crecimiento y retención. Programas educativos y bolsa de trabajo",
@@ -252,6 +273,7 @@ export const ETAPAS: EtapaMapa[] = [
   {
     numero: 6,
     id: "etapa-6",
+    icono: Handshake,
     nombre: "Extensión y Política Pública",
     resumen: "Eventos, patrocinios, donativos, industria y política pública",
     pasos: [
@@ -294,6 +316,7 @@ export const ETAPAS: EtapaMapa[] = [
   {
     numero: 7,
     id: "etapa-7",
+    icono: TrendingUp,
     nombre: "Evaluación y Mejora Continua",
     resumen: "Evaluación a programas, procesos y estrategias de mejora continua",
     pasos: [

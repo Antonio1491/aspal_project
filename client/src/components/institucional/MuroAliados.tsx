@@ -1,13 +1,31 @@
+import logoParksys from "@assets/logo-parksys-fondo-claro.webp";
 import logoAnpr from "@assets/Recurso 50comunidad ASPAL_1763678044080.png";
 import logoWup from "@assets/Recurso 53comunidad ASPAL_1763678055285.png";
 import type { Aliado } from "@/content/institucional/nosotros";
 
-const LOGOS = { wup: logoWup, anpr: logoAnpr } as const;
+/**
+ * Logos de aliados, versión para fondo claro, con sus medidas intrínsecas
+ * (evitan el salto de maquetación al cargar). El de Parksys llegó solo en
+ * versión para fondo oscuro; el de fondo claro se derivó pasando el texto
+ * blanco a noche (originales en docs/marca/).
+ */
+const LOGOS: Record<
+  NonNullable<Aliado["logo"]>,
+  { src: string; ancho: number; alto: number }
+> = {
+  wup: { src: logoWup, ancho: 240, alto: 95 },
+  anpr: { src: logoAnpr, ancho: 207, alto: 102 },
+  parksys: { src: logoParksys, ancho: 760, alto: 240 },
+};
 
 /**
  * Muro de aliados (Bloque 9). En la Etapa 1 solo los fundadores; las demás
  * categorías se anuncian «conforme se firmen convenios» (§6.2). Rejilla
  * estática: sin carrusel automático (accesibilidad).
+ *
+ * Logos en gris para que ninguno pese más que otro; al pasar el ratón por la
+ * tarjeta recuperan su color (hoy solo Parksys lo tiene: los archivos de WUP y
+ * ANPR ya son grises).
  */
 export function MuroAliados({
   fundadores,
@@ -25,17 +43,17 @@ export function MuroAliados({
         {fundadores.map((aliado) => (
           <li
             key={aliado.nombre}
-            className="flex h-full flex-col rounded-2xl border border-border bg-background p-6"
+            className="group flex h-full flex-col rounded-2xl border border-border bg-background p-6"
             data-testid={`aliado-${aliado.nombre.toLowerCase().replace(/\s+/g, "-")}`}
           >
             <div className="flex h-24 items-center">
               {aliado.logo ? (
                 <img
-                  src={LOGOS[aliado.logo]}
+                  src={LOGOS[aliado.logo].src}
                   alt={aliado.nombre}
-                  width={aliado.logo === "wup" ? 240 : 207}
-                  height={aliado.logo === "wup" ? 95 : 102}
-                  className="max-h-20 w-auto"
+                  width={LOGOS[aliado.logo].ancho}
+                  height={LOGOS[aliado.logo].alto}
+                  className="max-h-20 w-auto opacity-70 grayscale transition-[filter,opacity] duration-300 group-hover:opacity-100 group-hover:grayscale-0"
                   loading="lazy"
                 />
               ) : (

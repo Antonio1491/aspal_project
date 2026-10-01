@@ -79,10 +79,12 @@ export const REGISTRO = [
       'import { HeroInstitucional } from "@/components/layout/HeroInstitucional";',
     categoria: "layout",
     descripcion:
-      "Banda noche con overline miel y el único <h1> de la página. Sin animaciones: se prerenderiza.",
-    usarCuando: "La cabecera de cualquier página institucional nueva.",
+      "Banda noche con overline miel y el único <h1> de la página. Con `visual`, añade una columna a la derecha desde lg (foto o PatronPanal); en móvil no se pinta. Sin animaciones: se prerenderiza.",
+    usarCuando:
+      "La cabecera de cualquier página institucional nueva. `visual` para la home o páginas que necesiten ancla visual.",
     evitarPara: "Más de una vez por página (pinta el <h1>).",
-    props: "overline: string; overlineNormal?: boolean; titulo: string; children?",
+    props:
+      "overline: string; overlineNormal?: boolean; titulo: string; visual?: ReactNode; children?",
     estado: "en-uso",
     vista: "demo",
   },
@@ -95,6 +97,38 @@ export const REGISTRO = [
     descripcion: "Etiqueta «Próximamente» para un destino que aún no existe.",
     usarCuando: "Junto a un enlace o sección sin página todavía (menú, pilares, pie).",
     props: "className?: string",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "patron-panal",
+    nombre: "PatronPanal",
+    archivo: "client/src/components/layout/PatronPanal.tsx",
+    importar: 'import { PatronPanal } from "@/components/layout/PatronPanal";',
+    categoria: "layout",
+    descripcion:
+      "Panal de hexágonos de la marca (el isotipo repetido), con un racimo destacado en miel y bordes que se desvanecen. SVG decorativo (aria-hidden). Con `animado`, el racimo se arma celda a celda al cargar (una vez por página: en el hero).",
+    usarCuando:
+      "Fondos noche que necesitan ancla visual sin foto: la columna `visual` del hero, detrás de una foto, bandas de cierre.",
+    evitarPara:
+      "Fondos claros (está pensado en miel sobre noche) o como relleno de todas las bandas: pierde fuerza.",
+    props: "className?: string; animado?: boolean",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "foto-hero",
+    nombre: "FotoHero",
+    archivo: "client/src/components/layout/FotoHero.tsx",
+    importar: 'import { FotoHero } from "@/components/layout/FotoHero";',
+    categoria: "layout",
+    descripcion:
+      "Foto del hero tratada con el hexágono de la marca: «hexagono» (recorte hexagonal con contorno miel desplazado y celda miel), «panal» (la foto repartida en celdas del isotipo, que se ensamblan en cascada al cargar) o «sangrado» (hasta el borde derecho con zigzag hexagonal). Solo descarga la foto desde lg.",
+    usarCuando:
+      "La columna `visual` de HeroInstitucional cuando hay foto (FOTO_HERO en content/institucional/inicio.ts).",
+    evitarPara:
+      "«panal» con una foto sin reencuadrar: su encuadre (ENCUADRE_PANAL) está ajustado a mano para la foto actual.",
+    props: 'src: string; alt: string; estilo?: "hexagono" | "panal" | "sangrado"',
     estado: "en-uso",
     vista: "demo",
   },
@@ -217,23 +251,72 @@ export const REGISTRO = [
     importar: 'import { PilarCard } from "@/components/institucional/PilarCard";',
     categoria: "institucional",
     descripcion:
-      "Tarjeta de uno de los 4 pilares. «resumen» (h3, enlace al detalle) o «detalle» (h2, cómo se traduce y enlaces).",
+      "Tarjeta de uno de los 4 pilares en resumen (h3): nombre, subtítulo y compromiso; toda la tarjeta lleva a su sección de ¿Qué hacemos? y su flecha avanza al pasar el ratón. Con `ilustracion`, la ilustración de la marca sale de una insignia hexagonal que rompe el borde superior y se asoma al entrar en pantalla (el contenedor le deja 40 px: pt-10); con `numero`, el número en grande en contorno miel.",
     usarCuando:
-      "Mostrar pilares: home, Nosotros, ¿Qué hacemos?. Datos en content/institucional/pilares.ts.",
-    props: 'pilar: Pilar; variante: "resumen" | "detalle"',
+      "Resumir los pilares en otra página (home, Nosotros). Datos en content/institucional/pilares.ts.",
+    evitarPara: "El detalle de un pilar en ¿Qué hacemos?: para eso, SeccionPilar.",
+    props: "pilar: Pilar; ilustracion?: boolean; numero?: number",
     estado: "en-uso",
     vista: "demo",
   },
   {
-    id: "tarjeta-compromiso",
-    nombre: "TarjetaCompromiso",
-    archivo: "client/src/components/institucional/TarjetaCompromiso.tsx",
+    id: "ilustracion-pilar",
+    nombre: "IlustracionPilar",
+    archivo: "client/src/components/institucional/IlustracionPilar.tsx",
     importar:
-      'import { TarjetaCompromiso } from "@/components/institucional/TarjetaCompromiso";',
+      'import { IlustracionPilar } from "@/components/institucional/IlustracionPilar";',
     categoria: "institucional",
-    descripcion: "Tarjeta simple de título + texto (Lo que defendemos).",
-    usarCuando: "Enunciados cortos de valores o compromisos en rejilla.",
-    props: "titulo: string; texto: string",
+    descripcion:
+      "La ilustración de un pilar asomando desde su hexágono sobre el panal de la marca. Se asoma al cargar. Decorativa.",
+    usarCuando:
+      "Columna visual del hero de una página que pertenece a un pilar (el blog es Conocimiento).",
+    evitarPara: "¿Qué hacemos?: allí cada pilar ya tiene su SeccionPilar.",
+    props: "pilar: Pilar",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "seccion-pilar",
+    nombre: "SeccionPilar",
+    archivo: "client/src/components/institucional/SeccionPilar.tsx",
+    importar: 'import { SeccionPilar } from "@/components/institucional/SeccionPilar";',
+    categoria: "institucional",
+    descripcion:
+      "Un pilar como sección editorial, con su ancla: ilustración en un hexágono grande que desborda por arriba y se asoma al entrar en pantalla, número en contorno miel, subtítulo como declaración, compromiso, «cómo se traduce» en recuadro y los accesos como píldoras («Próximamente» si aún no existen). Los pares van en banda suave con la ilustración a la derecha.",
+    usarCuando:
+      "El detalle de cada pilar en ¿Qué hacemos?. Ya es una Banda: no la envuelvas.",
+    evitarPara: "Resumir los pilares en otra página: para eso, PilarCard.",
+    props: "pilar: Pilar; numero: number; siguiente?: Pilar",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "indice-pilares",
+    nombre: "IndicePilares",
+    archivo: "client/src/components/institucional/IndicePilares.tsx",
+    importar: 'import { IndicePilares } from "@/components/institucional/IndicePilares";',
+    categoria: "institucional",
+    descripcion:
+      "Los 4 pilares de un vistazo (insignia con icono, «Pilar 01», nombre y subtítulo), cada uno con un salto a su SeccionPilar en la misma página.",
+    usarCuando: "Bajo el hero de ¿Qué hacemos?: índice de la página, también en móvil.",
+    evitarPara:
+      "Enlazar a los pilares desde otra página: PilarCard ya lleva a /que-hacemos#id.",
+    props: "sin props (lee PILARES)",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "panal-pilares",
+    nombre: "PanalPilares",
+    archivo: "client/src/components/institucional/PanalPilares.tsx",
+    importar: 'import { PanalPilares } from "@/components/institucional/PanalPilares";',
+    categoria: "institucional",
+    descripcion:
+      "Los 4 pilares como un racimo de 4 celdas del panal, cada una con su ilustración, sobre PatronPanal. Las celdas se arman una tras otra al cargar. Decorativo.",
+    usarCuando:
+      "Columna visual del hero de ¿Qué hacemos? (`visual` de HeroInstitucional).",
+    evitarPara: "Fondos sin relación con los pilares: para eso, PatronPanal.",
+    props: "sin props (lee PILARES)",
     estado: "en-uso",
     vista: "demo",
   },
@@ -244,8 +327,10 @@ export const REGISTRO = [
     importar: 'import { RutaTimeline } from "@/components/institucional/RutaTimeline";',
     categoria: "institucional",
     descripcion:
-      "Escalera de hitos por año con <details> nativo: se abre con clic, toque o teclado.",
-    usarCuando: "Cualquier línea de tiempo con detalle desplegable.",
+      "Ruta por años como camino: insignia hexagonal con icono por hito, línea que los une desde xl (se traza al entrar en pantalla), todo el texto a la vista y «Estamos aquí» en el hito en curso.",
+    usarCuando: "Metas o hitos en el tiempo (Ruta ASPAL 2026–2030).",
+    evitarPara:
+      "Pasos de un proceso que llevan a otra página: para eso, IndiceEtapas (home).",
     props: "hitos: Hito[]",
     estado: "en-uso",
     vista: "demo",
@@ -257,9 +342,40 @@ export const REGISTRO = [
     importar: 'import { PerfilCard } from "@/components/institucional/PerfilCard";',
     categoria: "institucional",
     descripcion:
-      "Perfil de una persona: foto (o silueta con el isotipo), nombre, cargo, bio y LinkedIn.",
-    usarCuando: "Equipo, Consejo, ponentes.",
-    props: "perfil: Perfil",
+      "Perfil de una persona con su retrato en el hexágono del isotipo (foto o, sin ella, iniciales): nombre (h3), cargo, bio y LinkedIn. En fila por defecto; `destacado`, tarjeta ancha con el retrato grande en miel y la bio como declaración.",
+    usarCuando:
+      "Equipo, Consejo, ponentes. `destacado` para una sola persona al frente (la Dirección General).",
+    props: "perfil: Perfil; destacado?: boolean",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "retrato-hex",
+    nombre: "RetratoHex",
+    archivo: "client/src/components/institucional/RetratoHex.tsx",
+    importar: 'import { RetratoHex } from "@/components/institucional/RetratoHex";',
+    categoria: "institucional",
+    descripcion:
+      "Retrato de una persona en el hexágono del isotipo: la foto recortada o, sin foto, sus iniciales sobre noche, miel o claro. El tamaño lo dan el ancho y la letra de className.",
+    usarCuando:
+      "Cara de una persona del equipo o del Consejo (PerfilCard, RacimoEquipo).",
+    evitarPara: "Testimonios de la red: VocesRed ya trae su retrato redondo de 1:1.",
+    props: 'perfil: Perfil; tono?: "noche" | "miel" | "claro"; className?: string',
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "racimo-equipo",
+    nombre: "RacimoEquipo",
+    archivo: "client/src/components/institucional/RacimoEquipo.tsx",
+    importar: 'import { RacimoEquipo } from "@/components/institucional/RacimoEquipo";',
+    categoria: "institucional",
+    descripcion:
+      "El equipo como racimo de 3 celdas del panal (RetratoHex) sobre PatronPanal: la primera persona en miel, las demás en claro. Se arma al cargar. Decorativo.",
+    usarCuando:
+      "Columna visual del hero de Nuestro equipo (`visual` de HeroInstitucional).",
+    evitarPara: "Listar al equipo: los perfiles van en PerfilCard.",
+    props: "perfiles: Perfil[] (usa los 3 primeros)",
     estado: "en-uso",
     vista: "demo",
   },
@@ -296,27 +412,190 @@ export const REGISTRO = [
     importar: 'import { IndiceEtapas } from "@/components/institucional/IndiceEtapas";',
     categoria: "institucional",
     descripcion:
-      "Las 7 etapas del Mapa de Ruta en lista ordenada: franja de la home (enlaza a /mapa-de-ruta#etapa-N) o índice de la página.",
-    usarCuando: "Enlazar a las etapas del Mapa de Ruta.",
-    props: 'origen: "home" | "mapa"',
+      "Las 7 etapas del Mapa de Ruta como paso a paso: insignia hexagonal con icono, línea que las une desde xl y «Empieza aquí» en la 1; cada una enlaza a /mapa-de-ruta#etapa-N. Al entrar en pantalla la línea se traza y las insignias se activan en secuencia.",
+    usarCuando: "Llevar al Mapa de Ruta desde otra página (home).",
+    evitarPara: "El índice de la propia /mapa-de-ruta: para eso, IndiceMapa.",
+    props: "sin props (lee ETAPAS)",
     estado: "en-uso",
     vista: "demo",
   },
   {
-    id: "etapa-mapa",
-    nombre: "EtapaMapa",
-    archivo: "client/src/components/institucional/EtapaMapa.tsx",
-    importar: 'import { EtapaMapa } from "@/components/institucional/EtapaMapa";',
+    id: "indice-mapa",
+    nombre: "IndiceMapa",
+    archivo: "client/src/components/institucional/IndiceMapa.tsx",
+    importar: 'import { IndiceMapa } from "@/components/institucional/IndiceMapa";',
     categoria: "institucional",
     descripcion:
-      "Una etapa del Mapa de Ruta: pasos, frase de cierre y enlaces a la anterior y la siguiente.",
-    usarCuando: "Dentro de una Banda con id={etapa.id} en /mapa-de-ruta.",
+      "Índice de /mapa-de-ruta: una celda miel con las cifras (pasos y etapas, contados de los datos) y la descarga del PDF, y una tarjeta por etapa con icono, resumen y rango de pasos que salta a su sección.",
+    usarCuando: "Bajo el hero de /mapa-de-ruta.",
+    evitarPara: "Enlazar al mapa desde otra página: para eso, IndiceEtapas.",
+    props: "sin props (lee ETAPAS y MAPA_RUTA)",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "seccion-etapa",
+    nombre: "SeccionEtapa",
+    archivo: "client/src/components/institucional/SeccionEtapa.tsx",
+    importar: 'import { SeccionEtapa } from "@/components/institucional/SeccionEtapa";',
+    categoria: "institucional",
+    descripcion:
+      "Una etapa del Mapa de Ruta como sección con ancla: a la izquierda (fija desde lg) número en contorno, insignia, nombre y resumen; a la derecha los pasos como camino vertical de hexágonos numerados que se traza al entrar en pantalla, la frase de cierre y los enlaces a la etapa anterior y la siguiente.",
+    usarCuando:
+      "Cada etapa en /mapa-de-ruta, después de NavEtapas. Ya es una Banda: no la envuelvas.",
     props: "etapa: EtapaMapa; anterior?: EtapaMapa; siguiente?: EtapaMapa",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "nav-etapas",
+    nombre: "NavEtapas",
+    archivo: "client/src/components/institucional/NavEtapas.tsx",
+    importar: 'import { NavEtapas } from "@/components/institucional/NavEtapas";',
+    categoria: "institucional",
+    descripcion:
+      'Barra fija de progreso por las etapas: la actual con su nombre (desde md) y 7 hexágonos numerados unidos por una línea que se rellena hasta donde vas; la actual en miel con aria-current="step", las vistas en noche. Sigue la etapa que cruza la mitad de la pantalla.',
+    usarCuando:
+      "En /mapa-de-ruta, en el mismo contenedor que las SeccionEtapa: es sticky y solo se fija dentro de él.",
+    evitarPara: "Navegación entre páginas: para eso, SubnavSeccion.",
+    props: "sin props (lee ETAPAS y observa #etapa-N)",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "panal-etapas",
+    nombre: "PanalEtapas",
+    archivo: "client/src/components/institucional/PanalEtapas.tsx",
+    importar: 'import { PanalEtapas } from "@/components/institucional/PanalEtapas";',
+    categoria: "institucional",
+    descripcion:
+      "El Mapa de Ruta como flor de 7 celdas del panal sobre PatronPanal: las etapas 1–6 en anillo y la 7 (mejora continua) en el centro, la 1 en miel. Se arma al cargar y cada celda salta a su etapa.",
+    usarCuando:
+      "Columna visual del hero de /mapa-de-ruta (`visual` de HeroInstitucional).",
+    evitarPara: "Fuera de /mapa-de-ruta: sus enlaces son anclas de esa página.",
+    props: "sin props (lee ETAPAS)",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "cifra-animada",
+    nombre: "CifraAnimada",
+    archivo: "client/src/components/institucional/CifraAnimada.tsx",
+    importar: 'import { CifraAnimada } from "@/components/institucional/CifraAnimada";',
+    categoria: "institucional",
+    descripcion:
+      "Cifra («15+», «1,000») que cuenta desde 0 hasta su valor la primera vez que entra en pantalla. Prerender y «reducir movimiento»: el valor final tal cual; el lector de pantalla solo lee el final.",
+    usarCuando:
+      "Cifras destacadas de una banda (CIFRAS de la home). Solo el número: el tamaño y el color los pone quien la envuelve.",
+    evitarPara:
+      "Cifras que no son un único entero (rangos, decimales: se muestran sin animar) o datos que el usuario compara al leer (tablas).",
+    props: "valor: string; duracion?: number",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "manifiesto-numerado",
+    nombre: "ManifiestoNumerado",
+    archivo: "client/src/components/institucional/ManifiestoNumerado.tsx",
+    importar:
+      'import { ManifiestoNumerado } from "@/components/institucional/ManifiestoNumerado";',
+    categoria: "institucional",
+    descripcion:
+      "Enunciados de valores o compromisos como manifiesto: lista numerada (01, 02… en contorno miel) con título y texto, separados por una línea.",
+    usarCuando: "Lo que defendemos, principios, compromisos: pocos enunciados con texto.",
+    evitarPara: "Listas largas o de una línea: ahí basta una lista simple.",
+    props: "items: { titulo: string; texto: string }[]",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "hashtag",
+    nombre: "Hashtag",
+    archivo: "client/src/components/institucional/Hashtag.tsx",
+    importar: 'import { Hashtag } from "@/components/institucional/Hashtag";',
+    categoria: "institucional",
+    descripcion:
+      "El hashtag de la marca con <wbr> entre sus palabras: en una línea si cabe y, si no, salta entre palabras en vez de desbordar. Solo el texto.",
+    usarCuando:
+      "El hashtag a tamaño de titular (Nosotros). A 13 px (overlines) cabe siempre y basta {HASHTAG}.",
+    props: "texto?: string (por defecto HASHTAG)",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "voces-red",
+    nombre: "VocesRed",
+    archivo: "client/src/components/institucional/VocesRed.tsx",
+    importar: 'import { VocesRed } from "@/components/institucional/VocesRed";',
+    categoria: "institucional",
+    descripcion:
+      "Banda noche de testimonios: cita, retrato 1:1 (o iniciales en hexágono), nombre, cargo, organización y país. Con la lista vacía no se pinta.",
+    usarCuando:
+      "Prueba social con personas reales. Los datos van en TESTIMONIOS de content/institucional/inicio.ts.",
+    evitarPara: "Citas inventadas o sin permiso de la persona.",
+    props: "testimonios: Testimonio[]",
     estado: "en-uso",
     vista: "demo",
   },
 
   // ── Contenido de WordPress ─────────────────────────────────────────────
+  {
+    id: "franja-podcast",
+    nombre: "FranjaPodcast",
+    archivo: "client/src/components/content/FranjaPodcast.tsx",
+    importar: 'import { FranjaPodcast } from "@/components/content/FranjaPodcast";',
+    categoria: "contenido",
+    descripcion:
+      "Un episodio como franja noche con aspecto de reproductor: portada en hexágono, onda de audio en miel (dibujo fijo) y «Escuchar». Toda la franja enlaza al episodio en WordPress, en otra pestaña.",
+    usarCuando:
+      "Destacar un episodio concreto (el último, uno recomendado) dentro de una banda.",
+    evitarPara:
+      "Listados de episodios (EpisodioFila) o reproducir audio en la página: no tiene reproductor.",
+    props: "episodio: TransformedPost",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "portada-articulo",
+    nombre: "PortadaArticulo",
+    archivo: "client/src/components/content/PortadaArticulo.tsx",
+    importar: 'import { PortadaArticulo } from "@/components/content/PortadaArticulo";',
+    categoria: "contenido",
+    descripcion:
+      "El artículo destacado en grande y horizontal: imagen a la izquierda (arriba en móvil), «Artículo destacado», aviso de miembros, titular (h2), extracto, autor y fecha. Enlaza fuera.",
+    usarCuando: "El primer artículo de /blog, encima de la rejilla de BlogCard.",
+    evitarPara: "La home: su portada de revista es vertical y vive en ContenidoReciente.",
+    props: "post: TransformedPost",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "meta-articulo",
+    nombre: "MetaArticulo",
+    archivo: "client/src/components/content/MetaArticulo.tsx",
+    importar: 'import { MetaArticulo } from "@/components/content/MetaArticulo";',
+    categoria: "contenido",
+    descripcion:
+      "Autor y fecha de un artículo en una línea; si falta uno, sale el otro solo, y una fecha malformada no se pinta.",
+    usarCuando: "Pie de BlogCard y PortadaArticulo; cualquier lista de artículos.",
+    props: "post: TransformedPost; className?: string",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "aviso-miembros",
+    nombre: "AvisoMiembros",
+    archivo: "client/src/components/content/AvisoMiembros.tsx",
+    importar: 'import { AvisoMiembros } from "@/components/content/AvisoMiembros";',
+    categoria: "contenido",
+    descripcion:
+      "Píldora «Exclusivo para miembros» con candado: avisa antes del clic de que el cuerpo está tras el muro de la comunidad.",
+    usarCuando: "Tarjetas de contenido con `isGated`.",
+    evitarPara: "Funciones aún no disponibles: para eso, Proximamente.",
+    props: "sin props",
+    estado: "en-uso",
+    vista: "demo",
+  },
   {
     id: "blog-card",
     nombre: "BlogCard",
@@ -324,23 +603,56 @@ export const REGISTRO = [
     importar: 'import BlogCard from "@/components/content/BlogCard";',
     categoria: "contenido",
     descripcion:
-      "Tarjeta de artículo: imagen (si la hay), título, extracto y fecha. Enlaza fuera (muro de MemberPress, D9).",
-    usarCuando: "Listar artículos de /api/posts.",
-    evitarPara: "Episodios de podcast: PodcastCard.",
-    props: "post: TransformedPost",
+      "Tarjeta de artículo: imagen 16:9 (si la hay), etiqueta opcional («Blog», «Podcast»), «Exclusivo para miembros» si está tras el muro, titular, extracto, autor y fecha. Al pasar el ratón la imagen se acerca y el borde se marca. Enlaza fuera (muro de MemberPress, D9).",
+    usarCuando:
+      "Listar artículos de /api/posts (rejilla de /blog, «Sigue leyendo»), o mezclar artículos y episodios con `etiqueta`.",
+    evitarPara:
+      "El artículo destacado de /blog (PortadaArticulo) y la lista de /podcast (EpisodioFila).",
+    props: "post: TransformedPost; etiqueta?: string",
     estado: "en-uso",
     vista: "demo",
   },
   {
-    id: "podcast-card",
-    nombre: "PodcastCard",
-    archivo: "client/src/components/content/PodcastCard.tsx",
-    importar: 'import { PodcastCard } from "@/components/content/PodcastCard";',
+    id: "episodio-fila",
+    nombre: "EpisodioFila",
+    archivo: "client/src/components/content/EpisodioFila.tsx",
+    importar: 'import { EpisodioFila } from "@/components/content/EpisodioFila";',
     categoria: "contenido",
     descripcion:
-      "Tarjeta de episodio: portada (si la hay), número opcional, título, descripción y fecha.",
-    usarCuando: "Listar episodios de /api/podcasts.",
-    props: "podcast: TransformedPost; episodeNumber?: number",
+      "Un episodio en lista: número en contorno (desde sm), portada en hexágono, «Episodio N», aviso de miembros, título, extracto, fecha y «Escuchar». Toda la fila enlaza fuera.",
+    usarCuando:
+      "La lista de /podcast, dentro de un <ol> con divide-y. `numero` sobre el total de la colección (useListaPaginada), no sobre lo cargado.",
+    evitarPara: "Destacar el último episodio: para eso, FranjaPodcast.",
+    props: "episodio: TransformedPost; numero: number",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "portada-podcast",
+    nombre: "PortadaPodcast",
+    archivo: "client/src/components/content/PortadaPodcast.tsx",
+    importar: 'import { PortadaPodcast } from "@/components/content/PortadaPodcast";',
+    categoria: "contenido",
+    descripcion:
+      "El podcast como celda miel del panal: auriculares y onda sobre PatronPanal. Se arma al cargar. Decorativa.",
+    usarCuando: "Columna visual del hero de /podcast (`visual` de HeroInstitucional).",
+    props: "sin props",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "ver-mas",
+    nombre: "VerMas",
+    archivo: "client/src/components/content/VerMas.tsx",
+    importar: 'import { VerMas } from "@/components/content/VerMas";',
+    categoria: "contenido",
+    descripcion:
+      "Pie de una lista paginada: «Mostrando X de Y» (aria-live) y el botón que trae la página siguiente; «Cargando…» mientras llega y «Reintentar» si falla. Sin más páginas, solo el recuento.",
+    usarCuando:
+      "Debajo de una lista de useListaPaginada (/blog, /podcast). El total es el de la colección.",
+    evitarPara: "Paginación numerada ni scroll infinito: aquí se carga a petición.",
+    props:
+      "mostrados, total: number; nombre: string; hayMas, cargando, error: boolean; onCargarMas: () => void; testid: string",
     estado: "en-uso",
     vista: "demo",
   },
@@ -352,7 +664,7 @@ export const REGISTRO = [
       'import { ContenidoReciente } from "@/components/content/ContenidoReciente";',
     categoria: "contenido",
     descripcion:
-      "Banda con 3 artículos y el último episodio. Si la API falla, desaparece (RF-13).",
+      "Banda de la home como portada de revista: el artículo más reciente en grande, los dos siguientes en lista numerada y el último episodio en FranjaPodcast. Sin fechas a la vista. Si la API falla, desaparece (RF-13); si falla una sola consulta, pinta la otra.",
     usarCuando: "Traer contenido reciente a una página institucional.",
     props: "sin props",
     estado: "en-uso",
@@ -393,18 +705,6 @@ export const REGISTRO = [
     vista: "demo",
   },
   {
-    id: "badge",
-    nombre: "Badge",
-    archivo: "client/src/components/ui/badge.tsx",
-    importar: 'import { Badge } from "@/components/ui/badge";',
-    categoria: "ui",
-    descripcion: "Etiqueta pequeña (categoría, número de episodio).",
-    usarCuando: "Metadatos cortos que no se pulsan.",
-    props: 'variant?: "default" | "secondary" | "outline" | "destructive"',
-    estado: "en-uso",
-    vista: "demo",
-  },
-  {
     id: "card",
     nombre: "Card",
     archivo: "client/src/components/ui/card.tsx",
@@ -440,7 +740,7 @@ export const REGISTRO = [
     categoria: "ui",
     descripcion: "Bloque que se abre y cierra (acordeones del panel móvil).",
     usarCuando:
-      "Grupos desplegables controlados. Para texto estático que se despliega, <details> nativo (ver RutaTimeline).",
+      "Grupos desplegables controlados. Para texto estático que se despliega, <details> nativo.",
     props: "open?; onOpenChange?; children",
     estado: "en-uso",
     vista: "demo",

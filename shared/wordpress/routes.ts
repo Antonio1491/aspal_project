@@ -10,16 +10,36 @@
  * a `[]`, porque el cliente necesita distinguir "no se pudo cargar" de "no
  * hay artículos" para mostrar un reintento en vez de un estado vacío falso.
  * Un 404 en `/api/posts/:slug` significa exactamente que el post no existe.
+ *
+ * Paginación: `/api/posts` y `/api/podcasts` aceptan `per_page` (1–100, el
+ * máximo de WordPress) y `page` (desde 1). El cuerpo sigue siendo la lista; el
+ * total de la colección va en la cabecera CABECERA_TOTAL, para numerar y saber
+ * si quedan más sin cambiar la forma de la respuesta.
  */
 import type { Express, Request, Response } from "express";
 import { fetchPodcasts, fetchPostBySlug, fetchPosts } from "./client";
+import { CABECERA_TOTAL } from "./types";
+
+/** Entero de la query dentro de [min, max]; si no es un número, `porDefecto`. */
+function enteroAcotado(valor: unknown, porDefecto: number, min: number, max: number) {
+  const n = Number.parseInt(String(valor), 10);
+  return Number.isNaN(n) ? porDefecto : Math.min(max, Math.max(min, n));
+}
+
+function paginacion(req: Request) {
+  return {
+    perPage: enteroAcotado(req.query.per_page, 6, 1, 100),
+    page: enteroAcotado(req.query.page, 1, 1, Number.MAX_SAFE_INTEGER),
+  };
+}
 
 export function registerApiRoutes(app: Express): void {
   app.get("/api/posts", async (req: Request, res: Response) => {
     try {
-      const perPage = parseInt(req.query.per_page as string) || 6;
-      const posts = await fetchPosts(perPage);
-      res.json(posts);
+      const { perPage, page } = paginacion(req);
+      const { items, total } = await fetchPosts(perPage, page);
+      res.setHeader(CABECERA_TOTAL, String(total));
+      res.json(items);
     } catch (error) {
       console.error("Error fetching posts:", error);
       res.status(500).json({ error: "Failed to fetch posts" });
@@ -41,9 +61,10 @@ export function registerApiRoutes(app: Express): void {
 
   app.get("/api/podcasts", async (req: Request, res: Response) => {
     try {
-      const perPage = parseInt(req.query.per_page as string) || 6;
-      const podcasts = await fetchPodcasts(perPage);
-      res.json(podcasts);
+      const { perPage, page } = paginacion(req);
+      const { items, total } = await fetchPodcasts(perPage, page);
+      res.setHeader(CABECERA_TOTAL, String(total));
+      res.json(items);
     } catch (error) {
       console.error("Error fetching podcasts:", error);
       res.status(500).json({ error: "Failed to fetch podcasts" });

@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -60,25 +59,6 @@ export const DEMOS_UI: Record<IdDemoUi, Demo> = {
     ),
     codigo: (v) =>
       `<Button variant="${String(v.variant)}"${v.size !== "default" ? ` size="${String(v.size)}"` : ""}${v.disabled ? " disabled" : ""} className="px-6">\n  ${String(v.texto)}\n</Button>`,
-  },
-  badge: {
-    controles: [
-      {
-        tipo: "opciones",
-        clave: "variant",
-        etiqueta: "variant",
-        opciones: ["default", "secondary", "outline", "destructive"],
-        inicial: "secondary",
-      },
-    ],
-    render: (v) => (
-      <Badge
-        variant={String(v.variant) as "default" | "secondary" | "outline" | "destructive"}
-      >
-        Episodio 12
-      </Badge>
-    ),
-    codigo: (v) => `<Badge variant="${String(v.variant)}">Episodio 12</Badge>`,
   },
   card: {
     fondo: "suave",

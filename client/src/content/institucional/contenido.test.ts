@@ -4,7 +4,7 @@ import * as nosotros from "./nosotros";
 import { esRutaConocida } from "@/lib/rutas";
 import { PILARES } from "./pilares";
 import { ETAPAS, MAPA_RUTA } from "./mapa-ruta";
-import { CIFRAS, TEXTO_EVENTOS } from "./inicio";
+import { CIFRAS, FOTO_HERO, TESTIMONIOS, TEXTO_EVENTOS } from "./inicio";
 
 /** Todas las cadenas de un valor, recorriendo objetos y arrays (no funciones ni iconos). */
 function cadenas(valor: unknown): string[] {
@@ -37,6 +37,23 @@ describe("contenido institucional", () => {
     expect(CIFRAS.map((c) => c.valor)).toEqual(["15+", "4", "7", "1,000"]);
     expect(CIFRAS[2].etiqueta).toContain("23 pasos");
     expect(CIFRAS[3].etiqueta).toMatch(/meta/i);
+    // Solo la meta 2030 se rotula como meta: el resto son hechos.
+    expect(CIFRAS.filter((c) => c.meta).map((c) => c.valor)).toEqual(["1,000"]);
+  });
+
+  it("valida las ranuras de la home cuando se llenen (foto del hero, testimonios)", () => {
+    if (FOTO_HERO) {
+      expect(FOTO_HERO.src).toMatch(/^\/fotos\/.+\.webp$/);
+      expect(FOTO_HERO.alt.trim().length).toBeGreaterThan(10);
+    }
+    for (const t of TESTIMONIOS) {
+      for (const campo of [t.cita, t.nombre, t.cargo, t.organizacion, t.pais]) {
+        expect(campo.trim(), t.nombre).not.toBe("");
+      }
+      expect(t.cita.split(/\s+/).length, t.nombre).toBeLessThanOrEqual(30);
+      if (t.foto) expect(t.foto, t.nombre).toMatch(/^\/fotos\/.+\.webp$/);
+    }
+    expect(new Set(TESTIMONIOS.map((t) => t.nombre)).size).toBe(TESTIMONIOS.length);
   });
 
   it("no tiene textos vacíos ni marcadores de relleno", () => {

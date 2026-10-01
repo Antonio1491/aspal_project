@@ -58,3 +58,10 @@ export interface TransformedPost {
   author: string;
   link: string;
 }
+
+/**
+ * Cabecera con que `/api/posts` y `/api/podcasts` devuelven el total de la
+ * colección paginada (el cuerpo sigue siendo la lista de la página pedida).
+ * Vive aquí, en el módulo puro, porque la leen servidor y cliente.
+ */
+export const CABECERA_TOTAL = "X-Total-Count";

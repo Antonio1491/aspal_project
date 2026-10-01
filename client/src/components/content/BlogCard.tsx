@@ -1,16 +1,22 @@
-import { motion } from "framer-motion";
-import { Card } from "@/components/ui/card";
-import { Clock, ArrowUpRight } from "lucide-react";
-import { formatPublishedDate } from "@/lib/date";
+import { AvisoMiembros } from "@/components/content/AvisoMiembros";
+import { MetaArticulo } from "@/components/content/MetaArticulo";
 import type { TransformedPost } from "@shared/wordpress/types";
+import { ArrowUpRight } from "lucide-react";
 
 interface BlogCardProps {
   post: TransformedPost;
+  /** Etiqueta de tipo sobre el título («Blog», «Podcast»), para mezclar
+   *  artículos y episodios con la misma tarjeta. */
+  etiqueta?: string;
 }
 
-export default function BlogCard({ post }: BlogCardProps) {
-  const publishedLabel = formatPublishedDate(post.publishedAt);
-
+/**
+ * Tarjeta de artículo (rejilla de /blog, «Sigue leyendo» de cada artículo):
+ * imagen 16:9, aviso «Exclusivo para miembros» si está tras el muro, titular,
+ * extracto, autor y fecha. Al pasar el ratón, la imagen se acerca y el borde
+ * se marca; sin elevar la tarjeta.
+ */
+export default function BlogCard({ post, etiqueta }: BlogCardProps) {
   // NOTA: el plan pedía que la tarjeta navegara a `/blog/${post.slug}`. Está
   // aplazado a propósito: WordPress no sirve el cuerpo de ningún artículo a
   // una petición anónima (muro de MemberPress), así que la lectura interna
@@ -22,90 +28,70 @@ export default function BlogCard({ post }: BlogCardProps) {
       href={post.link}
       target="_blank"
       rel="noopener noreferrer"
-      className="group block h-full rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-background transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       // Sin esto el nombre accesible del enlace es la concatenación de imagen,
-      // tiempo, título, extracto y fecha: seis tarjetas producen seis párrafos
-      // en la lista de enlaces de un lector de pantalla.
-      aria-label={`${post.title} (se abre en una pestaña nueva)`}
+      // título, extracto y fecha: seis tarjetas producen seis párrafos en la
+      // lista de enlaces de un lector de pantalla. La etiqueta visible
+      // («Blog», «Podcast») va también en el nombre accesible.
+      aria-label={`${etiqueta ? `${etiqueta}: ` : ""}${post.title} (se abre en una pestaña nueva)`}
       data-testid={`link-post-${post.id}`}
     >
-      <motion.div
-        className="h-full cursor-pointer"
-        whileHover={{ y: -8 }}
-        transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
-      >
-        <Card
-          className="h-full flex flex-col overflow-hidden bg-card border-border/50 hover:border-primary/30 group-focus-within:border-primary/30 hover:shadow-xl group-focus-within:shadow-xl transition-all duration-300"
-          data-testid={`card-post-${post.id}`}
-        >
-          {/* Imagen. Condicional: featuredImage puede venir vacío, y un
-              <img src=""> solicita la propia página y pinta el icono de rota. */}
-          {post.featuredImage && (
-            <div className="relative h-52 overflow-hidden bg-muted/30">
-              <motion.img
-                src={post.featuredImage}
-                // Decorativa: el título ya está en el aria-label del enlace.
-                alt=""
-                loading="lazy"
-                className="w-full h-full object-contain"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.4 }}
-                data-testid={`img-post-featured-${post.id}`}
-              />
-
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-300" />
-
-              <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 group-focus-within:translate-y-0">
-                <div className="p-2 rounded-full bg-white/90 dark:bg-black/80 backdrop-blur-sm">
-                  <ArrowUpRight className="w-4 h-4 text-primary" aria-hidden="true" />
-                </div>
-              </div>
-            </div>
-          )}
-
-          <div className="flex-1 flex flex-col p-6">
-            <h3
-              className="text-lg md:text-xl font-bold text-foreground group-hover:text-primary group-focus-within:text-primary transition-colors line-clamp-2 mb-3"
-              data-testid={`text-post-title-${post.id}`}
-            >
-              {post.title}
-            </h3>
-
-            {post.excerpt && (
-              <p
-                className="text-sm text-muted-foreground line-clamp-3 flex-1"
-                data-testid={`text-post-excerpt-${post.id}`}
+      {/* Condicional: featuredImage puede venir vacío, y un <img src="">
+          solicita la propia página y pinta el icono de rota. */}
+      {post.featuredImage && (
+        <span className="block aspect-video overflow-hidden bg-muted">
+          <img
+            src={post.featuredImage}
+            // Decorativa: el título ya está en el aria-label del enlace.
+            alt=""
+            width={1600}
+            height={900}
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none"
+            data-testid={`img-post-featured-${post.id}`}
+          />
+        </span>
+      )}
+      <span className="flex flex-1 flex-col p-6" data-testid={`card-post-${post.id}`}>
+        {(etiqueta || post.isGated) && (
+          <span className="mb-3 flex flex-wrap gap-2">
+            {etiqueta && (
+              <span
+                className="inline-flex rounded-full bg-noche px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-noche-foreground"
+                data-testid={`etiqueta-post-${post.id}`}
               >
-                {post.excerpt}
-              </p>
+                {etiqueta}
+              </span>
             )}
-
-            {/* Metadatos agrupados (ley de proximidad): ocupan el hueco que
-                deja la insignia de categoría retirada. El tiempo de lectura se
-                omite si no hay dato fiable — ver readingMinutes en types.ts. */}
-            <div className="mt-4 pt-4 border-t border-border/50 flex items-center gap-4 text-sm text-muted-foreground">
-              {publishedLabel && (
-                <time
-                  dateTime={post.publishedAt}
-                  data-testid={`text-post-date-${post.id}`}
-                >
-                  {publishedLabel}
-                </time>
-              )}
-
-              {post.readingMinutes > 0 && (
-                <span
-                  className="flex items-center gap-1"
-                  data-testid={`text-post-readtime-${post.id}`}
-                >
-                  <Clock className="w-3.5 h-3.5" aria-hidden="true" />
-                  {post.readingMinutes} min lectura
-                </span>
-              )}
-            </div>
-          </div>
-        </Card>
-      </motion.div>
+            {post.isGated && <AvisoMiembros />}
+          </span>
+        )}
+        <h3
+          className="line-clamp-3 text-xl font-bold leading-snug text-foreground"
+          data-testid={`text-post-title-${post.id}`}
+        >
+          {post.title}
+        </h3>
+        {post.excerpt && (
+          <span
+            className="mt-2 line-clamp-3 text-base text-muted-foreground"
+            data-testid={`text-post-excerpt-${post.id}`}
+          >
+            {post.excerpt}
+          </span>
+        )}
+        <span className="mt-auto flex items-end justify-between gap-4 pt-5">
+          <MetaArticulo post={post} />
+          <span className="inline-flex shrink-0 items-center gap-1 font-medium text-primary">
+            Leer
+            <ArrowUpRight
+              className="h-4 w-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              aria-hidden="true"
+            />
+          </span>
+        </span>
+      </span>
     </a>
   );
 }

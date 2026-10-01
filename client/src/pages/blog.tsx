@@ -1,270 +1,244 @@
-import { useQuery } from "@tanstack/react-query";
-import { motion } from "framer-motion";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
 import BlogCard from "@/components/content/BlogCard";
-import { Badge } from "@/components/ui/badge";
+import { FranjaPodcast } from "@/components/content/FranjaPodcast";
+import { VerMas } from "@/components/content/VerMas";
+import { PortadaArticulo } from "@/components/content/PortadaArticulo";
+import { IlustracionPilar } from "@/components/institucional/IlustracionPilar";
+import { Banda } from "@/components/layout/Banda";
+import Footer from "@/components/layout/Footer";
+import Header from "@/components/layout/Header";
+import { HeroInstitucional } from "@/components/layout/HeroInstitucional";
+import { PatronPanal } from "@/components/layout/PatronPanal";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Clock, ArrowRight } from "lucide-react";
-import { Link } from "wouter";
-import { formatPublishedDate } from "@/lib/date";
+import { PILARES } from "@/content/institucional/pilares";
+import { useEnCliente } from "@/hooks/use-en-cliente";
+import { useListaPaginada } from "@/hooks/use-lista-paginada";
+import { registrarEvento } from "@/lib/analitica";
+import { BOTON_CONTORNO_NOCHE, BOTON_MIEL_NOCHE, H2_BANDA } from "@/lib/clases";
+import { cn } from "@/lib/utils";
 import type { TransformedPost } from "@shared/wordpress/types";
+import { useQuery } from "@tanstack/react-query";
+import { ArrowRight } from "lucide-react";
+import { Link } from "wouter";
 
-/** Número de artículos que se piden. Ojo: hoy coincide con los que existen,
- *  así que el octavo desaparecería en silencio. Umbral de paginación por
- *  decidir — ver la lista de revisión. */
-const POSTS_PER_PAGE = 7;
+/** Artículos por página de «Ver más»: el destacado y 9 en la rejilla, tres
+ *  filas completas en la primera vista. Antes se pedían 7 fijos, que hoy son
+ *  todos: el octavo habría desaparecido en silencio. */
+const POSTS_PER_PAGE = 10;
 
-/** Esqueleto con la silueta real de la tarjeta. Antes eran bloques `h-96`
- *  grises y el salto al cargar era brusco (ley de Doherty). */
-function BlogCardSkeleton({ index }: { index: number }) {
+/** El blog es el pilar Conocimiento: su ilustración, subtítulo y compromiso. */
+const CONOCIMIENTO = PILARES.find((p) => p.id === "conocimiento")!;
+
+// Un solo fetch fallido no puede significar "no hay artículos": con
+// `retry: false` global, el fallo quedaba cacheado toda la sesión.
+const REINTENTO = {
+  retry: 2,
+  retryDelay: (intento: number) => Math.min(1000 * 2 ** intento, 8000),
+};
+
+async function cargar(url: string): Promise<TransformedPost[]> {
+  const respuesta = await fetch(url);
+  if (!respuesta.ok) throw new Error(`Error al cargar ${url}: ${respuesta.status}`);
+  return respuesta.json();
+}
+
+/** Flecha que avanza al pasar el ratón por su `group`. */
+function Flecha({ className }: { className?: string }) {
   return (
-    <Card
-      className="h-full flex flex-col overflow-hidden bg-card border-border/50"
-      data-testid={`skeleton-post-${index}`}
-    >
-      <div className="h-52 bg-muted animate-pulse motion-reduce:animate-none motion-reduce:animate-none" />
-      <div className="flex-1 flex flex-col p-6">
-        <div className="h-6 w-11/12 rounded bg-muted animate-pulse motion-reduce:animate-none motion-reduce:animate-none" />
-        <div className="mt-2 h-6 w-3/5 rounded bg-muted animate-pulse motion-reduce:animate-none motion-reduce:animate-none" />
-        <div className="mt-4 space-y-2 flex-1">
-          <div className="h-4 w-full rounded bg-muted animate-pulse motion-reduce:animate-none motion-reduce:animate-none" />
-          <div className="h-4 w-full rounded bg-muted animate-pulse motion-reduce:animate-none motion-reduce:animate-none" />
-          <div className="h-4 w-4/5 rounded bg-muted animate-pulse motion-reduce:animate-none motion-reduce:animate-none" />
-        </div>
-        <div className="mt-4 pt-4 border-t border-border/50">
-          <div className="h-4 w-32 rounded bg-muted animate-pulse motion-reduce:animate-none motion-reduce:animate-none" />
-        </div>
-      </div>
-    </Card>
+    <ArrowRight
+      className={cn(
+        "transition-transform duration-200 group-hover:translate-x-1 group-focus-visible:translate-x-1",
+        className,
+      )}
+      aria-hidden="true"
+    />
   );
 }
 
+/** Esqueleto con la forma de la portada y la rejilla. */
+function Esqueleto() {
+  const bloque = "animate-pulse rounded-3xl bg-muted motion-reduce:animate-none";
+  return (
+    <div aria-hidden="true" data-testid="skeleton-posts">
+      <div className={cn(bloque, "h-[26rem]")} />
+      <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className={cn(bloque, "h-96 rounded-2xl")} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Blog (pilar Conocimiento), con el lenguaje de la home: el artículo más
+ * reciente como portada, el resto en rejilla, el último episodio del podcast y
+ * el cierre con el compromiso del pilar. Los artículos se abren en la
+ * comunidad (el cuerpo está tras el muro de MemberPress; ver BlogCard).
+ *
+ * En el HTML prerenderizado salen el hero y el cierre: las consultas no corren
+ * en el servidor, y un esqueleto ahí sería un «Cargando…» que nunca termina.
+ * El esqueleto aparece al montar, con las consultas ya en marcha.
+ */
 export default function Blog() {
-  const {
-    data: posts,
-    isLoading,
-    isError,
-    refetch,
-    isFetching,
-  } = useQuery<TransformedPost[]>({
-    queryKey: ["/api/posts", { per_page: POSTS_PER_PAGE }],
-    queryFn: async () => {
-      const response = await fetch(`/api/posts?per_page=${POSTS_PER_PAGE}`);
-      if (!response.ok)
-        throw new Error(`Error al cargar los artículos: ${response.status}`);
-      return response.json();
-    },
-    // Un solo fetch fallido no puede significar "no hay artículos": con
-    // `retry: false` global, el fallo quedaba cacheado toda la sesión.
-    retry: 2,
-    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 8000),
+  const montado = useEnCliente();
+
+  const articulos = useListaPaginada("/api/posts", POSTS_PER_PAGE);
+  const episodios = useQuery<TransformedPost[]>({
+    queryKey: ["/api/podcasts", { per_page: 1 }],
+    queryFn: () => cargar("/api/podcasts?per_page=1"),
+    ...REINTENTO,
   });
 
+  const posts = articulos.items;
   // El destacado solo tiene sentido si queda algo debajo. Con un único
   // artículo, se lo comía el destacado y la rejilla decía "no hay artículos":
   // la página se contradecía a sí misma.
-  const hasFeatured = (posts?.length ?? 0) >= 2;
-  const featuredPost = hasFeatured ? posts?.[0] : undefined;
-  const gridPosts = hasFeatured ? (posts?.slice(1) ?? []) : (posts ?? []);
-
-  const featuredDate = formatPublishedDate(featuredPost?.publishedAt);
+  const destacado = posts.length >= 2 ? posts[0] : undefined;
+  const resto = destacado ? posts.slice(1) : posts;
+  const episodio = episodios.data?.[0];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex min-h-screen flex-col bg-background">
       <Header />
-      <main id="contenido" tabIndex={-1} className="focus:outline-none">
-        <section
-          className="relative bg-primary overflow-hidden"
-          data-testid="section-blog-hero"
+      <main id="contenido" tabIndex={-1} className="flex-1 focus:outline-none">
+        {/* 1. Hero: el blog es el pilar Conocimiento */}
+        <HeroInstitucional
+          overline="Blog · Pilar Conocimiento"
+          titulo="Artículos de Conocimiento"
+          visual={<IlustracionPilar pilar={CONOCIMIENTO} />}
         >
-          <div className="container mx-auto px-4 md:px-8 py-12 md:py-20">
-            {/* El h1 vive fuera del panel condicional: antes, con 0 artículos,
-              la página se quedaba literalmente sin encabezado de nivel 1. */}
-            <div className={hasFeatured ? "mb-8 lg:mb-10" : "py-8"}>
-              <h1
-                className="text-3xl md:text-5xl font-bold text-white leading-tight"
-                data-testid="text-blog-title"
-              >
-                Artículos de <span className="text-secondary">Conocimiento</span>
-              </h1>
-              <p className="mt-3 text-white/80 text-base md:text-lg max-w-2xl">
-                Recursos, guías y mejores prácticas para asociaciones profesionales
+          <p>{CONOCIMIENTO.subtitulo}</p>
+          <p className="mt-2">
+            Recursos, guías y mejores prácticas para asociaciones profesionales.
+          </p>
+        </HeroInstitucional>
+
+        {/* 2. Artículos: portada y rejilla (o carga, error, vacío) */}
+        <Banda id="articulos">
+          {!montado ? null : articulos.isPending ? (
+            <>
+              <p className="sr-only" role="status">
+                Cargando artículos…
               </p>
-            </div>
-
-            {featuredPost && (
-              <div className="grid lg:grid-cols-2 gap-6 items-stretch">
-                {featuredPost.featuredImage && (
-                  <motion.div
-                    className="relative rounded-3xl overflow-hidden shadow-xl"
-                    initial={{ opacity: 0, x: -40 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
-                  >
-                    <Link
-                      href={`/blog/${featuredPost.slug}`}
-                      className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
-                      aria-label={featuredPost.title}
-                      tabIndex={-1}
-                    >
-                      <img
-                        src={featuredPost.featuredImage}
-                        alt=""
-                        className="w-full h-full object-cover min-h-[300px] lg:min-h-full cursor-pointer hover:scale-105 transition-transform duration-500"
-                        data-testid="img-featured-article"
-                      />
-                    </Link>
-                  </motion.div>
-                )}
-
-                <motion.div
-                  className="relative flex flex-col bg-card rounded-3xl overflow-hidden shadow-xl p-6 md:p-8"
-                  initial={{ opacity: 0, x: 40 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.7, delay: 0.1, ease: [0.25, 0.4, 0.25, 1] }}
-                >
-                  <Badge
-                    className="self-start mb-4 bg-secondary text-secondary-foreground font-semibold px-3 py-1"
-                    data-testid="badge-featured"
-                  >
-                    Artículo Destacado
-                  </Badge>
-
-                  <Link
-                    href={`/blog/${featuredPost.slug}`}
-                    className="rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                  >
-                    <h2
-                      className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground hover:text-primary transition-colors cursor-pointer leading-tight"
-                      data-testid="text-featured-title"
-                    >
-                      {featuredPost.title}
-                    </h2>
-                  </Link>
-
-                  {featuredPost.excerpt && (
-                    <p
-                      className="mt-4 text-muted-foreground line-clamp-4 text-base md:text-lg flex-1"
-                      data-testid="text-featured-excerpt"
-                    >
-                      {featuredPost.excerpt}
-                    </p>
-                  )}
-
-                  {/* La insignia de categoría se retira: con una sola categoría
-                    real decía "Blog" en el 100% de los casos. */}
-                  <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                    {featuredDate && (
-                      <time dateTime={featuredPost.publishedAt}>{featuredDate}</time>
-                    )}
-                    {featuredPost.readingMinutes > 0 && (
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" aria-hidden="true" />
-                        {featuredPost.readingMinutes} min lectura
-                      </span>
-                    )}
-                  </div>
-
-                  <Link
-                    href={`/blog/${featuredPost.slug}`}
-                    className="mt-6 inline-flex items-center gap-2 min-h-[44px] text-primary font-semibold text-lg rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                    data-testid="link-read-featured"
-                  >
-                    Leer artículo
-                    <ArrowRight className="w-5 h-5" aria-hidden="true" />
-                  </Link>
-                </motion.div>
-              </div>
-            )}
-          </div>
-
-          <div className="absolute bottom-0 left-0 right-0" aria-hidden="true">
-            <svg viewBox="0 0 1440 60" fill="none" className="w-full">
-              <path
-                d="M0 60L48 55C96 50 192 40 288 35C384 30 480 30 576 33.3C672 37 768 43 864 45C960 47 1056 45 1152 41.7C1248 38 1344 33 1392 30.8L1440 28.5V60H1392C1344 60 1248 60 1152 60C1056 60 960 60 864 60C768 60 672 60 576 60C480 60 384 60 288 60C192 60 96 60 48 60H0Z"
-                className="fill-background"
-              />
-            </svg>
-          </div>
-        </section>
-
-        {/* La rejilla aporta ahora su propio padding superior: antes se lo daba
-          la sección "Temas de Interés", que se ha eliminado con el filtro. */}
-        <section
-          className="pt-12 md:pt-16 pb-16 md:pb-24"
-          data-testid="section-posts-grid"
-        >
-          <div className="container mx-auto px-4 md:px-8">
-            <h2
-              className="text-2xl md:text-3xl font-bold mb-8"
-              data-testid="text-grid-title"
-            >
-              Últimos artículos
-            </h2>
-
-            {isLoading ? (
-              <div
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-                aria-busy="true"
-                aria-label="Cargando artículos"
-              >
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <BlogCardSkeleton key={i} index={i} />
-                ))}
-              </div>
-            ) : isError ? (
-              /* Tercer estado, distinto del vacío: antes un WordPress caído
+              <Esqueleto />
+            </>
+          ) : articulos.isError ? (
+            /* Tercer estado, distinto del vacío: antes un WordPress caído
                mostraba "No hay artículos en esta categoría". */
-              <div className="text-center py-12" data-testid="state-posts-error">
-                <p className="text-lg font-semibold text-foreground">
-                  No hemos podido cargar los artículos
-                </p>
-                <p className="mt-2 text-muted-foreground">
-                  Puede ser un problema temporal de conexión.
-                </p>
-                <Button
-                  className="mt-6 min-h-[44px] px-6"
-                  onClick={() => refetch()}
-                  disabled={isFetching}
-                  data-testid="button-retry-posts"
-                >
-                  {isFetching ? "Reintentando…" : "Reintentar"}
+            <div className="py-12 text-center" data-testid="state-posts-error">
+              <p className="text-lg font-semibold text-foreground">
+                No hemos podido cargar los artículos
+              </p>
+              <p className="mt-2 text-muted-foreground">
+                Puede ser un problema temporal de conexión.
+              </p>
+              <Button
+                className="mt-6 min-h-11 px-6"
+                onClick={() => articulos.reintentar()}
+                disabled={articulos.isFetching}
+                data-testid="button-retry-posts"
+              >
+                {articulos.isFetching ? "Reintentando…" : "Reintentar"}
+              </Button>
+            </div>
+          ) : posts.length === 0 ? (
+            <p
+              className="py-12 text-center text-lg text-muted-foreground"
+              data-testid="text-no-posts"
+            >
+              Todavía no hay artículos publicados. Vuelve pronto.
+            </p>
+          ) : (
+            <>
+              {destacado && <PortadaArticulo post={destacado} />}
+              {resto.length > 0 && (
+                <>
+                  <h2
+                    className={cn(H2_BANDA, destacado && "mt-16")}
+                    data-testid="text-grid-title"
+                  >
+                    {destacado ? "Más artículos" : "Artículos"}
+                  </h2>
+                  <ul className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {resto.map((post) => (
+                      <li key={post.id}>
+                        <BlogCard post={post} />
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+              <VerMas
+                mostrados={posts.length}
+                total={articulos.total}
+                nombre="artículos"
+                hayMas={articulos.hayMas}
+                cargando={articulos.cargandoMas}
+                error={articulos.errorAlCargarMas}
+                onCargarMas={() => articulos.cargarMas()}
+                testid="button-blog-ver-mas"
+              />
+            </>
+          )}
+        </Banda>
+
+        {/* 3. El pilar también se escucha: último episodio (si llega) */}
+        {montado && episodio && (
+          <Banda tono="suave">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <h2 className={H2_BANDA}>También en podcast</h2>
+              <Link
+                href="/podcast"
+                className="group inline-flex min-h-11 items-center gap-1.5 font-medium text-primary underline underline-offset-4"
+                data-testid="link-blog-podcast"
+              >
+                Todos los episodios
+                <Flecha className="h-4 w-4" />
+              </Link>
+            </div>
+            <div className="mt-8">
+              <FranjaPodcast episodio={episodio} />
+            </div>
+          </Banda>
+        )}
+
+        {/* 4. Cierre: el compromiso del pilar y la puerta de entrada */}
+        <Banda tono="noche">
+          <div className="grid items-center gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <p className="text-[13px] font-semibold uppercase tracking-wider text-secondary">
+                Compromiso ASPAL
+              </p>
+              <h2 className="mt-2 text-3xl font-bold md:text-4xl">
+                {CONOCIMIENTO.compromiso}
+              </h2>
+              <p className="mt-4 max-w-2xl text-lg text-white/85">
+                {CONOCIMIENTO.comoSeTraduce}
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Button variant="secondary" className={BOTON_MIEL_NOCHE} asChild>
+                  <Link
+                    href="/unete"
+                    className="group"
+                    onClick={() => registrarEvento("click_unete", { origen: "blog" })}
+                    data-testid="button-blog-unete"
+                  >
+                    Únete a la comunidad
+                    <Flecha />
+                  </Link>
+                </Button>
+                <Button variant="outline" className={BOTON_CONTORNO_NOCHE} asChild>
+                  <Link href="/que-hacemos#conocimiento" data-testid="button-blog-pilar">
+                    Conoce el pilar Conocimiento
+                  </Link>
                 </Button>
               </div>
-            ) : gridPosts.length > 0 ? (
-              <motion.div
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={{
-                  hidden: {},
-                  visible: { transition: { staggerChildren: 0.1 } },
-                }}
-              >
-                {gridPosts.map((post) => (
-                  <motion.div
-                    key={post.id}
-                    variants={{
-                      hidden: { opacity: 0, y: 30 },
-                      visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-                    }}
-                  >
-                    <BlogCard post={post} />
-                  </motion.div>
-                ))}
-              </motion.div>
-            ) : (
-              <div className="text-center py-12" data-testid="state-posts-empty">
-                <p className="text-muted-foreground text-lg" data-testid="text-no-posts">
-                  Todavía no hay artículos publicados. Vuelve pronto.
-                </p>
-              </div>
-            )}
+            </div>
+            <div className="hidden lg:col-span-5 lg:block">
+              <PatronPanal />
+            </div>
           </div>
-        </section>
+        </Banda>
       </main>
       <Footer />
     </div>

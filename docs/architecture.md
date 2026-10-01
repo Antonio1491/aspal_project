@@ -51,7 +51,7 @@ components/
   sections/   HeroSection, FeaturesGrid, FeatureCard, ProblemSection,
               TestimonialsSection, TestimonialCard, CTASection,
               LogoCarousel, CommunityGraphics, AnimatedSection
-  content/    BlogCard, PodcastCard
+  content/    BlogCard, EpisodioFila, VerMas…
   ui/         primitivas shadcn/ui — solo las que se usan
 ```
 
@@ -97,15 +97,21 @@ No hay persistencia. Todo el contenido se pide a WordPress en cada request:
 `https://comunidad.asociacionesprofesionales.org/wp-json/wp/v2`
 (configurable con `WP_API_BASE`)
 
-| Endpoint                       | Origen                                              |
-| ------------------------------ | --------------------------------------------------- |
-| `GET /api/posts?per_page=N`    | `/posts?_embed`                                     |
-| `GET /api/posts/:slug`         | `/posts?_embed&slug=…` · `404` si no hay resultados |
-| `GET /api/podcasts?per_page=N` | `/posts` filtrado por la categoría `podcast`        |
-| `GET /api/health`              | —                                                   |
+| Endpoint                              | Origen                                              |
+| ------------------------------------- | --------------------------------------------------- |
+| `GET /api/posts?per_page=N&page=P`    | `/posts?_embed` (sin la categoría `podcast`)        |
+| `GET /api/posts/:slug`                | `/posts?_embed&slug=…` · `404` si no hay resultados |
+| `GET /api/podcasts?per_page=N&page=P` | `/posts` filtrado por la categoría `podcast`        |
+| `GET /api/health`                     | —                                                   |
+
+**Paginación**: `per_page` va de 1 a 100 (el máximo de WordPress; por defecto 6) y `page` empieza en 1. El cuerpo es la lista de esa página; el total de la
+colección llega en la cabecera `X-Total-Count` (de `X-WP-Total`). Lo usan el
+«Ver más» de /blog y /podcast (`useListaPaginada`) y la numeración de episodios,
+que se cuenta sobre ese total y no sobre lo cargado.
 
 **Normalización** (`transformPost`): se limpia el HTML para título y extracto
-(truncado a 200 caracteres), el contenido se conserva como HTML crudo para
+(truncado a 200 caracteres) y se decodifican sus entidades, también las
+numéricas (`&#8211;` → «–»), el contenido se conserva como HTML crudo para
 renderizar, y la imagen destacada cae al primer `<img>` del contenido cuando
 WordPress no devuelve `wp:featuredmedia`. Autor por defecto: `ASPAL`.
 Categoría por defecto: `General`.

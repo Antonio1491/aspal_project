@@ -102,10 +102,51 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        // Entradas de la home: solo transform (nunca opacidad) y fill «both»,
+        // así el retardo de cada pieza la mantiene en su estado inicial.
+        // Todas se apagan con «reducir movimiento» (index.css).
+        ensamble: {
+          from: { transform: "translate(var(--dx, 0), var(--dy, 0)) scale(.94)" },
+          to: { transform: "none" },
+        },
+        "celda-miel": {
+          "0%": { transform: "scale(.6) rotate(-8deg)" },
+          "70%": { transform: "scale(1.04)" },
+          "100%": { transform: "none" },
+        },
+        raya: {
+          from: { strokeDashoffset: "80" },
+          to: { strokeDashoffset: "0" },
+        },
+        trazo: {
+          from: { transform: "scaleX(0)" },
+          to: { transform: "scaleX(1)" },
+        },
+        "trazo-y": {
+          from: { transform: "scaleY(0)" },
+          to: { transform: "scaleY(1)" },
+        },
+        asoma: {
+          "0%": { transform: "translateY(1.5rem) scale(.9)" },
+          "65%": { transform: "translateY(-.375rem) scale(1.03)" },
+          "100%": { transform: "none" },
+        },
+        insignia: {
+          "0%": { transform: "scale(.7)" },
+          "60%": { transform: "scale(1.08)" },
+          "100%": { transform: "none" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        ensamble: "ensamble 650ms cubic-bezier(.2,.8,.2,1) both",
+        "celda-miel": "celda-miel 700ms 350ms cubic-bezier(.2,.9,.3,1.2) both",
+        raya: "raya 400ms ease-out both",
+        trazo: "trazo 1400ms cubic-bezier(.4,0,.2,1) both",
+        "trazo-y": "trazo-y 1200ms cubic-bezier(.4,0,.2,1) both",
+        asoma: "asoma 700ms cubic-bezier(.2,.9,.3,1.2) both",
+        insignia: "insignia 500ms cubic-bezier(.2,.9,.3,1.3) both",
       },
     },
   },

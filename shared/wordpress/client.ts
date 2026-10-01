@@ -22,13 +22,40 @@ const WP_API_BASE =
 const PODCAST_CATEGORY_SLUG = "podcast";
 
 async function fetchJson(url: string): Promise<unknown> {
+  return (await fetchJsonConTotal(url)).cuerpo;
+}
+
+/**
+ * Como `fetchJson`, más el total de resultados de la colección
+ * (`X-WP-Total`). Sin la cabecera, `null`: quien llama decide.
+ */
+async function fetchJsonConTotal(
+  url: string,
+): Promise<{ cuerpo: unknown; total: number | null }> {
   const response = await fetch(url);
 
   if (!response.ok) {
     throw new Error(`WordPress API error: ${response.status} en ${url}`);
   }
 
-  return response.json();
+  const total = Number.parseInt(response.headers?.get("X-WP-Total") ?? "", 10);
+  return { cuerpo: await response.json(), total: Number.isNaN(total) ? null : total };
+}
+
+/**
+ * Una página de una colección: sus elementos y el total de la colección
+ * entera, para numerar (episodio N) y saber si quedan más («Ver más»).
+ */
+export interface PaginaWP {
+  items: TransformedPost[];
+  total: number;
+}
+
+/** Una página de `/posts`; sin `X-WP-Total`, el total es lo que llegó. */
+async function fetchPagina(params: URLSearchParams): Promise<PaginaWP> {
+  const { cuerpo, total } = await fetchJsonConTotal(`${WP_API_BASE}/posts?${params}`);
+  const items = (cuerpo as WPPost[]).map(transformPost);
+  return { items, total: total ?? items.length };
 }
 
 /**
@@ -54,22 +81,25 @@ export async function resolvePodcastCategoryId(): Promise<number | null> {
   return categories[0].id;
 }
 
-/** Artículos del blog. Excluye los episodios de podcast, que tienen su propia
- *  página en `/podcast`. */
-export async function fetchPosts(perPage: number = 6): Promise<TransformedPost[]> {
+/** Artículos del blog, por páginas (`page` empieza en 1). Excluye los
+ *  episodios de podcast, que tienen su propia página en `/podcast`. */
+export async function fetchPosts(
+  perPage: number = 6,
+  page: number = 1,
+): Promise<PaginaWP> {
   const podcastCategoryId = await resolvePodcastCategoryId();
 
   const params = new URLSearchParams({
     _embed: "1",
     per_page: String(perPage),
+    page: String(page),
   });
 
   if (podcastCategoryId !== null) {
     params.set("categories_exclude", String(podcastCategoryId));
   }
 
-  const posts = (await fetchJson(`${WP_API_BASE}/posts?${params}`)) as WPPost[];
-  return posts.map(transformPost);
+  return fetchPagina(params);
 }
 
 /** Un artículo por slug. `null` significa "no existe", no "falló la carga":
@@ -86,20 +116,23 @@ export async function fetchPostBySlug(slug: string): Promise<TransformedPost | n
   return transformPost(posts[0]);
 }
 
-/** Episodios de podcast. */
-export async function fetchPodcasts(perPage: number = 6): Promise<TransformedPost[]> {
+/** Episodios de podcast, por páginas (`page` empieza en 1). */
+export async function fetchPodcasts(
+  perPage: number = 6,
+  page: number = 1,
+): Promise<PaginaWP> {
   const podcastCategoryId = await resolvePodcastCategoryId();
 
   if (podcastCategoryId === null) {
-    return [];
+    return { items: [], total: 0 };
   }
 
   const params = new URLSearchParams({
     _embed: "1",
     per_page: String(perPage),
+    page: String(page),
     categories: String(podcastCategoryId),
   });
 
-  const posts = (await fetchJson(`${WP_API_BASE}/posts?${params}`)) as WPPost[];
-  return posts.map(transformPost);
+  return fetchPagina(params);
 }

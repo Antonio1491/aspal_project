@@ -11,9 +11,22 @@ glassmorphism) describía un sitio que ya no existe.
   Nunca el de fondo claro sobre fondo oscuro.
 - **Isotipo** (panal de 4 hexágonos): `Aspal-Icono_*.webp`. Es la silueta de
   perfil cuando falta la foto.
-- **Motivo gráfico:** `HexagonNetwork` (`components/sections/CommunityGraphics.tsx`),
-  semitransparente, en el hero, en la banda «Únete a la casa común» y en la Ruta
-  2026–2030.
+- **Motivo gráfico:** el hexágono del isotipo. `PatronPanal`
+  (`components/layout/PatronPanal.tsx`), panal estático en miel sobre noche, en
+  la columna visual del hero de la home; insignias hexagonales en el paso a
+  paso del Mapa de Ruta y en las iniciales de «Voces de la red».
+- **Ilustraciones:** familia plana en miel y noche con manchas azul claro
+  (`client/src/assets/recurso-*.webp` y sus versiones ligeras de 480 px en
+  `assets/ilustraciones/`). Una por pilar y la del webinar en Eventos. No
+  mezclar con fotos dentro de la misma banda.
+- **Fotos:** reales, de eventos y personas de la red. Ranuras preparadas en
+  `content/institucional/inicio.ts` (`FOTO_HERO`, `TESTIMONIOS`); mientras
+  estén vacías, la home no muestra huecos.
+  En el hero la foto va con `FotoHero` estilo «panal»: repartida en celdas del
+  isotipo, con una celda miel rayada. Su encuadre está ajustado a mano para la
+  foto actual (`ENCUADRE_PANAL`): una foto nueva exige reencuadrar para que
+  ninguna cara caiga en la separación entre celdas. Nunca una foto rectangular
+  sin tratar.
 - **Nombre visible:** `NOMBRE_MARCA` de `client/src/lib/marca.ts`. No se escribe a mano.
 
 ## Color
@@ -63,6 +76,10 @@ Catálogo vivo con demos y código: `/componentes` (fuente:
 - Iconos: Lucide, de línea, en pizarra, siempre con `aria-hidden` y junto a su
   texto. Pilares: Users (Comunidad), BookOpen (Conocimiento), Cpu (Tecnología), BarChart3 (Datos).
 - Secciones sin construir: `<Proximamente />`, nunca un enlace a ningún sitio.
+- Contenido reciente de la home: portada de revista (artículo protagonista,
+  dos más en lista numerada con `NUMERO_CONTORNO` y el último episodio en
+  `FranjaPodcast`). Sin fechas a la vista: el contenido más nuevo puede tener
+  meses y la fecha ya está en /blog y en cada artículo.
 
 ## Navegación
 
@@ -89,10 +106,11 @@ Catálogo vivo con demos y código: `/componentes` (fuente:
   NOSOTROS». Cambiar un texto = editar ese módulo; las páginas no llevan copy.
 - `contenido.test.ts` rechaza textos vacíos, marcadores de relleno y enlaces a
   rutas que no existen.
-- Datos pendientes (año de fundación D7, fotos, LinkedIn, Consejo, logo de
-  Parksys, Dossier) van como `PENDIENTE` en el módulo, nunca inventados.
+- Datos pendientes (año de fundación D7, fotos, LinkedIn, Consejo,
+  Dossier) van como `PENDIENTE` en el módulo, nunca inventados.
 - Componentes de estas páginas: `components/institucional/` (SubnavSeccion,
-  PilarCard, PerfilCard, TarjetaCompromiso, RutaTimeline, MuroAliados).
+  PilarCard, PerfilCard, ManifiestoNumerado, RutaTimeline, MuroAliados,
+  Hashtag).
 - Anclas: las secciones enlazables llevan `id` y `scroll-mt-32`; `ScrollRestoration` lleva al ancla cuando la URL trae `#`.
 
 ## Movimiento
@@ -102,6 +120,29 @@ Catálogo vivo con demos y código: `/componentes` (fuente:
   opacidad del contenido:** el HTML prerenderizado mostraría texto invisible a
   buscadores y a quien no ejecuta JavaScript.
 - Sin sliders automáticos ni animaciones infinitas en páginas institucionales.
+- **Entradas de la home** (una vez, solo transform, keyframes en
+  `tailwind.config.ts`): el panal del hero se ensambla al cargar
+  (`FotoHero`), las cifras cuentan hasta su valor (`CifraAnimada`) y el Mapa
+  de Ruta traza su línea y activa las insignias en secuencia
+  (`IndiceEtapas`). Las dos últimas esperan a entrar en pantalla con
+  `useAnimarAlVer` (`hooks/`), que en el prerender y con «reducir
+  movimiento» devuelve `estatico`: el HTML ya es el estado final.
+- **Micro-interacciones:** solo la flecha que avanza al pasar el ratón o
+  enfocar (botón del hero, «Cómo se traduce» de los pilares). Las tarjetas
+  no se elevan ni animan su ilustración.
+- **Pilares en la home:** panal escalonado. La ilustración sale de una
+  insignia hexagonal que rompe el borde de la tarjeta, número del pilar en
+  contorno miel y, desde `lg`, las tarjetas pares bajan medio paso. Al entrar
+- **Nosotros** usa el mismo lenguaje: panal del isotipo que se arma en el hero
+  (`PatronPanal animado`, una vez por página) y estático en la banda final,
+  cifras que cuentan junto a «Quiénes somos», Misión y Visión en grande sobre
+  noche con «2030» como marca de agua, «Lo que defendemos» como manifiesto
+  numerado junto a la ilustración del megáfono, pilares en panal escalonado
+  (`REJILLA_PILARES_PANAL`) y la Ruta 2026–2030 como camino que se traza.
+- **El hashtag a tamaño de titular va con `<Hashtag />`**: es una sola palabra
+  de 25 letras y sin puntos de corte desborda en móvil.
+  en pantalla, cada ilustración se asoma desde su insignia, en cascada
+  (entrada única, no en hover).
 
 ## Fotografía
 
