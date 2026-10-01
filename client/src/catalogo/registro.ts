@@ -326,9 +326,40 @@ export const REGISTRO = [
     importar: 'import { PerfilCard } from "@/components/institucional/PerfilCard";',
     categoria: "institucional",
     descripcion:
-      "Perfil de una persona: foto (o silueta con el isotipo), nombre, cargo, bio y LinkedIn.",
-    usarCuando: "Equipo, Consejo, ponentes.",
-    props: "perfil: Perfil",
+      "Perfil de una persona con su retrato en el hexágono del isotipo (foto o, sin ella, iniciales): nombre (h3), cargo, bio y LinkedIn. En fila por defecto; `destacado`, tarjeta ancha con el retrato grande en miel y la bio como declaración.",
+    usarCuando:
+      "Equipo, Consejo, ponentes. `destacado` para una sola persona al frente (la Dirección General).",
+    props: "perfil: Perfil; destacado?: boolean",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "retrato-hex",
+    nombre: "RetratoHex",
+    archivo: "client/src/components/institucional/RetratoHex.tsx",
+    importar: 'import { RetratoHex } from "@/components/institucional/RetratoHex";',
+    categoria: "institucional",
+    descripcion:
+      "Retrato de una persona en el hexágono del isotipo: la foto recortada o, sin foto, sus iniciales sobre noche, miel o claro. El tamaño lo dan el ancho y la letra de className.",
+    usarCuando:
+      "Cara de una persona del equipo o del Consejo (PerfilCard, RacimoEquipo).",
+    evitarPara: "Testimonios de la red: VocesRed ya trae su retrato redondo de 1:1.",
+    props: 'perfil: Perfil; tono?: "noche" | "miel" | "claro"; className?: string',
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "racimo-equipo",
+    nombre: "RacimoEquipo",
+    archivo: "client/src/components/institucional/RacimoEquipo.tsx",
+    importar: 'import { RacimoEquipo } from "@/components/institucional/RacimoEquipo";',
+    categoria: "institucional",
+    descripcion:
+      "El equipo como racimo de 3 celdas del panal (RetratoHex) sobre PatronPanal: la primera persona en miel, las demás en claro. Se arma al cargar. Decorativo.",
+    usarCuando:
+      "Columna visual del hero de Nuestro equipo (`visual` de HeroInstitucional).",
+    evitarPara: "Listar al equipo: los perfiles van en PerfilCard.",
+    props: "perfiles: Perfil[] (usa los 3 primeros)",
     estado: "en-uso",
     vista: "demo",
   },

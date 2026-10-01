@@ -2,17 +2,9 @@ import { Banda } from "@/components/layout/Banda";
 import type { Testimonio } from "@/content/institucional/inicio";
 import { HASHTAG } from "@/content/institucional/nosotros";
 import { HEXAGONO_PUNTA } from "@/lib/clases";
+import { iniciales } from "@/lib/iniciales";
 import { cn } from "@/lib/utils";
 import { Quote } from "lucide-react";
-
-function iniciales(nombre: string): string {
-  return nombre
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((parte) => parte[0]!.toUpperCase())
-    .join("");
-}
 
 /**
  * «Voces de la red»: testimonios de directivos, con cara y nombre. Es la prueba

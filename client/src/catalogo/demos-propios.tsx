@@ -13,6 +13,8 @@ import { MuroAliados } from "@/components/institucional/MuroAliados";
 import { PanalPilares } from "@/components/institucional/PanalPilares";
 import { PerfilCard } from "@/components/institucional/PerfilCard";
 import { PilarCard } from "@/components/institucional/PilarCard";
+import { RacimoEquipo } from "@/components/institucional/RacimoEquipo";
+import { RetratoHex } from "@/components/institucional/RetratoHex";
 import { RutaTimeline } from "@/components/institucional/RutaTimeline";
 import { SeccionPilar } from "@/components/institucional/SeccionPilar";
 import { SubnavSeccion } from "@/components/institucional/SubnavSeccion";
@@ -291,14 +293,49 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
         opciones: PERFILES.map((p) => p.nombre),
         inicial: PERFILES[0].nombre,
       },
+      { tipo: "interruptor", clave: "destacado", etiqueta: "destacado", inicial: false },
     ],
+    nota: "Sin foto, el retrato muestra las iniciales: los retratos aún no llegan.",
     render: (v) => (
-      <div className="max-w-sm">
-        <PerfilCard perfil={PERFILES.find((p) => p.nombre === v.perfil) ?? PERFILES[0]} />
+      <div className={v.destacado ? undefined : "max-w-xl"}>
+        <PerfilCard
+          perfil={PERFILES.find((p) => p.nombre === v.perfil) ?? PERFILES[0]}
+          destacado={Boolean(v.destacado)}
+        />
       </div>
     ),
     codigo: (v) =>
-      `<PerfilCard perfil={PERFILES.find((p) => p.nombre === ${JSON.stringify(texto(v.perfil))})!} />`,
+      `<PerfilCard perfil={PERFILES.find((p) => p.nombre === ${JSON.stringify(texto(v.perfil))})!}${v.destacado ? " destacado" : ""} />`,
+  },
+  "retrato-hex": {
+    controles: [
+      {
+        tipo: "opciones",
+        clave: "tono",
+        etiqueta: "tono",
+        opciones: ["noche", "miel", "claro"],
+        inicial: "noche",
+      },
+    ],
+    render: (v) => (
+      <RetratoHex
+        perfil={PERFILES[1]}
+        tono={texto(v.tono) as "noche" | "miel" | "claro"}
+        className="w-28 text-3xl"
+      />
+    ),
+    codigo: (v) =>
+      `<RetratoHex perfil={perfil}${v.tono === "noche" ? "" : ` tono="${texto(v.tono)}"`} className="w-28 text-3xl" />`,
+  },
+  "racimo-equipo": {
+    fondo: "noche",
+    nota: "Decorativo (aria-hidden). En el hero solo se pinta desde 1024 px.",
+    render: () => (
+      <div className="mx-auto max-w-sm p-8">
+        <RacimoEquipo perfiles={PERFILES} />
+      </div>
+    ),
+    codigo: () => `<RacimoEquipo perfiles={PERFILES} />`,
   },
   "muro-aliados": {
     controles: [
