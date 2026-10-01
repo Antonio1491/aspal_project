@@ -1,5 +1,6 @@
 import BlogCard from "@/components/content/BlogCard";
 import { FranjaPodcast } from "@/components/content/FranjaPodcast";
+import { VerMas } from "@/components/content/VerMas";
 import { PortadaArticulo } from "@/components/content/PortadaArticulo";
 import { IlustracionPilar } from "@/components/institucional/IlustracionPilar";
 import { Banda } from "@/components/layout/Banda";
@@ -10,6 +11,7 @@ import { PatronPanal } from "@/components/layout/PatronPanal";
 import { Button } from "@/components/ui/button";
 import { PILARES } from "@/content/institucional/pilares";
 import { useEnCliente } from "@/hooks/use-en-cliente";
+import { useListaPaginada } from "@/hooks/use-lista-paginada";
 import { registrarEvento } from "@/lib/analitica";
 import { BOTON_CONTORNO_NOCHE, BOTON_MIEL_NOCHE, H2_BANDA } from "@/lib/clases";
 import { cn } from "@/lib/utils";
@@ -18,10 +20,10 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowRight } from "lucide-react";
 import { Link } from "wouter";
 
-/** Número de artículos que se piden. Ojo: hoy coincide con los que existen,
- *  así que el octavo desaparecería en silencio. Umbral de paginación por
- *  decidir — ver la lista de revisión. */
-const POSTS_PER_PAGE = 7;
+/** Artículos por página de «Ver más»: el destacado y 9 en la rejilla, tres
+ *  filas completas en la primera vista. Antes se pedían 7 fijos, que hoy son
+ *  todos: el octavo habría desaparecido en silencio. */
+const POSTS_PER_PAGE = 10;
 
 /** El blog es el pilar Conocimiento: su ilustración, subtítulo y compromiso. */
 const CONOCIMIENTO = PILARES.find((p) => p.id === "conocimiento")!;
@@ -80,18 +82,14 @@ function Esqueleto() {
 export default function Blog() {
   const montado = useEnCliente();
 
-  const articulos = useQuery<TransformedPost[]>({
-    queryKey: ["/api/posts", { per_page: POSTS_PER_PAGE }],
-    queryFn: () => cargar(`/api/posts?per_page=${POSTS_PER_PAGE}`),
-    ...REINTENTO,
-  });
+  const articulos = useListaPaginada("/api/posts", POSTS_PER_PAGE);
   const episodios = useQuery<TransformedPost[]>({
     queryKey: ["/api/podcasts", { per_page: 1 }],
     queryFn: () => cargar("/api/podcasts?per_page=1"),
     ...REINTENTO,
   });
 
-  const posts = articulos.data ?? [];
+  const posts = articulos.items;
   // El destacado solo tiene sentido si queda algo debajo. Con un único
   // artículo, se lo comía el destacado y la rejilla decía "no hay artículos":
   // la página se contradecía a sí misma.
@@ -136,7 +134,7 @@ export default function Blog() {
               </p>
               <Button
                 className="mt-6 min-h-11 px-6"
-                onClick={() => articulos.refetch()}
+                onClick={() => articulos.reintentar()}
                 disabled={articulos.isFetching}
                 data-testid="button-retry-posts"
               >
@@ -170,6 +168,16 @@ export default function Blog() {
                   </ul>
                 </>
               )}
+              <VerMas
+                mostrados={posts.length}
+                total={articulos.total}
+                nombre="artículos"
+                hayMas={articulos.hayMas}
+                cargando={articulos.cargandoMas}
+                error={articulos.errorAlCargarMas}
+                onCargarMas={() => articulos.cargarMas()}
+                testid="button-blog-ver-mas"
+              />
             </>
           )}
         </Banda>

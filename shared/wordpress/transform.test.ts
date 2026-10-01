@@ -166,3 +166,21 @@ describe("transformPost — imagen y categorías", () => {
     expect(post.title).not.toContain("&amp;");
   });
 });
+
+describe("transformPost — entidades HTML", () => {
+  it("decodifica las numéricas y las tipográficas del título", () => {
+    const post = transformPost(
+      makePost({
+        title: { rendered: "Fines de Flujo &#8211; Parte 1 &#x2014; &ldquo;ya&rdquo;" },
+      }),
+    );
+    expect(post.title).toBe("Fines de Flujo – Parte 1 — “ya”");
+  });
+
+  it("decodifica en una sola pasada y deja intactas las desconocidas", () => {
+    const post = transformPost(
+      makePost({ title: { rendered: "A &amp;#8211; B &noexiste; C &#039;D&#039;" } }),
+    );
+    expect(post.title).toBe("A &#8211; B &noexiste; C 'D'");
+  });
+});

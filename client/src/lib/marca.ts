@@ -63,3 +63,17 @@ export const REDES: RedSocial[] = [
     testid: "button-social-instagram",
   },
 ];
+
+/** Dónde escuchar el podcast Conexión Profesional (hero de /podcast). */
+export const PODCAST_PLATAFORMAS = [
+  {
+    nombre: "Apple Podcasts",
+    href: "https://podcasts.apple.com/mx/podcast/conexi%C3%B3n-profesional/id1739853485",
+    testid: "button-apple-podcasts",
+  },
+  {
+    nombre: "Spotify",
+    href: "https://open.spotify.com/show/38oaCe96wmhex6FPGwluxu",
+    testid: "button-spotify",
+  },
+] as const;

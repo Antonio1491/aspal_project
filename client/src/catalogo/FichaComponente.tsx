@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { CopiarCodigo } from "./CopiarCodigo";
 import { demoDe } from "./demos";
 import type { EntradaCatalogo } from "./tipos";
@@ -29,7 +28,11 @@ export function FichaComponente({ entrada }: { entrada: EntradaCatalogo }) {
         >
           {entrada.nombre}
         </h3>
-        {entrada.estado === "sin-uso" && <Badge variant="destructive">Sin uso</Badge>}
+        {entrada.estado === "sin-uso" && (
+          <span className="rounded-full bg-destructive px-2.5 py-0.5 text-xs font-semibold text-destructive-foreground">
+            Sin uso
+          </span>
+        )}
       </div>
       <p className="mt-1 break-all font-mono text-sm text-muted-foreground">
         {entrada.archivo}

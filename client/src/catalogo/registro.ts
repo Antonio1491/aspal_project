@@ -550,7 +550,7 @@ export const REGISTRO = [
     usarCuando:
       "Destacar un episodio concreto (el último, uno recomendado) dentro de una banda.",
     evitarPara:
-      "Listados de episodios (PodcastCard) o reproducir audio en la página: no tiene reproductor.",
+      "Listados de episodios (EpisodioFila) o reproducir audio en la página: no tiene reproductor.",
     props: "episodio: TransformedPost",
     estado: "en-uso",
     vista: "demo",
@@ -607,21 +607,52 @@ export const REGISTRO = [
     usarCuando:
       "Listar artículos de /api/posts (rejilla de /blog, «Sigue leyendo»), o mezclar artículos y episodios con `etiqueta`.",
     evitarPara:
-      "El artículo destacado de /blog (PortadaArticulo) y la página /podcast (PodcastCard).",
+      "El artículo destacado de /blog (PortadaArticulo) y la lista de /podcast (EpisodioFila).",
     props: "post: TransformedPost; etiqueta?: string",
     estado: "en-uso",
     vista: "demo",
   },
   {
-    id: "podcast-card",
-    nombre: "PodcastCard",
-    archivo: "client/src/components/content/PodcastCard.tsx",
-    importar: 'import { PodcastCard } from "@/components/content/PodcastCard";',
+    id: "episodio-fila",
+    nombre: "EpisodioFila",
+    archivo: "client/src/components/content/EpisodioFila.tsx",
+    importar: 'import { EpisodioFila } from "@/components/content/EpisodioFila";',
     categoria: "contenido",
     descripcion:
-      "Tarjeta de episodio: portada (si la hay), número opcional, título, descripción y fecha.",
-    usarCuando: "Listar episodios de /api/podcasts.",
-    props: "podcast: TransformedPost; episodeNumber?: number",
+      "Un episodio en lista: número en contorno (desde sm), portada en hexágono, «Episodio N», aviso de miembros, título, extracto, fecha y «Escuchar». Toda la fila enlaza fuera.",
+    usarCuando:
+      "La lista de /podcast, dentro de un <ol> con divide-y. `numero` sobre el total de la colección (useListaPaginada), no sobre lo cargado.",
+    evitarPara: "Destacar el último episodio: para eso, FranjaPodcast.",
+    props: "episodio: TransformedPost; numero: number",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "portada-podcast",
+    nombre: "PortadaPodcast",
+    archivo: "client/src/components/content/PortadaPodcast.tsx",
+    importar: 'import { PortadaPodcast } from "@/components/content/PortadaPodcast";',
+    categoria: "contenido",
+    descripcion:
+      "El podcast como celda miel del panal: auriculares y onda sobre PatronPanal. Se arma al cargar. Decorativa.",
+    usarCuando: "Columna visual del hero de /podcast (`visual` de HeroInstitucional).",
+    props: "sin props",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "ver-mas",
+    nombre: "VerMas",
+    archivo: "client/src/components/content/VerMas.tsx",
+    importar: 'import { VerMas } from "@/components/content/VerMas";',
+    categoria: "contenido",
+    descripcion:
+      "Pie de una lista paginada: «Mostrando X de Y» (aria-live) y el botón que trae la página siguiente; «Cargando…» mientras llega y «Reintentar» si falla. Sin más páginas, solo el recuento.",
+    usarCuando:
+      "Debajo de una lista de useListaPaginada (/blog, /podcast). El total es el de la colección.",
+    evitarPara: "Paginación numerada ni scroll infinito: aquí se carga a petición.",
+    props:
+      "mostrados, total: number; nombre: string; hayMas, cargando, error: boolean; onCargarMas: () => void; testid: string",
     estado: "en-uso",
     vista: "demo",
   },
@@ -670,18 +701,6 @@ export const REGISTRO = [
     evitarPara: "Enlaces de texto dentro de un párrafo.",
     props:
       'variant?: "default" | "secondary" | "outline" | "ghost" | "destructive"; size?: "default" | "sm" | "lg" | "icon"; asChild?: boolean',
-    estado: "en-uso",
-    vista: "demo",
-  },
-  {
-    id: "badge",
-    nombre: "Badge",
-    archivo: "client/src/components/ui/badge.tsx",
-    importar: 'import { Badge } from "@/components/ui/badge";',
-    categoria: "ui",
-    descripcion: "Etiqueta pequeña (categoría, número de episodio).",
-    usarCuando: "Metadatos cortos que no se pulsan.",
-    props: 'variant?: "default" | "secondary" | "outline" | "destructive"',
     estado: "en-uso",
     vista: "demo",
   },

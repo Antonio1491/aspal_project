@@ -22,8 +22,9 @@ function wpPost(slug = "un-articulo") {
   };
 }
 
-function jsonResponse(body: unknown, ok = true, status = 200) {
-  return { ok, status, json: async () => body } as Response;
+function jsonResponse(body: unknown, ok = true, status = 200, total?: number) {
+  const headers = new Headers(total === undefined ? {} : { "X-WP-Total": String(total) });
+  return { ok, status, headers, json: async () => body } as Response;
 }
 
 const fetchMock = vi.fn();
@@ -74,12 +75,32 @@ describe("fetchPosts", () => {
       .mockResolvedValueOnce(jsonResponse(PODCAST_CATEGORY))
       .mockResolvedValueOnce(jsonResponse([wpPost()]));
 
-    const posts = await fetchPosts(7);
+    const { items } = await fetchPosts(7);
 
     const url = calledUrl(1);
     expect(url.searchParams.get("categories_exclude")).toBe("3");
     expect(url.searchParams.get("per_page")).toBe("7");
-    expect(posts).toHaveLength(1);
+    expect(url.searchParams.get("page")).toBe("1");
+    expect(items).toHaveLength(1);
+  });
+
+  it("pide la página indicada y devuelve el total de X-WP-Total", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse(PODCAST_CATEGORY))
+      .mockResolvedValueOnce(jsonResponse([wpPost()], true, 200, 23));
+
+    const pagina = await fetchPosts(10, 3);
+
+    expect(calledUrl(1).searchParams.get("page")).toBe("3");
+    expect(pagina.total).toBe(23);
+  });
+
+  it("sin X-WP-Total, el total es lo que llegó", async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse(PODCAST_CATEGORY))
+      .mockResolvedValueOnce(jsonResponse([wpPost(), wpPost("otro")]));
+
+    await expect(fetchPosts()).resolves.toMatchObject({ total: 2 });
   });
 
   it("no excluye nada si la categoría podcast no existe", async () => {
@@ -147,7 +168,7 @@ describe("fetchPodcasts", () => {
   it("devuelve vacío si no hay categoría podcast", async () => {
     fetchMock.mockResolvedValueOnce(jsonResponse([]));
 
-    await expect(fetchPodcasts()).resolves.toEqual([]);
+    await expect(fetchPodcasts()).resolves.toEqual({ items: [], total: 0 });
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,9 +1,11 @@
 import { AvisoMiembros } from "@/components/content/AvisoMiembros";
 import BlogCard from "@/components/content/BlogCard";
+import { EpisodioFila } from "@/components/content/EpisodioFila";
 import { ContenidoReciente } from "@/components/content/ContenidoReciente";
 import { FranjaPodcast } from "@/components/content/FranjaPodcast";
 import { MetaArticulo } from "@/components/content/MetaArticulo";
-import { PodcastCard } from "@/components/content/PodcastCard";
+import { PortadaPodcast } from "@/components/content/PortadaPodcast";
+import { VerMas } from "@/components/content/VerMas";
 import { PortadaArticulo } from "@/components/content/PortadaArticulo";
 import { FormSuscripcion } from "@/components/forms/FormSuscripcion";
 import { CifraAnimada } from "@/components/institucional/CifraAnimada";
@@ -510,32 +512,59 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
     codigo: (v) =>
       `<BlogCard post={post}${v.tipo === "—" ? "" : ` ${atributo("etiqueta", v.tipo)}`} />`,
   },
-  "podcast-card": {
+  "episodio-fila": {
     controles: [
-      { tipo: "interruptor", clave: "imagen", etiqueta: "con portada", inicial: true },
       {
-        tipo: "opciones",
-        clave: "episodio",
-        etiqueta: "episodeNumber",
-        opciones: ["—", "1", "12"],
-        inicial: "12",
+        tipo: "interruptor",
+        clave: "miembros",
+        etiqueta: "exclusivo para miembros",
+        inicial: true,
       },
     ],
-    fondo: "suave",
-    nota: "Datos de ejemplo. En la app, el episodio llega de /api/podcasts.",
+    nota: "Datos de ejemplo. En /podcast llega de /api/podcasts y se numera sobre el total.",
     render: (v) => (
-      <div className="max-w-sm">
-        <PodcastCard
-          podcast={{
-            ...POST_EJEMPLO,
-            featuredImage: v.imagen ? POST_EJEMPLO.featuredImage : "",
-          }}
-          episodeNumber={v.episodio === "—" ? undefined : Number(v.episodio)}
-        />
+      <ol className="divide-y divide-border border-y border-border">
+        <li>
+          <EpisodioFila
+            episodio={{ ...POST_EJEMPLO, isGated: Boolean(v.miembros) }}
+            numero={8}
+          />
+        </li>
+      </ol>
+    ),
+    codigo: () => `<EpisodioFila episodio={episodio} numero={total - i} />`,
+  },
+  "portada-podcast": {
+    fondo: "noche",
+    nota: "Decorativa (aria-hidden). En el hero solo se pinta desde 1024 px.",
+    render: () => (
+      <div className="mx-auto max-w-xs py-12">
+        <PortadaPodcast />
       </div>
     ),
-    codigo: (v) =>
-      `<PodcastCard podcast={episodio}${v.episodio === "—" ? "" : ` episodeNumber={${texto(v.episodio)}}`} />`,
+    codigo: () => `<PortadaPodcast />`,
+  },
+  "ver-mas": {
+    controles: [
+      { tipo: "interruptor", clave: "hayMas", etiqueta: "hayMas", inicial: true },
+      { tipo: "interruptor", clave: "cargando", etiqueta: "cargando", inicial: false },
+      { tipo: "interruptor", clave: "error", etiqueta: "error", inicial: false },
+    ],
+    nota: "Sin datos: los estados se fuerzan con los controles. En la app los da useListaPaginada.",
+    render: (v) => (
+      <VerMas
+        mostrados={10}
+        total={23}
+        nombre="episodios"
+        hayMas={Boolean(v.hayMas)}
+        cargando={Boolean(v.cargando)}
+        error={Boolean(v.error)}
+        onCargarMas={() => {}}
+        testid="demo-ver-mas"
+      />
+    ),
+    codigo: () =>
+      `<VerMas\n  mostrados={lista.items.length}\n  total={lista.total}\n  nombre="episodios"\n  hayMas={lista.hayMas}\n  cargando={lista.cargandoMas}\n  error={lista.errorAlCargarMas}\n  onCargarMas={() => lista.cargarMas()}\n  testid="button-ver-mas"\n/>`,
   },
   "contenido-reciente": {
     nota: "Usa la API real (/api/posts y /api/podcasts). Si falla, el bloque desaparece: es el comportamiento esperado.",

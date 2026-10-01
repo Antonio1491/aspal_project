@@ -83,12 +83,12 @@ hacían y acabaron divergiendo.
 
 Todos los endpoints son públicos, de solo lectura y sin parámetros de auth.
 
-| Endpoint                       | Descripción                          |
-| ------------------------------ | ------------------------------------ |
-| `GET /api/posts?per_page=N`    | Últimos posts (por defecto 6)        |
-| `GET /api/posts/:slug`         | Post individual · `404` si no existe |
-| `GET /api/podcasts?per_page=N` | Episodios de la categoría `podcast`  |
-| `GET /api/health`              | Sonda de estado                      |
+| Endpoint                              | Descripción                                                   |
+| ------------------------------------- | ------------------------------------------------------------- |
+| `GET /api/posts?per_page=N&page=P`    | Posts por páginas (6 por defecto); total en `X-Total-Count`   |
+| `GET /api/posts/:slug`                | Post individual · `404` si no existe                          |
+| `GET /api/podcasts?per_page=N&page=P` | Episodios de la categoría `podcast`; total en `X-Total-Count` |
+| `GET /api/health`                     | Sonda de estado                                               |
 
 Los posts se devuelven ya normalizados (`TransformedPost`): el HTML se limpia
 para el extracto y la imagen destacada cae al primer `<img>` del contenido

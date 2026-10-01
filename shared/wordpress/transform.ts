@@ -7,16 +7,49 @@ const WORDS_PER_MINUTE = 200;
 /** Longitud máxima del extracto de tarjeta. */
 const EXCERPT_LENGTH = 200;
 
+/** Entidades con nombre que WordPress usa en títulos y extractos. */
+const ENTIDADES: Record<string, string> = {
+  nbsp: " ",
+  amp: "&",
+  lt: "<",
+  gt: ">",
+  quot: '"',
+  apos: "'",
+  ndash: "–",
+  mdash: "—",
+  hellip: "…",
+  laquo: "«",
+  raquo: "»",
+  lsquo: "‘",
+  rsquo: "’",
+  ldquo: "“",
+  rdquo: "”",
+};
+
+/**
+ * Decodifica entidades HTML en una sola pasada: con nombre (`&ndash;`) y
+ * numéricas (`&#8211;`, `&#x2013;`). WordPress escapa así la tipografía de los
+ * títulos («Fines de Flujo &#8211; Parte 1» llegaba tal cual a la página).
+ * Una sola pasada: `&amp;#8211;` queda como el texto `&#8211;`, no como «–».
+ * Una entidad desconocida se deja como está.
+ */
+function decodificarEntidades(texto: string): string {
+  return texto.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (entidad, cuerpo: string) => {
+    if (cuerpo[0] === "#") {
+      const codigo =
+        cuerpo[1] === "x" || cuerpo[1] === "X"
+          ? parseInt(cuerpo.slice(2), 16)
+          : parseInt(cuerpo.slice(1), 10);
+      return Number.isFinite(codigo) && codigo > 0 && codigo <= 0x10ffff
+        ? String.fromCodePoint(codigo)
+        : entidad;
+    }
+    return ENTIDADES[cuerpo.toLowerCase()] ?? entidad;
+  });
+}
+
 function stripHtml(html: string): string {
-  return html
-    .replace(/<[^>]*>/g, "")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#039;/g, "'")
-    .trim();
+  return decodificarEntidades(html.replace(/<[^>]*>/g, "")).trim();
 }
 
 function extractFirstImage(content: string): string | null {
