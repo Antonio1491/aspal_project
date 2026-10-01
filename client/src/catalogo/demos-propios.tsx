@@ -1,11 +1,15 @@
+import { AvisoMiembros } from "@/components/content/AvisoMiembros";
 import BlogCard from "@/components/content/BlogCard";
 import { ContenidoReciente } from "@/components/content/ContenidoReciente";
 import { FranjaPodcast } from "@/components/content/FranjaPodcast";
+import { MetaArticulo } from "@/components/content/MetaArticulo";
 import { PodcastCard } from "@/components/content/PodcastCard";
+import { PortadaArticulo } from "@/components/content/PortadaArticulo";
 import { FormSuscripcion } from "@/components/forms/FormSuscripcion";
 import { CifraAnimada } from "@/components/institucional/CifraAnimada";
 import { Hashtag } from "@/components/institucional/Hashtag";
 import { ManifiestoNumerado } from "@/components/institucional/ManifiestoNumerado";
+import { IlustracionPilar } from "@/components/institucional/IlustracionPilar";
 import { IndiceEtapas } from "@/components/institucional/IndiceEtapas";
 import { IndiceMapa } from "@/components/institucional/IndiceMapa";
 import { IndicePilares } from "@/components/institucional/IndicePilares";
@@ -427,6 +431,52 @@ export const DEMOS_PROPIOS: Record<IdDemoPropio, Demo> = {
       />
     ),
     codigo: () => `<FranjaPodcast episodio={episodio} />`,
+  },
+  "portada-articulo": {
+    controles: [
+      {
+        tipo: "interruptor",
+        clave: "miembros",
+        etiqueta: "exclusivo para miembros",
+        inicial: true,
+      },
+    ],
+    nota: "Datos de ejemplo. En /blog es el artículo más reciente de /api/posts.",
+    render: (v) => (
+      <PortadaArticulo post={{ ...POST_EJEMPLO, isGated: Boolean(v.miembros) }} />
+    ),
+    codigo: () => `<PortadaArticulo post={posts[0]} />`,
+  },
+  "meta-articulo": {
+    render: () => <MetaArticulo post={POST_EJEMPLO} />,
+    codigo: () => `<MetaArticulo post={post} />`,
+  },
+  "aviso-miembros": {
+    render: () => <AvisoMiembros />,
+    codigo: () => `{post.isGated && <AvisoMiembros />}`,
+  },
+  "ilustracion-pilar": {
+    controles: [
+      {
+        tipo: "opciones",
+        clave: "pilar",
+        etiqueta: "pilar",
+        opciones: PILARES.map((p) => p.id),
+        inicial: "conocimiento",
+      },
+    ],
+    fondo: "noche",
+    nota: "Decorativa (aria-hidden). En el hero solo se pinta desde 1024 px.",
+    render: (v) => (
+      <div className="mx-auto max-w-xs py-12">
+        <IlustracionPilar
+          key={texto(v.pilar)}
+          pilar={PILARES.find((p) => p.id === v.pilar) ?? PILARES[0]}
+        />
+      </div>
+    ),
+    codigo: (v) =>
+      `<IlustracionPilar pilar={PILARES.find((p) => p.id === ${JSON.stringify(texto(v.pilar))})!} />`,
   },
   "blog-card": {
     controles: [

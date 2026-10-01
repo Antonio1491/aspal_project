@@ -260,6 +260,22 @@ export const REGISTRO = [
     vista: "demo",
   },
   {
+    id: "ilustracion-pilar",
+    nombre: "IlustracionPilar",
+    archivo: "client/src/components/institucional/IlustracionPilar.tsx",
+    importar:
+      'import { IlustracionPilar } from "@/components/institucional/IlustracionPilar";',
+    categoria: "institucional",
+    descripcion:
+      "La ilustración de un pilar asomando desde su hexágono sobre el panal de la marca. Se asoma al cargar. Decorativa.",
+    usarCuando:
+      "Columna visual del hero de una página que pertenece a un pilar (el blog es Conocimiento).",
+    evitarPara: "¿Qué hacemos?: allí cada pilar ya tiene su SeccionPilar.",
+    props: "pilar: Pilar",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
     id: "seccion-pilar",
     nombre: "SeccionPilar",
     archivo: "client/src/components/institucional/SeccionPilar.tsx",
@@ -540,16 +556,58 @@ export const REGISTRO = [
     vista: "demo",
   },
   {
+    id: "portada-articulo",
+    nombre: "PortadaArticulo",
+    archivo: "client/src/components/content/PortadaArticulo.tsx",
+    importar: 'import { PortadaArticulo } from "@/components/content/PortadaArticulo";',
+    categoria: "contenido",
+    descripcion:
+      "El artículo destacado en grande y horizontal: imagen a la izquierda (arriba en móvil), «Artículo destacado», aviso de miembros, titular (h2), extracto, autor y fecha. Enlaza fuera.",
+    usarCuando: "El primer artículo de /blog, encima de la rejilla de BlogCard.",
+    evitarPara: "La home: su portada de revista es vertical y vive en ContenidoReciente.",
+    props: "post: TransformedPost",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "meta-articulo",
+    nombre: "MetaArticulo",
+    archivo: "client/src/components/content/MetaArticulo.tsx",
+    importar: 'import { MetaArticulo } from "@/components/content/MetaArticulo";',
+    categoria: "contenido",
+    descripcion:
+      "Autor y fecha de un artículo en una línea; si falta uno, sale el otro solo, y una fecha malformada no se pinta.",
+    usarCuando: "Pie de BlogCard y PortadaArticulo; cualquier lista de artículos.",
+    props: "post: TransformedPost; className?: string",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
+    id: "aviso-miembros",
+    nombre: "AvisoMiembros",
+    archivo: "client/src/components/content/AvisoMiembros.tsx",
+    importar: 'import { AvisoMiembros } from "@/components/content/AvisoMiembros";',
+    categoria: "contenido",
+    descripcion:
+      "Píldora «Exclusivo para miembros» con candado: avisa antes del clic de que el cuerpo está tras el muro de la comunidad.",
+    usarCuando: "Tarjetas de contenido con `isGated`.",
+    evitarPara: "Funciones aún no disponibles: para eso, Proximamente.",
+    props: "sin props",
+    estado: "en-uso",
+    vista: "demo",
+  },
+  {
     id: "blog-card",
     nombre: "BlogCard",
     archivo: "client/src/components/content/BlogCard.tsx",
     importar: 'import BlogCard from "@/components/content/BlogCard";',
     categoria: "contenido",
     descripcion:
-      "Tarjeta de artículo o episodio: imagen (si la hay), etiqueta opcional («Blog», «Podcast»), título, extracto y fecha. Enlaza fuera (muro de MemberPress, D9).",
+      "Tarjeta de artículo: imagen 16:9 (si la hay), etiqueta opcional («Blog», «Podcast»), «Exclusivo para miembros» si está tras el muro, titular, extracto, autor y fecha. Al pasar el ratón la imagen se acerca y el borde se marca. Enlaza fuera (muro de MemberPress, D9).",
     usarCuando:
-      "Listar artículos de /api/posts, o mezclar artículos y episodios en una misma fila con `etiqueta`.",
-    evitarPara: "La página /podcast, que usa PodcastCard con número de episodio.",
+      "Listar artículos de /api/posts (rejilla de /blog, «Sigue leyendo»), o mezclar artículos y episodios con `etiqueta`.",
+    evitarPara:
+      "El artículo destacado de /blog (PortadaArticulo) y la página /podcast (PodcastCard).",
     props: "post: TransformedPost; etiqueta?: string",
     estado: "en-uso",
     vista: "demo",
